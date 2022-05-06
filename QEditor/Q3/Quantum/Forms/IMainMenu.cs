@@ -14,6 +14,7 @@ namespace Q.Quantum.Forms
         public bool Open = false;
         public List<MenuItem> Items = new List<MenuItem>();
         public int DX = 0;
+        public Texture.Texture2D Icon = null;
         public MenuClick CLick = null;
         public MenuItem AddItem(string text)
         {
@@ -99,11 +100,13 @@ namespace Q.Quantum.Forms
                             var new_subi = new_sub.AddItem(ci.Text);
                             new_subi.Items = ci.Items;
                             new_subi.CLick = ci.CLick;
+                            new_subi.Icon = ci.Icon;
                         }
 
-                        new_sub.Set(RenderPosition.X+Size.X-2, ay, s_w, need_y);
+                        new_sub.Set(Size.X+3, ay, s_w+150, need_y);
                         OverItem.SubMenu = new_sub;
                         ay = ay + 25;
+                        Console.WriteLine("Item:" + OverItem.Text);
                         Add(new_sub);
                         //Environment.Exit(0);
 
@@ -120,7 +123,7 @@ namespace Q.Quantum.Forms
         {
             //base.RenderForm();
 
-            DrawFrame(new Vector4(0.4f, 0.4f, 0.4f, 1.0f));
+            DrawFrame(new Vector4(1.1f, 1.1f, 1.1f, 1.0f));
             DrawLine(RenderPosition.X, RenderPosition.Y, RenderPosition.X + Size.X, RenderPosition.Y,new Vector4(0.3f,0.3f,0.3f,1.0f));
             DrawLine(RenderPosition.X, RenderPosition.Y, RenderPosition.X , RenderPosition.Y+Size.Y, new Vector4(0.3f, 0.3f, 0.3f, 1.0f));
             DrawLine(RenderPosition.X+Size.X, RenderPosition.Y, RenderPosition.X + Size.X, RenderPosition.Y+Size.Y, new Vector4(0.3f, 0.3f, 0.3f, 1.0f));
@@ -133,9 +136,18 @@ namespace Q.Quantum.Forms
             {
                 if (item == OverItem)
                 {
-                    DrawFrame(dx,dy-3,Size.X-4,25,new Vector4(0.2f,0.2f,0.2f,1.0f));
+                    DrawFrame(dx,dy-3,Size.X-4,25,new Vector4(0.2f,2.4f,2.4f,1.0f));
                 }
-                DrawText(item.Text, dx+3, dy, new Vector4(0.7f, 0.7f, 0.7f, 1.0f));
+                if(item.Icon!=null)
+                {
+                    Draw(item.Icon, dx, dy+1, 16, 16,new Vector4(1,1,1,1));
+                }
+                DrawText(item.Text, dx+32, dy, new Vector4(0.7f, 0.7f, 0.7f, 1.0f));
+                if (item.Items.Count > 0)
+                {
+                    Draw(IMainMenu.RightArrow, RenderPosition.X+ Size.X - 32, dy,16, 16, new Vector4(1, 1, 1, 1));
+                }
+                
                 dx = dx;
                 dy = dy + 25;
 
@@ -149,6 +161,8 @@ namespace Q.Quantum.Forms
     {
 
         public List<MenuItem> Items = new List<MenuItem>();
+        public static Texture.Texture2D RightArrow = null;
+        
         public MenuItem OverItem
         {
             get;
@@ -156,21 +170,31 @@ namespace Q.Quantum.Forms
         }
 
         public Dictionary<MenuItem, ISubMenu> MenuItems = new Dictionary<MenuItem, ISubMenu>();
+        public IMainMenu()
+        {
+            if (RightArrow == null)
+            {
+                RightArrow = new Texture.Texture2D("Data/UI/right.png", false);
+            }
+        }
+
+
+
 
         public override void RenderForm()
         {
-            DrawFrame(new Vector4(0.4f, 0.4f, 0.4f, 1.0f));
-            int dx = RenderPosition.X + 5;
+            DrawFrame(new Vector4(1.1f, 1.1f, 1.1f, 1.0f));
+            int dx = RenderPosition.X + 25;
             int dy = RenderPosition.Y + 6;
             foreach(var item in Items)
             {
                 if (OverItem == item)
                 {
-                    DrawFrame(dx-5,dy-6,TextWidth(item.Text)+25+3,Size.Y, new Vector4(0.2f, 0.2f, 0.2f, 1));
+                    DrawFrame(dx-25,dy-6,TextWidth(item.Text)+80,Size.Y, new Vector4(0.5f, 0.5f, 0.5f, 1));
                 }
                 DrawText(item.Text, dx+3, dy+1, new Vector4(0.7f,0.7f, 0.7f, 1));
                 item.DX = dx;
-                dx += TextWidth(item.Text) + 25;
+                dx += TextWidth(item.Text) + 60;
             }
             //base.RenderForm();
         }
@@ -199,6 +223,7 @@ namespace Q.Quantum.Forms
                     }
                     else
                     {
+                        if (OverItem.Items.Count == 0) return;
                         var new_sub = new ISubMenu();
                         int need_y = OverItem.Items.Count * 25 + 10;
 
@@ -216,9 +241,10 @@ namespace Q.Quantum.Forms
                             var new_subi = new_sub.AddItem(ci.Text);
                             new_subi.Items = ci.Items;
                             new_subi.CLick = ci.CLick;
+                            new_subi.Icon = ci.Icon;
                         }
                       
-                        new_sub.Set(OverItem.DX, 30, s_w, need_y);
+                        new_sub.Set(OverItem.DX-10, 30, s_w+150, need_y);
                         OverItem.SubMenu = new_sub;
                         Add(new_sub);
                         //Environment.Exit(0);
@@ -232,25 +258,26 @@ namespace Q.Quantum.Forms
         public override void OnMouseMove(int x, int y, int x_delta, int y_delta)
         {
             //base.OnMouseMove(x, y, x_delta, y_delta);
-            int dx = RenderPosition.X + 5;
+            int dx = RenderPosition.X + 25;
             int dy = RenderPosition.Y + 6;
             foreach (var item in Items)
             {
-                if(x>=dx && x<=dx+TextWidth(item.Text) && y>=dy && y<=dy+Size.Y)
+                if(x>=dx && x<=dx+TextWidth(item.Text)+80 && y>=dy && y<=dy+Size.Y)
                 {
                     OverItem = item;   
                 }
                 //DrawText(item.Text, dx, dy, new Vector4(0, 0, 0, 1));
-                dx += TextWidth(item.Text) + 25;
+                dx += TextWidth(item.Text) + 60;
 
             }
         }
 
-        public MenuItem AddItem(string text)
+        public MenuItem AddItem(string text, Texture.Texture2D icon = null)
         {
 
             var new_item = new MenuItem();
 
+            new_item.Icon = icon;
             new_item.Text = text;
 
             Items.Add(new_item);

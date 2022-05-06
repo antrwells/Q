@@ -9,7 +9,11 @@ namespace Q.Quantum
 {
     public class ITheme
     {
-        
+        public Texture2D FileIcon
+        {
+            get;
+            set;
+        }
         public Texture2D Border
         {
             get;

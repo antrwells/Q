@@ -181,6 +181,43 @@ namespace Q.Quantum.Forms
             
         }
 
+
+        int msx, msy;
+        public override void OnMouseDown(int button)
+        {
+            bool next = false;
+            //base.OnMouseDown(button);
+            Console.WriteLine("MSX:" + msx);
+            if (msx < 8)
+            {
+                edit_x = 0;
+                return;
+            }
+            for (int i = start_x; i < edit_text.Length; i++)
+            {
+               
+                int cx = char_x[i];
+                Console.WriteLine("C:" + i + " CX:" + cx);
+                if (msx > cx)
+                {
+                    next = true;
+                }else if(next)
+                {
+                    edit_x = i;
+                    return;
+                }
+            }
+            edit_x = edit_text.Length;
+        }
+
+        public override void OnMouseMove(int x, int y, int x_delta, int y_delta)
+        {
+            base.OnMouseMove(x, y, x_delta, y_delta);
+            msx = x-RenderPosition.X ;
+            msy = y;
+
+            
+        }
         public override void OnUpdate()
         {
             //base.OnUpdate();

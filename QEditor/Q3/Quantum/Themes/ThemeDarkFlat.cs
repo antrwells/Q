@@ -16,7 +16,8 @@ namespace Q.Quantum.Themes
             Frame = new Texture.Texture2D("Data/UI/Theme/DarkFlatTheme/Frame1.png", false);
             WindowTitle = new Texture.Texture2D("Data/UI/Theme/DarkFlatTheme/WindowTitle1.png", false);
             Line = new Texture.Texture2D("Data/UI/Theme/DarkFlatTheme/Line.png", false);
-            SystemFont = new Font.FontTTF("Data/UI/Theme/DarkFlatTheme/DarkSys.ttf", 15);
+            FileIcon = new Texture.Texture2D("Data/UI/Theme/DarkFlatTheme/FileIcon1.png", false);
+            SystemFont = new Font.FontTTF("Data/UI/Theme/DarkFlatTheme/DarkSys.ttf", 13);
         }
 
     }

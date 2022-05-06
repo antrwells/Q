@@ -37,16 +37,20 @@ namespace Q3Editor
             
             var load_map  = file.AddItem("Load Map");
 
+            load_map.Icon = new Texture2D("Data/UI/Theme/DarkFlatTheme/FileIcon1.png", false);
+
             var lm_2 = load_map.AddItem("Load original.");
             load_map.AddItem("Load copy.");
             load_map.AddItem("Load other.");
+
+            lm_2.AddItem("Yes it works.");
 
             var save_map = file.AddItem("Save Map");
 
             lm_2.CLick = (item) =>
             {
 
-                Environment.Exit(1);
+              //  Environment.Exit(1);
 
             };
 
