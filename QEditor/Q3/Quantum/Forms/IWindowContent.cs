@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Q3.Quantum.Forms;
 
 namespace Q.Quantum.Forms
 {
@@ -11,6 +12,21 @@ namespace Q.Quantum.Forms
 
         private bool resizeLeft, resizeRight, resizeBottom, resizeTop, resizeCorner;
         private bool resizing = false;
+
+        public IToolBar ToolBar
+        {
+            get
+            {
+                return _ToolBar;
+            }
+            set
+            {
+                _ToolBar = value;
+                Add(_ToolBar);
+                _ToolBar.Set(0, 0, Size.X, 45);
+            }                
+        }
+        private IToolBar _ToolBar = null;
 
         public ViewScroller VerticalScroll
         {
@@ -36,6 +52,7 @@ namespace Q.Quantum.Forms
             HorizontalScroll.Scroll = false;
             HorizontalScroll.Horizontal = true;
             Add(HorizontalScroll);
+            _ToolBar = null;
 
             
             Add(VerticalScroll);
@@ -75,9 +92,12 @@ namespace Q.Quantum.Forms
 
         public override void Resized()
         {
-            VerticalScroll.Set(Size.X - 10,0, 10, Size.Y-10);
-            HorizontalScroll.Set(0, Size.Y - 10, Size.X-10, 10);
-        
+            VerticalScroll.Set(Size.X - 10, 0, 10, Size.Y - 10);
+            HorizontalScroll.Set(0, Size.Y - 10, Size.X - 10, 10);
+            if (ToolBar != null)
+            {
+                ToolBar.Set(0, 0, Size.X, 45);
+            }
         }
 
         public override void OnMouseMove(int x, int y, int x_delta, int y_delta)
@@ -205,7 +225,13 @@ namespace Q.Quantum.Forms
             Child.Remove(VerticalScroll);
             Child.Remove(HorizontalScroll);
             Add(VerticalScroll, HorizontalScroll);
+            if (ToolBar != null)
+            {
+                Child.Remove(ToolBar);
+                Add(ToolBar);
+            }
 
+            
             //base.RenderForm();
             Color = new OpenTK.Mathematics.Vector4(1, 1, 1, 1);
             DrawFrame();

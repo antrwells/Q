@@ -472,6 +472,11 @@ namespace Q.Quantum
 
         }
 
+        public void DrawButtonNoText()
+        {
+            Draw(UserInterface.ActiveInterface.Theme.Button);
+        }
+
         public void DrawButton(string text)
         {
             Draw(UserInterface.ActiveInterface.Theme.Button);

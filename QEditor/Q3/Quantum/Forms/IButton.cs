@@ -13,13 +13,30 @@ namespace Q.Quantum.Forms
     {
         bool drag = false;
 
-        public ButtonClicked Click = null;
-        public ButtonClicked DoubleClick = null;
+        public event ButtonClicked Click = null;
+        public event ButtonClicked DoubleClick = null;
 
+        public Q.Texture.Texture2D Icon
+        {
+            get;
+            set;
+        }
+        public IButton()
+        {
+            Icon = null;
+        }
         public override void RenderForm()
         {
 
-            DrawButton(Text);
+            if (Icon != null)
+            {
+                DrawButtonNoText();
+                Draw(Icon, RenderPosition.X+Size.X/2-8, RenderPosition.Y+Size.Y/2-8,16,16, Color);
+            }
+            else
+            {
+                DrawButton(Text);
+            }
 
         }
 

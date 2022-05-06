@@ -11,6 +11,7 @@ using OpenTK.Windowing.Desktop;
 using Q.Draw.Simple;
 using Q.Quantum;
 using Q.Quantum.Forms;
+using Q3.Quantum.Forms;
     
 namespace Q3Editor
 {
@@ -71,6 +72,16 @@ namespace Q3Editor
             img.SetImage(new Texture2D("data/test1.jpg"));
             var text = new ITextEdit().Set(350, 2800, 200, 35).SetText("Test Text") as ITextEdit;
             text.NumericOnly = true;
+            var tb = new IToolBar();
+            tb.Set(0, 0, win.Size.X, 35);
+            win.Content.ToolBar = tb;
+            var b1 = tb.AddItem(new Texture2D("Data/UI/Theme/DarkFlatTheme/FileIcon1.png"),"Load");
+            tb.AddItem(null,"Save");
+
+            //b1.Button.Click
+            b1.Button.Click += Button_Click;
+            
+            //b1.Button.Icon = new Texture2D("Data/UI/Theme/DarkFlatTheme/FileIcon1.png", false);
             // win.Content.ScrollPosition = new OpenTK.Mathematics.Vector2i(50, 0);
             IVector3 tv = new IVector3();
             // 
@@ -78,20 +89,10 @@ namespace Q3Editor
             tv.OnValueChanged += Tv_OnValueChanged;
 
             tv.Set(30, 50, 500, 35);
-            but1.Click = (button) =>
-            {
-                Console.WriteLine("Button Clicked!");
-            };
+           
 
-            but1.DoubleClick = (button) =>
-            {
-
-                Console.WriteLine("Double clicked!");
-
-            };
-
-           // win.Content.Add(img);
-            //win.Content.Add(but1);
+            win.Content.Add(img);
+            win.Content.Add(but1);
            // win.Content.Add(text);
             UI.Add(win);
             
@@ -102,6 +103,12 @@ namespace Q3Editor
             //draw1 = new BasicDraw2D();
 
 
+        }
+
+        private void Button_Click(int button)
+        {
+            Environment.Exit(1);
+            //throw new NotImplementedException();
         }
 
         private void Tv_OnValueChanged(OpenTK.Mathematics.Vector3 value)
