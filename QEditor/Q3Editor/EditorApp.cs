@@ -67,14 +67,18 @@ namespace Q3Editor
 
             var frame1 = new IFrame().Set(20, 20, 300, 500);
             var but1 = new IButton().Set(20, 20, 200, 35).SetText("Button 1") as IButton;
-            var win = new IWindow().Set(20, 20, 500, 600).SetText("Test Window") as IWindow;
+            var win = new IWindow().Set(0,0,AppInfo.Width-100,AppInfo.Height-30).SetText("Test Window") as IWindow;
+
+            win.TitleOn = false;
+
             var img = new IImage().Set(0, 0, 2000,2000) as IImage;
             img.SetImage(new Texture2D("data/test1.jpg"));
             var text = new ITextEdit().Set(350, 2800, 200, 35).SetText("Test Text") as ITextEdit;
             text.NumericOnly = true;
+            
             var tb = new IToolBar();
-            tb.Set(0, 0, win.Size.X, 35);
-            win.Content.ToolBar = tb;
+           tb.Set(0, 0, win.Size.X, 35);
+            //win.Content.ToolBar = tb;
             var b1 = tb.AddItem(new Texture2D("Data/UI/Theme/DarkFlatTheme/FileIcon1.png"),"Load");
             tb.AddItem(null,"Save");
 
@@ -92,7 +96,7 @@ namespace Q3Editor
            
 
             win.Content.Add(img);
-            win.Content.Add(but1);
+            //win.Content.Add(but1);
            // win.Content.Add(text);
             UI.Add(win);
             

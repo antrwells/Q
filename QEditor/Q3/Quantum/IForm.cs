@@ -121,7 +121,9 @@ namespace Q.Quantum
                 {
                     var x = form.Position.X+ (form.Size.X-Size.X);
                     var y = form.Position.Y+ (form.Size.Y-Size.Y);
-                                     
+
+                    if (x < 0) x = 0;
+                    if (y < 0) y = 0;
                   
                     // x = x - Size.X/2;
                     //y = y - Size.Y;

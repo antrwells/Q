@@ -36,6 +36,29 @@ namespace Q.Quantum.Forms
             TitleHeight = 25;
         }
 
+        public bool TitleOn
+        {
+            get
+            {
+                return _TitleOn;
+            }
+            set
+            {
+                if (value)
+                {
+                    Add(Title);
+                    Position = new OpenTK.Mathematics.Vector2i(Position.X, Position.Y + TitleHeight);
+                }
+                else
+                {
+                    Child.Remove(Title);
+                    Position = new OpenTK.Mathematics.Vector2i(Position.X, Position.Y - TitleHeight);
+                }
+                _TitleOn = value;
+            }
+        }
+        private bool _TitleOn = true;
+
         public override void Resized()
         {
             Title.Set(0, 0, Size.X+3, TitleHeight);

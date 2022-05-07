@@ -31,11 +31,96 @@ namespace Q.Quantum.Forms
         {
             get
             {
+                float yi, hd, av, ov;
+                float nm = 0;
+                float ay = 0;
+                float max_V = 0;
+                yi = hd = av = ov = av2 = 0.0f;
+                dh = 0;
+
+                if (Horizontal)
+                {
+                  
+                    ov = (float)Size.X / (float)(MaxValue);
+
+                    if (ov > 0.9)
+                    {
+                     
+                        ov = 0.9f;
+                    }
+      
+
+
+                    dh = (int)(Size.X * ov);
+
+           
+
+                    if (CurrentValue + dh > Size.X)
+                    {
+                        if (dh != float.PositiveInfinity)
+                        {
+                            CurrentValue = Size.X - (int)dh;
+                            if (CurrentValue < 0) CurrentValue = 0;
+                        }
+                    }
+
+
+
+                    max_V = Size.X - (dh);
+                 
+                    av2 = CurrentValue / max_V;
+                
+                }
+                else
+                {
+                                
+
+                    ov = (float)Size.Y / (float)(MaxValue);
+
+                    if (ov > 0.9)
+                    {
+               
+                        ov = 0.9f;
+                    }
+                    
+
+
+
+
+                    dh = (int)(Size.Y * ov);
+
+                  
+
+           
+
+
+                    if (CurrentValue + dh > Size.Y)
+                    {
+                        if (dh != float.PositiveInfinity)
+                        {
+                            CurrentValue = Size.Y - (int)dh;
+                            if (CurrentValue < 0) CurrentValue = 0;
+                        }
+                    }
+
+
+
+                    max_V = Size.Y - (dh);
+          
+
+                    av2 = CurrentValue / max_V;
+              
+
+
+                }
+
+
                 return av2;
             }
         }
         float av2;
 
+        private int dh;
 
         public ViewScroller()
         {
@@ -48,7 +133,31 @@ namespace Q.Quantum.Forms
         public override void OnMouseDown(int button)
         {
             base.OnMouseDown(button);
-            Drag = true;
+            if (Horizontal)
+            {
+
+                if (msx > RenderPosition.X + CurrentValue && msx < RenderPosition.X + CurrentValue + dh)
+                {
+                    Drag = true;
+                }
+                else
+                {
+                    Drag = false;
+                }
+
+            }
+            else
+            {
+                if (msy > RenderPosition.Y + CurrentValue && msy < RenderPosition.Y + CurrentValue + dh)
+                {
+                    Drag = true;
+                }
+                else
+                {
+                    Drag = false;
+                }
+            }
+            //Drag = true;
         }
 
         public override void OnMouseUp(int button)
@@ -56,9 +165,11 @@ namespace Q.Quantum.Forms
             base.OnMouseUp(button);
             Drag = false;
         }
-
+        int msx, msy;
         public override void OnMouseMove(int x, int y, int x_delta, int y_delta)
         {
+            msx = x;
+            msy = y;
             base.OnMouseMove(x, y, x_delta, y_delta);
             if (Drag)
             {
@@ -87,131 +198,9 @@ namespace Q.Quantum.Forms
         }
 
         public override void RenderForm()
-        {
-            float yi, hd, av, ov, dh;
-            float nm = 0;
-            float ay = 0;
-            float max_V = 0;
-            yi = hd = av = ov = av2 = 0.0f;
-            dh = 0;
-
-            if (Horizontal)
-            {
-                yi = (float)(CurrentValue) / (float)(MaxValue);
-
-                hd = Size.X / (float)(MaxValue);
-
-                av = CurrentValue * hd;
-
-                ov = (float)Size.X / (float)(MaxValue);
-
-            
-               // Console.WriteLine("HV:" + ov);
-
-
-                dh = Size.X * ov;
-
-                nm = Size.X - dh;
-
-                ay = CurrentValue;
-
-                if (CurrentValue + dh > Size.X)
-                {
-                    if (dh != float.PositiveInfinity)
-                    {
-                        CurrentValue = Size.X - (int)dh;
-                        if (CurrentValue < 0) CurrentValue = 0;
-                    }
-                }
-
-
-
-                max_V = Size.X - (dh);
-                //float yd = Size.Y - (CurrentValue + dh);
-                if (max_V < 1)
-                {
-                    max_V = 1;
-                }
-                av2 = CurrentValue / max_V;
-
-                if (av2 > 1)
-                {
-                    av2 = 1;
-                }
-            }
-            else
-            {
-
-                yi = (float)(CurrentValue) / (float)(MaxValue);
-
-                hd = Size.Y / (float)(MaxValue);
-
-//                av = CurrentValue * hd;
-
-                ov = (float)Size.Y / (float)(MaxValue);
-
-               // if (ov > 1) ov = 1;
-                
-
-                dh = Size.Y * ov;
-
-                nm = Size.Y - dh;
-
-                ay = CurrentValue;
-
-                if (CurrentValue + dh > Size.Y)
-                {
-                    if (dh != float.PositiveInfinity)
-                    {
-                        CurrentValue = Size.Y - (int)dh;
-                        if (CurrentValue < 0) CurrentValue = 0;
-                    }
-                }
-
-
-
-                max_V = Size.Y - (dh);
-                //float yd = Size.Y - (CurrentValue + dh);
-               // Console.WriteLine("AV2aa:" + av2);
-                if(max_V<1)
-                {
-                    max_V = 1;
-                }
-                av2 = CurrentValue / max_V;
-                //Console.WriteLine("CV:" + CurrentValue + " MAX:" + max_V);
-
-
-                if (av2 == float.NaN || av2 == float.PositiveInfinity || av2==float.NegativeInfinity)
-                {
-                    av2 = 0;
-                }
-                if(av2<0)
-                {
-                    av2 = 0;
-                }
-                if(av2>1 )
-                {
-                    av2 = 1;
-                }
-
-               
-              
-               // Console.WriteLine("AV2aa:" + av2);
-
-                if (av2 > 1)
-                {
-                    av2 = 1;
-                }
-            }
-            //  Console.WriteLine("AV:" + av2);
-
-            //yd = yd / MaxValue;
-
-
-            //int draw_y = (int)Size.Y 
-            //int draw_h = (int)((float)Size.Y * ov);
-            skip:
-            //base.RenderForm();
+       {
+       
+       
             DrawFrame();
             DrawOutline(new OpenTK.Mathematics.Vector4(1, 1, 1, 1));
             if (Horizontal)
@@ -221,7 +210,7 @@ namespace Q.Quantum.Forms
             else
             {
                 DrawFrame(RenderPosition.X + 1, RenderPosition.Y + CurrentValue, Size.X - 1, (int)dh, new OpenTK.Mathematics.Vector4(1, 3, 3, 1));
-                ;
+                
             }
         }
 
