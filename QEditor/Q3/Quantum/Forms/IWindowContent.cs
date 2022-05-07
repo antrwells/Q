@@ -224,8 +224,15 @@ namespace Q.Quantum.Forms
 
             Child.Remove(VerticalScroll);
             Child.Remove(HorizontalScroll);
-            Add(VerticalScroll, HorizontalScroll);
-            if (ToolBar != null)
+            if(ContentSize.X>Size.X)
+            {
+                Add(HorizontalScroll);  
+            };
+            if (ContentSize.Y > Size.Y)
+            {
+                Add(VerticalScroll, HorizontalScroll);
+            }
+                if (ToolBar != null)
             {
                 Child.Remove(ToolBar);
                 Add(ToolBar);
@@ -233,7 +240,7 @@ namespace Q.Quantum.Forms
 
             
             //base.RenderForm();
-            Color = new OpenTK.Mathematics.Vector4(1, 1, 1, 1);
+            Color = new OpenTK.Mathematics.Vector4(1, 1, 1, 0.7f);
             DrawFrame();
             Color = new OpenTK.Mathematics.Vector4(0.6f, 0.6f, 0.6f, 1.0f);
             DrawLine(RenderPosition.X-1, RenderPosition.Y, RenderPosition.X-1 + Size.X, RenderPosition.Y, Color);

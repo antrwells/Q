@@ -142,7 +142,7 @@ namespace Q.Quantum.Forms
                 {
                     Draw(item.Icon, dx, dy+1, 16, 16,new Vector4(1,1,1,1));
                 }
-                DrawText(item.Text, dx+32, dy, new Vector4(0.7f, 0.7f, 0.7f, 1.0f));
+                DrawText(item.Text, dx+32, dy,UserInterface.ActiveInterface.Theme.SystemTextColor);
                 if (item.Items.Count > 0)
                 {
                     Draw(IMainMenu.RightArrow, RenderPosition.X+ Size.X - 32, dy,16, 16, new Vector4(1, 1, 1, 1));
@@ -192,7 +192,7 @@ namespace Q.Quantum.Forms
                 {
                     DrawFrame(dx-25,dy-6,TextWidth(item.Text)+80,Size.Y, new Vector4(0.5f, 0.5f, 0.5f, 1));
                 }
-                DrawText(item.Text, dx+3, dy+1, new Vector4(0.7f,0.7f, 0.7f, 1));
+                DrawText(item.Text, dx+3, dy+1,UserInterface.ActiveInterface.Theme.SystemTextColor);
                 item.DX = dx;
                 dx += TextWidth(item.Text) + 60;
             }

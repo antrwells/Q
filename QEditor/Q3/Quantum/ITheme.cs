@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Q.Texture;
+using OpenTK.Mathematics;
 
 namespace Q.Quantum
 {
@@ -51,6 +52,12 @@ namespace Q.Quantum
         }
 
         public Font.FontTTF SystemFont
+        {
+            get;
+            set;
+        }
+
+        public Vector4 SystemTextColor
         {
             get;
             set;

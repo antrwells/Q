@@ -18,6 +18,7 @@ namespace Q.Quantum.Themes
             Line = new Texture.Texture2D("Data/UI/Theme/DarkFlatTheme/Line.png", false);
             FileIcon = new Texture.Texture2D("Data/UI/Theme/DarkFlatTheme/FileIcon1.png", false);
             SystemFont = new Font.FontTTF("Data/UI/Theme/DarkFlatTheme/DarkSys.ttf", 13);
+            SystemTextColor = new OpenTK.Mathematics.Vector4(0.7f, 0.7f, 0.7f, 1);
         }
 
     }

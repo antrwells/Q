@@ -99,7 +99,7 @@ namespace Q.Quantum
         public UserInterface()
         {
 
-            Theme = new Themes.ThemeDarkFlat();
+            Theme = new Themes.ThemeDark();
             Cursor = new Texture2D("Data/ui/cursor/normal.png", false);
             Draw = new BasicDraw2D();
             Root = new Forms.IGroup();
@@ -190,12 +190,13 @@ namespace Q.Quantum
 
             MoveTo(zone, DragWin);
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 1; i++)
             {
                 foreach (var win in Docker.Center.ToArray())
                 {
                     MoveTo(Q3.Quantum.Forms.DockZone.Center, win);
                 }
+                
                 /*
                 foreach (var win in Docker.Left.ToArray())
                 {
@@ -213,7 +214,7 @@ namespace Q.Quantum
                 {
                     MoveTo(Q3.Quantum.Forms.DockZone.Bottom, win);
                 }
-            */
+                */
             }
 
 
@@ -384,6 +385,10 @@ namespace Q.Quantum
                         {
                             DragWin.Set(0, Docker.Size.Y / 4, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y);
                         }
+                        else
+                        {
+                            DragWin.Set(0, Docker.Size.Y / 4, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y / 2);
+                        }
 
                     }
                     else if (Docker.RightCount() == 0)
@@ -416,6 +421,10 @@ namespace Q.Quantum
                         else if (Docker.BottomCount() == 0)
                         {
                             DragWin.Set(Docker.Size.X / 4, Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y - Docker.Size.Y / 4);
+                        }
+                        else
+                        {
+                            DragWin.Set(Docker.Size.X / 4, Docker.Size.Y / 4, Docker.Size.X / 4, Docker.Size.Y / 4);
                         }
                     }
                     //DragWin.Set(Docker.Size.X / 4, Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y / 2);

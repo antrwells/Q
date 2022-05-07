@@ -59,19 +59,23 @@ namespace Q3Editor
 
             var win = new IWindow();
             win.Set(200, 200, 300, 300);
-            win.SetText("Test Window");
+            win.Title.SetText("Scene View");
 
             var win2 = new IWindow();
             win2.Set(50, 50, 250, 250);
-            win2.SetText("Test Window 2");
-
+            win2.Title.SetText("Console");
+            
             var win3 = new IWindow();
             win3.Set(300, 300, 250, 250);
-            win3.SetText("Window 3");
+            win3.Title.SetText("Editor");
 
             var win4 = new IWindow();
             win4.Set(20, 20, 150, 150);
-            win4.SetText("Window 4");
+            win4.Title.SetText("Properties");
+
+            var v3 = new IVector3();
+            v3.Set(20, 20, 280, 30);
+            win4.Content.Add(v3);
 
 
             UI.Root.Add(win);
