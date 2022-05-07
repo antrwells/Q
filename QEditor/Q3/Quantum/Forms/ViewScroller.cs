@@ -41,13 +41,14 @@ namespace Q.Quantum.Forms
                 if (Horizontal)
                 {
                   
-                    ov = (float)Size.X / (float)(MaxValue);
+                    ov = (float)(Size.X-(MaxValue)) / (float)(MaxValue);
 
-                    if (ov > 0.9)
+                    if (ov > 1.0)
                     {
                      
-                        ov = 0.9f;
+                        ov = 1.0f;
                     }
+                    if (ov < 0.1) ov = 0.1f;
       
 
 
@@ -75,12 +76,16 @@ namespace Q.Quantum.Forms
                 {
                                 
 
-                    ov = (float)Size.Y / (float)(MaxValue);
+                    ov = (float)(Size.Y-MaxValue) / (float)(MaxValue);
 
                     if (ov > 0.9)
                     {
                
                         ov = 0.9f;
+                    }
+                    if(ov<0.1)
+                    {
+                        ov = 0.1f;
                     }
                     
 

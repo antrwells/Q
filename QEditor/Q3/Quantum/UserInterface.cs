@@ -19,6 +19,9 @@ namespace Q.Quantum
             set;
         }
 
+        
+
+
         public ITheme Theme
         {
             get;
@@ -29,6 +32,25 @@ namespace Q.Quantum
             get;
             set;
         }
+        
+        private Q3.Quantum.Forms.DockZone HighlightZone
+        {
+            get;
+            set;
+        }
+
+        public Q.Quantum.Forms.IWindow DragWin
+        {
+            get;
+            set;
+        }
+
+        public Q3.Quantum.Forms.IDockArea Docker
+        {
+            get;
+            set;
+        }
+            
 
         public IForm FormOver
         {
@@ -81,13 +103,15 @@ namespace Q.Quantum
             Cursor = new Texture2D("Data/ui/cursor/normal.png", false);
             Draw = new BasicDraw2D();
             Root = new Forms.IGroup();
-            Root.Set(0, 25, App.AppInfo.Width, App.AppInfo.Height-25);
+            Root.Set(0, 60, App.AppInfo.Width, App.AppInfo.Height-60);
             ActiveInterface = this;
             prev_mouse = new Vector2(0, 0);
             FormPressed = new IForm[32];
             PrevClick = new long[32];
             Input.AppInput.OnKeyDown += AppInput_OnKeyDown;
             Input.AppInput.OnKeyUp += AppInput_OnKeyUp;
+            Docker = null;
+            HighlightZone = Q3.Quantum.Forms.DockZone.None;
         }
 
         private void AppInput_OnKeyUp(OpenTK.Windowing.GraphicsLibraryFramework.Keys obj)
@@ -156,8 +180,317 @@ namespace Q.Quantum
         int clicks = 0;
         int clicktime = 0;
         bool clicked = false;
+
+        public void DragComplete()
+        {
+
+            Docker.Remove(DragWin);
+
+            var zone = HighlightZone;
+
+            MoveTo(zone, DragWin);
+
+            for (int i = 0; i < 20; i++)
+            {
+                foreach (var win in Docker.Center.ToArray())
+                {
+                    MoveTo(Q3.Quantum.Forms.DockZone.Center, win);
+                }
+                /*
+                foreach (var win in Docker.Left.ToArray())
+                {
+                    MoveTo(Q3.Quantum.Forms.DockZone.Left, win);
+                }
+                foreach (var win in Docker.Right.ToArray())
+                {
+                    MoveTo(Q3.Quantum.Forms.DockZone.Right, win);
+                }
+                foreach (var win in Docker.Top.ToArray())
+                {
+                    MoveTo(Q3.Quantum.Forms.DockZone.Top, win);
+                }
+                foreach (var win in Docker.Bottom.ToArray())
+                {
+                    MoveTo(Q3.Quantum.Forms.DockZone.Bottom, win);
+                }
+            */
+            }
+
+
+
+
+
+
+
+            HighlightZone = Q3.Quantum.Forms.DockZone.None;
+        }
+
+        private void MoveTo(Q3.Quantum.Forms.DockZone zone,IWindow DragWin)
+        {
+            switch (zone)
+            {
+                case Q3.Quantum.Forms.DockZone.Left:
+
+                    //DragWin.Set(0, 0, Docker.Size.X / 4, Docker.Size.Y);
+
+                    if(Docker.TopCount()==0 && Docker.BottomCount() == 0)
+                    {
+                        DragWin.Set(0, 0, Docker.Size.X / 4, Docker.Size.Y);
+                    }else if (Docker.TopCount() == 0)
+                    {
+
+                        DragWin.Set(0,0, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
+
+                    }else if (Docker.BottomCount() == 0)
+                    {
+                        DragWin.Set(0, Docker.Size.Y / 4, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
+                    }
+                    else
+                    {
+                        DragWin.Set(0, Docker.Size.Y / 4, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 2);
+                    }
+
+
+                    Docker.AddLeft(DragWin);
+
+                    break;
+                case Q3.Quantum.Forms.DockZone.Right:
+
+                    //DragWin.Set(Docker.Size.X - Docker.Size.X / 4, 0, Docker.Size.X / 4, Docker.Size.Y);
+                    if (Docker.TopCount() == 0 && Docker.BottomCount() == 0)
+                    {
+                        DragWin.Set(Docker.Size.X-Docker.Size.X/4, 0, Docker.Size.X / 4, Docker.Size.Y);
+                    }
+                    else if (Docker.TopCount() == 0)
+                    {
+
+                        DragWin.Set(Docker.Size.X-Docker.Size.X/4, 0, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
+
+                    }
+                    else if (Docker.BottomCount() == 0)
+                    {
+                        DragWin.Set(Docker.Size.X-Docker.Size.X/4, Docker.Size.Y / 4, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
+                    }
+                    else
+                    {
+                        DragWin.Set(Docker.Size.X-Docker.Size.X/4, Docker.Size.Y / 4, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 2);
+                    }
+
+
+                    Docker.AddRight(DragWin);
+
+                    break;
+                case Q3.Quantum.Forms.DockZone.Top:
+
+                    //DragWin.Set(0, 0, Docker.Size.X, Docker.Size.Y / 4);
+
+                    if (Docker.LeftCount() == 0 && Docker.RightCount() == 0)
+                    {
+                        DragWin.Set(0,0, Docker.Size.X, Docker.Size.Y / 4);
+                    }
+                    else if (Docker.LeftCount() == 0)
+                    {
+                        DragWin.Set(0,0, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y / 4);
+                        //DragWin.Set(0, Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y / 4);
+                    }
+                    else if (Docker.RightCount() == 0)
+                    {
+
+                        DragWin.Set(Docker.Size.X / 4, 0, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y / 4);
+
+                    }
+                    else
+                    {
+                        DragWin.Set(Docker.Size.X / 4,0, Docker.Size.X / 2, Docker.Size.Y / 4);
+                    }
+
+
+                    Docker.AddTop(DragWin);
+
+
+                    break;
+                case Q3.Quantum.Forms.DockZone.Bottom
+
+                :
+                    if (Docker.LeftCount() == 0 && Docker.RightCount() == 0)
+                    {
+                        DragWin.Set(0, Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X, Docker.Size.Y / 4);
+                    }
+                    else if (Docker.LeftCount() == 0)
+                    {
+                        DragWin.Set(0, Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y / 4);
+                        //DragWin.Set(0, Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y / 4);
+                    }
+                    else if (Docker.RightCount() == 0)
+                    {
+                        //if (Docker.Left[0].Size.Y >= Docker.Size.Y-2)
+                        {
+
+                            DragWin.Set(Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y / 4);
+                        }
+                      //  else
+                        {
+                          //  DragWin.Set(0, Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X, Docker.Size.Y / 4);
+                        }
+                    }
+                    else
+                    {
+                        DragWin.Set(Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y / 4);
+                    }
+
+                    Docker.AddBottom(DragWin);
+
+
+                    break;
+
+                case Q3.Quantum.Forms.DockZone.Center:
+
+
+                    if (Docker.LeftCount() == 0 && Docker.RightCount() == 0)
+                    {
+                        if (Docker.TopCount() == 0 && Docker.BottomCount() == 0)
+                        {
+                            //Docker.AddCenter(DragWin);
+                            DragWin.Set(0, 0, Docker.Size.X, Docker.Size.Y);
+                        }
+                        else if (Docker.TopCount() == 0)
+                        {
+                            DragWin.Set(0, 0, Docker.Size.X, Docker.Size.Y - Docker.Size.Y / 4);
+                        }
+                        else if (Docker.BottomCount() == 0)
+                        {
+                            DragWin.Set(0, Docker.Size.Y / 4, Docker.Size.X, Docker.Size.Y - Docker.Size.Y / 4);
+                        }
+                        else
+                        {
+                            DragWin.Set(0, Docker.Size.Y / 4, Docker.Size.X, Docker.Size.Y - Docker.Size.Y / 2);
+                        }
+
+
+                    }
+                    else if (Docker.LeftCount() == 0)
+                    {
+
+                        if (Docker.TopCount() == 0 && Docker.BottomCount() == 0)
+                        {
+                            //Docker.AddCenter(DragWin);
+                            DragWin.Set(0, 0, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y);
+                        }
+                        else if (Docker.TopCount() == 0)
+                        {
+                            DragWin.Set(0, 0, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
+                        }
+                        else if (Docker.BottomCount() == 0)
+                        {
+                            DragWin.Set(0, Docker.Size.Y / 4, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y);
+                        }
+
+                    }
+                    else if (Docker.RightCount() == 0)
+                    {
+                        if (Docker.TopCount() == 0 && Docker.BottomCount() == 0)
+                        {
+                            //Docker.AddCenter(DragWin);
+                            DragWin.Set(Docker.Size.X / 4, 0, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y);
+                        }
+                        else if (Docker.TopCount() == 0)
+                        {
+                            DragWin.Set(Docker.Size.X / 4, 0, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
+                        }
+                        else if (Docker.BottomCount() == 0)
+                        {
+                            DragWin.Set(Docker.Size.X / 4, Docker.Size.Y / 4, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y);
+                        }
+
+                    }
+                    else
+                    {
+                        if (Docker.TopCount() == 0 && Docker.BottomCount() == 0)
+                        {
+                            DragWin.Set(Docker.Size.X / 4, 0, Docker.Size.X / 2, Docker.Size.Y);
+                        }
+                        else if (Docker.TopCount() == 0)
+                        {
+                            DragWin.Set(Docker.Size.X / 4, 0, Docker.Size.X / 2, Docker.Size.Y - Docker.Size.Y / 4);
+                        }
+                        else if (Docker.BottomCount() == 0)
+                        {
+                            DragWin.Set(Docker.Size.X / 4, Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y - Docker.Size.Y / 4);
+                        }
+                    }
+                    //DragWin.Set(Docker.Size.X / 4, Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y / 2);
+                    Docker.AddCenter(DragWin);
+
+
+
+                    break;
+            }
+        }
+
         public void UpdateUI()
         {
+
+            if (DragWin != null)
+            {
+                var dpos = DragWin.RenderPosition;
+
+                HighlightZone = Q3.Quantum.Forms.DockZone.None;
+
+                //left
+                if (dpos.X > Docker.RenderPosition.X && dpos.X < Docker.RenderPosition.X + Docker.Size.X / 4)
+                {
+                    if (dpos.Y > Docker.RenderPosition.Y && dpos.Y < Docker.RenderPosition.Y + Docker.Size.Y)
+                    {
+
+                        HighlightZone = Q3.Quantum.Forms.DockZone.Left;
+
+                    }
+
+                }
+                
+                if(dpos.X>=Docker.RenderPosition.X+Docker.Size.X-Docker.Size.X/4 && dpos.X<=Docker.RenderPosition.X+Docker.Size.X)
+                {
+                    if (dpos.Y > Docker.RenderPosition.Y && dpos.Y < Docker.RenderPosition.Y + Docker.Size.Y)
+                    {
+
+                        HighlightZone = Q3.Quantum.Forms.DockZone.Right;
+
+                    }
+                }
+
+                if (dpos.Y >= Docker.RenderPosition.Y    && dpos.Y <= Docker.RenderPosition.Y + Docker.Size.Y/4)
+                {
+
+                    if(dpos.X>=Docker.RenderPosition.X && dpos.X<=Docker.RenderPosition.X+Docker.Size.X)
+                    {
+
+                        HighlightZone = Q3.Quantum.Forms.DockZone.Top;
+
+                    }
+
+                }
+
+                if (dpos.Y >= (Docker.RenderPosition.Y+Docker.Size.Y) - Docker.Size.Y / 4 && dpos.Y <= Docker.RenderPosition.Y+Docker.Size.Y)
+                {
+
+                    if (dpos.X >= Docker.RenderPosition.X && dpos.X <= Docker.RenderPosition.X + Docker.Size.X)
+                    {
+
+                        HighlightZone = Q3.Quantum.Forms.DockZone.Bottom;
+
+                    }
+
+                }
+
+                if (dpos.X >= Docker.Position.X + Docker.Size.X / 4 && dpos.X <= Docker.Position.X + Docker.Size.X - Docker.Size.X / 4)
+                {
+                    if (dpos.Y >= Docker.Position.Y + Docker.Size.Y / 4 && dpos.Y <= Docker.Position.Y + Docker.Size.Y - Docker.Size.Y / 4)
+                    {
+                        HighlightZone = Q3.Quantum.Forms.DockZone.Center;
+                    }
+
+                }  
+            }
 
             if (key_in)
             {
@@ -270,8 +603,11 @@ namespace Q.Quantum
                     //clicktime = Environment.TickCount;
                     if (clicks == 2)
                     {
-                        form_over.OnDoubleClick(0);
-                        clicks = 0;
+                        if (form_over != null)
+                        {
+                            form_over.OnDoubleClick(0);
+                            clicks = 0;
+                        }
                     }
                     
                 }
@@ -288,7 +624,7 @@ namespace Q.Quantum
                     {
                       
                     }                    
-                    if (FormPressed[i] == null)
+                    if (FormPressed[i] == null && form_over!=null)
                     {
                         form_over.OnMouseDown(i);
                         FormPressed[i] = form_over;
@@ -372,6 +708,40 @@ namespace Q.Quantum
         public void RenderUI()
         {
             Root.Render();
+
+            OpenTK.Graphics.OpenGL.GL.Disable(OpenTK.Graphics.OpenGL.EnableCap.ScissorTest);
+
+            switch (HighlightZone)
+            {
+                case Q3.Quantum.Forms.DockZone.Left:
+
+                    Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y, Docker.Size.X / 4, Docker.Size.Y, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
+                    
+                    break;
+                case Q3.Quantum.Forms.DockZone.Right:
+
+                    Draw.Rect(Docker.RenderPosition.X + Docker.Size.X - Docker.Size.X / 4, Docker.RenderPosition.Y, Docker.Size.X / 4, Docker.Size.Y, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
+
+                    break;
+                case Q3.Quantum.Forms.DockZone.Top:
+
+                    Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y, Docker.Size.X, Docker.Size.Y / 4, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
+
+                    break;
+                case Q3.Quantum.Forms.DockZone.Bottom:
+
+                    Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y + Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X, Docker.Size.Y / 4, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
+                    break;
+                case Q3.Quantum.Forms.DockZone.Center:
+
+                    Draw.Rect(Docker.RenderPosition.X + Docker.Size.X / 4, Docker.RenderPosition.Y + Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y / 2, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
+
+                                 break;
+                    
+                    
+
+            }
+            
             OpenTK.Graphics.OpenGL.GL.Disable(OpenTK.Graphics.OpenGL.EnableCap.ScissorTest);
             if (MainMenu != null)
             {

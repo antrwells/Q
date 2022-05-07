@@ -30,8 +30,11 @@ namespace Q3Editor
         {
             UI = new UserInterface();
 
+            
+            
             var menu = UI.AddMainMenu() as IMainMenu;
 
+            
             var file = menu.AddItem("File");
             var edit = menu.AddItem("Edit");
             var help = menu.AddItem("Help");
@@ -48,6 +51,35 @@ namespace Q3Editor
 
             var save_map = file.AddItem("Save Map");
 
+            var dock_area = new IDockArea();
+
+            dock_area.Set(0, 0, AppInfo.Width-1, UI.Root.Size.Y-1);
+
+            UI.Root.Add(dock_area);
+
+            var win = new IWindow();
+            win.Set(200, 200, 300, 300);
+            win.SetText("Test Window");
+
+            var win2 = new IWindow();
+            win2.Set(50, 50, 250, 250);
+            win2.SetText("Test Window 2");
+
+            var win3 = new IWindow();
+            win3.Set(300, 300, 250, 250);
+            win3.SetText("Window 3");
+
+            var win4 = new IWindow();
+            win4.Set(20, 20, 150, 150);
+            win4.SetText("Window 4");
+
+
+            UI.Root.Add(win);
+            UI.Root.Add(win2);
+            UI.Root.Add(win3);
+            UI.Root.Add(win4);
+            UI.Docker = dock_area;
+            
             lm_2.CLick = (item) =>
             {
 
@@ -65,40 +97,40 @@ namespace Q3Editor
             };
 
 
-            var frame1 = new IFrame().Set(20, 20, 300, 500);
-            var but1 = new IButton().Set(20, 20, 200, 35).SetText("Button 1") as IButton;
-            var win = new IWindow().Set(0,0,AppInfo.Width-100,AppInfo.Height-30).SetText("Test Window") as IWindow;
+            //var frame1 = new IFrame().Set(20, 20, 300, 500);
+            //var but1 = new IButton().Set(20, 20, 200, 35).SetText("Button 1") as IButton;
+            //var win = new IWindow().Set(0,0,AppInfo.Width-100,AppInfo.Height-30).SetText("Test Window") as IWindow;
 
-            win.TitleOn = false;
+           // win.TitleOn = false;
 
-            var img = new IImage().Set(0, 0, 2000,2000) as IImage;
-            img.SetImage(new Texture2D("data/test1.jpg"));
-            var text = new ITextEdit().Set(350, 2800, 200, 35).SetText("Test Text") as ITextEdit;
-            text.NumericOnly = true;
+            //var img = new IImage().Set(0, 0, 2000,2000) as IImage;
+            //img.SetImage(new Texture2D("data/test1.jpg"));
+           // var text = new ITextEdit().Set(350, 2800, 200, 35).SetText("Test Text") as ITextEdit;
+            //text.NumericOnly = true;
             
-            var tb = new IToolBar();
-           tb.Set(0, 0, win.Size.X, 35);
+           // var tb = new IToolBar();
+           //tb.Set(0, 0, win.Size.X, 35);
             //win.Content.ToolBar = tb;
-            var b1 = tb.AddItem(new Texture2D("Data/UI/Theme/DarkFlatTheme/FileIcon1.png"),"Load");
-            tb.AddItem(null,"Save");
+            //var b1 = tb.AddItem(new Texture2D("Data/UI/Theme/DarkFlatTheme/FileIcon1.png"),"Load");
+            //tb.AddItem(null,"Save");
 
             //b1.Button.Click
-            b1.Button.Click += Button_Click;
+           // b1.Button.Click += Button_Click;
             
             //b1.Button.Icon = new Texture2D("Data/UI/Theme/DarkFlatTheme/FileIcon1.png", false);
             // win.Content.ScrollPosition = new OpenTK.Mathematics.Vector2i(50, 0);
-            IVector3 tv = new IVector3();
+           // IVector3 tv = new IVector3();
             // 
-            win.Content.Add(tv);
-            tv.OnValueChanged += Tv_OnValueChanged;
+           // win.Content.Add(tv);
+           // tv.OnValueChanged += Tv_OnValueChanged;
 
-            tv.Set(30, 50, 500, 35);
+           // tv.Set(30, 50, 500, 35);
            
 
-            win.Content.Add(img);
-            //win.Content.Add(but1);
-           // win.Content.Add(text);
-            UI.Add(win);
+            //win.Content.Add(img);
+        //    win.Content.Add(but1);
+         //   win.Content.Add(text);
+          //  UI.Add(win);
             
             base.InitApp();
             //tex1 = new Texture2D("data/t1.png", false);

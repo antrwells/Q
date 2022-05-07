@@ -44,18 +44,26 @@ namespace Q.Quantum.Forms
         {
             //base.OnMouseDown(button);
             Drag = true;
+            Root.Root.Child.Remove(Root);
+            Root.Root.Add(Root);
         }
 
         public override void OnMouseUp(int button)
         {
            // base.OnMouseUp(button);
             Drag = false;
+            if (UserInterface.ActiveInterface.DragWin != null)
+            {
+                UserInterface.ActiveInterface.DragComplete();
+            }
+            UserInterface.ActiveInterface.DragWin = null;
         }
 
         public override void OnMouseMove(int x, int y, int x_delta, int y_delta)
         {
-            if (!Drag) return;     
+            if (!Drag) return;
             //base.OnMouseMove(x, y, x_delta, y_delta);
+            UserInterface.ActiveInterface.DragWin = Root as IWindow;
             Root.Position = new OpenTK.Mathematics.Vector2i(Root.Position.X + x_delta, Root.Position.Y + y_delta);
            //Add to moving window.
         }
