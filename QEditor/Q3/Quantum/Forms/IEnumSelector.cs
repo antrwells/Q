@@ -7,6 +7,7 @@ using Q.Quantum;
 
 namespace Q3.Quantum.Forms
 {
+    public delegate void EnumSelected(string value);
     public class IEnumSelector : IForm
     {
 
@@ -29,6 +30,8 @@ namespace Q3.Quantum.Forms
             get;
             set;
         }
+
+        public event EnumSelected OnSelected;
 
         private IListSelector Selector;
 
@@ -90,6 +93,9 @@ namespace Q3.Quantum.Forms
                 if(sel == item.Text)
                 {
                     CurrentSelection = i;
+                    Child.Remove(Selector);
+                    Open = false;
+                    OnSelected?.Invoke(Values[i]);
                     break;
                 }
                 i++;

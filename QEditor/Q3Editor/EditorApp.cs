@@ -88,6 +88,8 @@ namespace Q3Editor
 
             esel.Set(20, 20, 200, 30);
 
+            esel.OnSelected += Esel_OnSelected;
+
             win4.Content.Add(esel);
 
             //UI.Root.Add(win);
@@ -155,6 +157,12 @@ namespace Q3Editor
             //draw1 = new BasicDraw2D();
 
 
+        }
+
+        private void Esel_OnSelected(string value)
+        {
+            Console.WriteLine("Selected:" + value);
+            //throw new NotImplementedException();
         }
 
         private void Button_Click(int button)
