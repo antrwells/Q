@@ -26,10 +26,17 @@ namespace Q3Editor
             
         }
 
+        public enum testEnum
+        {
+            OpenGL=1,DirectX,Vulkan,None
+        }
+
         public override void InitApp()
         {
             UI = new UserInterface();
 
+
+            
             
             
             var menu = UI.AddMainMenu() as IMainMenu;
@@ -70,17 +77,22 @@ namespace Q3Editor
             win3.Title.SetText("Editor");
 
             var win4 = new IWindow();
-            win4.Set(20, 20, 150, 150);
+            win4.Set(20, 20, 350, 250);
             win4.Title.SetText("Properties");
 
             var v3 = new IVector3();
             v3.Set(20, 20, 280, 30);
-            win4.Content.Add(v3);
+            //win4.Content.Add(v3);
 
+            IEnumSelector esel = new IEnumSelector(typeof(testEnum));
 
-            UI.Root.Add(win);
-            UI.Root.Add(win2);
-            UI.Root.Add(win3);
+            esel.Set(20, 20, 200, 30);
+
+            win4.Content.Add(esel);
+
+            //UI.Root.Add(win);
+            //UI.Root.Add(win2);
+           // UI.Root.Add(win3);
             UI.Root.Add(win4);
             UI.Docker = dock_area;
             
