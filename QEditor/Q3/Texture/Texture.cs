@@ -45,6 +45,11 @@ namespace Q.Texture
             set;
         }
 
+        protected InternalFormat Format
+        {
+            get;
+            set;
+        }
         public bool Loading
         {
             get;

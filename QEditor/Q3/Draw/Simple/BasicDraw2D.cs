@@ -85,6 +85,37 @@ namespace Q.Draw.Simple
             data[23] = 0;
         }
 
+        public void Rect(Q.Shader.Effect fx,int x, int y, int w, int h, Q.Texture.Texture2D tex, Vector4 col)
+        {
+            //tex.Bind(Texture.TextureUnit.Unit0);
+
+            SetData(x, y, w, h);
+            GenerateGL();
+
+
+
+
+            Matrix4 pm = Matrix4.CreateOrthographicOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, 0, 1.0f);
+
+            fx.Bind();
+            tex.Bind(Texture.TextureUnit.Unit0);
+            fx.SetUniform("image", 0);
+            fx.SetUniform("proj", pm);
+            fx.SetUniform("texSize", new Vector2(tex.Width, tex.Height));
+            fx.SetUniform("drawCol", col);
+
+            GL.BindVertexArray(arrays[0]);
+            GL.MemoryBarrier(MemoryBarrierMask.ShaderImageAccessBarrierBit);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 16);
+
+            fx1.Release();
+
+            GL.DeleteVertexArray(arrays[0]);
+            GL.DeleteBuffer(buffer[0]);
+            // tex.Release(Texture.TextureUnit.Unit0);
+
+        }
+
         public void Rect(int x, int y, int w, int h, Q.Texture.Texture2D tex, Vector4 col)
         {
             //tex.Bind(Texture.TextureUnit.Unit0);
@@ -112,6 +143,7 @@ namespace Q.Draw.Simple
 
             GL.DeleteVertexArray(arrays[0]);
             GL.DeleteBuffer(buffer[0]);
+           // tex.Release(Texture.TextureUnit.Unit0);
 
         }
 

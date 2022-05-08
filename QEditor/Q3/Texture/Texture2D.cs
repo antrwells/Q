@@ -87,12 +87,47 @@ namespace Q.Texture
             Loading = false;
         }
 
+        public Texture2D(int width, int height)
+        {
+            Width = width;
+            Height = height;
+            Raw = new byte[Width * Height * 4];
+            Format = InternalFormat.Rgba8;
+            Handle = GL.CreateTexture(TextureTarget.Texture2d);
+            GL.TextureStorage2D(Handle, 1, SizedInternalFormat.Rgba8, Width, Height);
+            unsafe
+            {
+                GCHandle pinnedArray = GCHandle.Alloc(Raw, GCHandleType.Pinned);
+                IntPtr pointer = pinnedArray.AddrOfPinnedObject();
+                GL.TextureSubImage2D(Handle, 0, 0, 0, Width, Height, PixelFormat.Rgba, PixelType.UnsignedByte, pointer);
+                Console.WriteLine("Created texture2D. W:" + Width + " H:" + Height + " Handle:" + Handle.Handle);
+            }
+            GL.TextureParameteri(Handle, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TextureParameteri(Handle, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TextureParameteri(Handle, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TextureParameteri(Handle, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+           // GL.GenerateTextureMipmap(Handle);
+            Loading = false;
+            DataBound = true;
+
+        }
+
+        public void CopyTex(int x,int y)
+        {
+            //Bind(TextureUnit.Unit0);
+            //GL.CopyTexSubImage2D(TextureTarget.Texture2d, 0, 0, 0, x, y, Width, Height);
+            GL.CopyTextureSubImage2D(Handle, 0, 0, 0, x, y, Width, Height);
+            //GL.CopyT
+            //Release(TextureUnit.Unit0);
+            
+        }
+
         public Texture2D(Q.Pixels.PixelMap map)
         {
 
             Width = map.Width;
             Height = map.Height;
-
+            Format = InternalFormat.Rgba8;
             Raw = map.Data;
             BindData();
             Loading = false;
@@ -119,6 +154,8 @@ namespace Q.Texture
 
             int image_width=64;
             int image_height=64;
+
+            Format = InternalFormat.Rgba8;
 
             byte[] raw;
 
@@ -168,7 +205,7 @@ namespace Q.Texture
             GL.TextureParameteri(Handle, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TextureParameteri(Handle, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
             GL.TextureParameteri(Handle, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-            GL.GenerateTextureMipmap(Handle);
+           // GL.GenerateTextureMipmap(Handle);
         }
 
         public override void Bind(TextureUnit unit)
@@ -190,7 +227,7 @@ namespace Q.Texture
 
             uint t_unit = (uint)unit;
 
-            GL.BindImageTexture(t_unit, Handle, 0, false, 0, BufferAccessARB.ReadOnly, InternalFormat.Rgba8);
+            GL.BindImageTexture(t_unit, Handle, 0, false, 0, BufferAccessARB.ReadOnly,Format);
              
             base.Bind(unit);
         }

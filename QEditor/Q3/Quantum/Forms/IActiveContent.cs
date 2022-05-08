@@ -245,7 +245,11 @@ namespace Q.Quantum.Forms
             
             //base.RenderForm();
             Color = new OpenTK.Mathematics.Vector4(1, 1, 1, 0.7f);
-            DrawFrame();
+            DrawBlur(RenderPosition.X, RenderPosition.Y, Size.X, Size.Y);
+
+
+
+            DrawFrame(new OpenTK.Mathematics.Vector4(1, 1, 1, 0.5f));
             Color = new OpenTK.Mathematics.Vector4(0.6f, 0.6f, 0.6f, 1.0f);
             DrawLine(RenderPosition.X-1, RenderPosition.Y, RenderPosition.X-1 + Size.X, RenderPosition.Y, Color);
             DrawLine(RenderPosition.X-1, RenderPosition.Y, RenderPosition.X-1, RenderPosition.Y + Size.Y,Color);

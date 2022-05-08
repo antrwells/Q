@@ -123,11 +123,11 @@ namespace Q.Quantum.Forms
         {
             //base.RenderForm();
 
-            DrawFrame(new Vector4(1.1f, 1.1f, 1.1f, 1.0f));
-            DrawLine(RenderPosition.X, RenderPosition.Y, RenderPosition.X + Size.X, RenderPosition.Y,new Vector4(0.3f,0.3f,0.3f,1.0f));
-            DrawLine(RenderPosition.X, RenderPosition.Y, RenderPosition.X , RenderPosition.Y+Size.Y, new Vector4(0.3f, 0.3f, 0.3f, 1.0f));
-            DrawLine(RenderPosition.X+Size.X, RenderPosition.Y, RenderPosition.X + Size.X, RenderPosition.Y+Size.Y, new Vector4(0.3f, 0.3f, 0.3f, 1.0f));
-            DrawLine(RenderPosition.X , RenderPosition.Y+Size.Y, RenderPosition.X + Size.X, RenderPosition.Y + Size.Y, new Vector4(0.3f, 0.3f, 0.3f, 1.0f));
+            DrawFrameRounded(new Vector4(1.1f, 1.1f, 1.1f, 1.0f));
+          // DrawLine(RenderPosition.X, RenderPosition.Y, RenderPosition.X + Size.X, RenderPosition.Y,new Vector4(0.3f,0.3f,0.3f,1.0f));
+          //  DrawLine(RenderPosition.X, RenderPosition.Y, RenderPosition.X , RenderPosition.Y+Size.Y, new Vector4(0.3f, 0.3f, 0.3f, 1.0f));
+           // DrawLine(RenderPosition.X+Size.X, RenderPosition.Y, RenderPosition.X + Size.X, RenderPosition.Y+Size.Y, new Vector4(0.3f, 0.3f, 0.3f, 1.0f));
+           // DrawLine(RenderPosition.X , RenderPosition.Y+Size.Y, RenderPosition.X + Size.X, RenderPosition.Y + Size.Y, new Vector4(0.3f, 0.3f, 0.3f, 1.0f));
 
             int dx = RenderPosition.X + 3;
             int dy = RenderPosition.Y + 6;
@@ -136,7 +136,7 @@ namespace Q.Quantum.Forms
             {
                 if (item == OverItem)
                 {
-                    DrawFrame(dx,dy-3,Size.X-4,25,new Vector4(0.2f,2.4f,2.4f,1.0f));
+                    DrawFrameRounded(dx,dy-3,Size.X-4,25,new Vector4(0.2f,2.4f,2.4f,1.0f));
                 }
                 if(item.Icon!=null)
                 {

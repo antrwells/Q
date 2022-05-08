@@ -531,7 +531,41 @@ namespace Q.Quantum
             Draw(UserInterface.ActiveInterface.Theme.FrameRounded);
         }
 
-        public void DrawTitle()
+        public void DrawFrameRounded(Vector4 color)
+        {
+            Draw(UserInterface.ActiveInterface.Theme.FrameRounded, color);
+
+        }
+        Texture2D bg = null;
+        public void DrawBlur(int x,int y,int w,int h,float blur = 0.5f)
+        {
+
+            if (bg == null)
+            {
+                bg = new Texture2D(w, h);
+            }
+            int ty = App.AppInfo.Height - (y + h);
+
+            int sy = App.AppInfo.Height - ty;
+                      
+
+                        bg.CopyTex(x, ty);
+
+
+            UserInterface.Draw.Rect(UserInterface.ActiveInterface.DrawBlur,x, y+h, w, -h, bg, new Vector4(1,1,1, 1.0f)) ;
+
+            Console.WriteLine("B:" + x + " Y:" + y + " W:" + w + " H:" + h);
+
+        }
+        
+        public void DrawFrameRounded(int x, int y, int w, int h, Vector4 color)
+        {
+
+            Draw(UserInterface.ActiveInterface.Theme.FrameRounded, x, y, w, h, color);
+
+        }            
+
+            public void DrawTitle()
         {
             Draw(UserInterface.ActiveInterface.Theme.WindowTitle);
         }

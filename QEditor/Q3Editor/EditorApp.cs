@@ -78,7 +78,13 @@ namespace Q3Editor
 
             dock_area.Set(0, 0, AppInfo.Width-1, UI.Root.Size.Y-1);
 
-            UI.Root.Add(dock_area);
+            // UI.Root.Add(dock_area);
+
+            var img = new IImage();
+            img.Set(0, 80, AppInfo.Width, AppInfo.Height - 100);
+            img.SetImage(new Texture2D("Data/test1.jpg"));
+
+            UI.Root.Add(img);
 
             var win = new IWindow();
             win.Set(200, 200, 300, 300);
@@ -100,8 +106,15 @@ namespace Q3Editor
             win.Content.Add(treeview);
 
             var win2 = new IWindow();
-            win2.Set(50, 50, 250, 250);
+            win2.Set(50, 50, 350, 450);
             win2.Title.SetText("Console");
+
+            var cb1 = new ICheckBox();
+            cb1.Set(20, 50, 80, 30);
+            cb1.SetText("Render");
+            cb1.OnCheckChanged += Cb1_OnCheckChanged;
+            win2.Content.Add(cb1);
+
             
             var win3 = new IWindow();
             win3.Set(300, 300, 250, 250);
@@ -123,11 +136,11 @@ namespace Q3Editor
 
             win4.Content.Add(esel);
 
-            UI.Root.Add(win);
-         //   UI.Root.Add(win2);
-          //  UI.Root.Add(win3);
-           // UI.Root.Add(win4);
-            UI.Docker = dock_area;
+          //  UI.Root.Add(win);
+            UI.Root.Add(win2);
+           // UI.Root.Add(win3);
+            //UI.Root.Add(win4);
+         //   UI.Docker = dock_area;
             
             lm_2.CLick = (item) =>
             {
@@ -188,6 +201,12 @@ namespace Q3Editor
             //draw1 = new BasicDraw2D();
 
 
+        }
+
+        private void Cb1_OnCheckChanged(bool check)
+        {
+            //   throw new NotImplementedException();
+            Console.WriteLine("Checked:" + check);
         }
 
         private void Esel_OnSelected(string value)

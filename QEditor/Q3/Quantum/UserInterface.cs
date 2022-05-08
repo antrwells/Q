@@ -78,6 +78,10 @@ namespace Q.Quantum
         }
 
         public static BasicDraw2D Draw;
+                //public static BasicDraw2D DrawBlur;
+
+
+        public Q.Shader._2D.EXBasicBlur DrawBlur;
 
         public IForm Root
         {
@@ -109,6 +113,9 @@ namespace Q.Quantum
             Theme = new Themes.ThemeDark();
             Cursor = new Texture2D("Data/ui/cursor/normal.png", false);
             Draw = new BasicDraw2D();
+            DrawBlur = new Shader._2D.EXBasicBlur();
+            
+            // DrawBlur = new BasicDraw2D();
             Root = new Forms.IGroup();
             Root.Set(0, 70, App.AppInfo.Width, App.AppInfo.Height-70);
             ActiveInterface = this;
@@ -205,7 +212,7 @@ namespace Q.Quantum
 
         public void DragComplete()
         {
-
+            if (Docker == null) return;
             Docker.Remove(DragWin);
 
             var zone = HighlightZone;
@@ -461,66 +468,69 @@ namespace Q.Quantum
         public void UpdateUI()
         {
 
-            if (DragWin != null)
+            if (Docker != null)
             {
-                var dpos = DragWin.RenderPosition;
-
-                HighlightZone = Q.Quantum.Forms.DockZone.None;
-
-                //left
-                if (dpos.X > Docker.RenderPosition.X && dpos.X < Docker.RenderPosition.X + Docker.Size.X / 4)
+                if (DragWin != null)
                 {
-                    if (dpos.Y > Docker.RenderPosition.Y && dpos.Y < Docker.RenderPosition.Y + Docker.Size.Y)
-                    {
+                    var dpos = DragWin.RenderPosition;
 
-                        HighlightZone = Q.Quantum.Forms.DockZone.Left;
+                    HighlightZone = Q.Quantum.Forms.DockZone.None;
+
+                    //left
+                    if (dpos.X > Docker.RenderPosition.X && dpos.X < Docker.RenderPosition.X + Docker.Size.X / 4)
+                    {
+                        if (dpos.Y > Docker.RenderPosition.Y && dpos.Y < Docker.RenderPosition.Y + Docker.Size.Y)
+                        {
+
+                            HighlightZone = Q.Quantum.Forms.DockZone.Left;
+
+                        }
 
                     }
 
+                    if (dpos.X >= Docker.RenderPosition.X + Docker.Size.X - Docker.Size.X / 4 && dpos.X <= Docker.RenderPosition.X + Docker.Size.X)
+                    {
+                        if (dpos.Y > Docker.RenderPosition.Y && dpos.Y < Docker.RenderPosition.Y + Docker.Size.Y)
+                        {
+
+                            HighlightZone = Q.Quantum.Forms.DockZone.Right;
+
+                        }
+                    }
+
+                    if (dpos.Y >= Docker.RenderPosition.Y && dpos.Y <= Docker.RenderPosition.Y + Docker.Size.Y / 4)
+                    {
+
+                        if (dpos.X >= Docker.RenderPosition.X && dpos.X <= Docker.RenderPosition.X + Docker.Size.X)
+                        {
+
+                            HighlightZone = Q.Quantum.Forms.DockZone.Top;
+
+                        }
+
+                    }
+
+                    if (dpos.Y >= (Docker.RenderPosition.Y + Docker.Size.Y) - Docker.Size.Y / 4 && dpos.Y <= Docker.RenderPosition.Y + Docker.Size.Y)
+                    {
+
+                        if (dpos.X >= Docker.RenderPosition.X && dpos.X <= Docker.RenderPosition.X + Docker.Size.X)
+                        {
+
+                            HighlightZone = Q.Quantum.Forms.DockZone.Bottom;
+
+                        }
+
+                    }
+
+                    if (dpos.X >= Docker.Position.X + Docker.Size.X / 4 && dpos.X <= Docker.Position.X + Docker.Size.X - Docker.Size.X / 4)
+                    {
+                        if (dpos.Y >= Docker.Position.Y + Docker.Size.Y / 4 && dpos.Y <= Docker.Position.Y + Docker.Size.Y - Docker.Size.Y / 4)
+                        {
+                            HighlightZone = Q.Quantum.Forms.DockZone.Center;
+                        }
+
+                    }
                 }
-                
-                if(dpos.X>=Docker.RenderPosition.X+Docker.Size.X-Docker.Size.X/4 && dpos.X<=Docker.RenderPosition.X+Docker.Size.X)
-                {
-                    if (dpos.Y > Docker.RenderPosition.Y && dpos.Y < Docker.RenderPosition.Y + Docker.Size.Y)
-                    {
-
-                        HighlightZone = Q.Quantum.Forms.DockZone.Right;
-
-                    }
-                }
-
-                if (dpos.Y >= Docker.RenderPosition.Y    && dpos.Y <= Docker.RenderPosition.Y + Docker.Size.Y/4)
-                {
-
-                    if(dpos.X>=Docker.RenderPosition.X && dpos.X<=Docker.RenderPosition.X+Docker.Size.X)
-                    {
-
-                        HighlightZone = Q.Quantum.Forms.DockZone.Top;
-
-                    }
-
-                }
-
-                if (dpos.Y >= (Docker.RenderPosition.Y+Docker.Size.Y) - Docker.Size.Y / 4 && dpos.Y <= Docker.RenderPosition.Y+Docker.Size.Y)
-                {
-
-                    if (dpos.X >= Docker.RenderPosition.X && dpos.X <= Docker.RenderPosition.X + Docker.Size.X)
-                    {
-
-                        HighlightZone = Q.Quantum.Forms.DockZone.Bottom;
-
-                    }
-
-                }
-
-                if (dpos.X >= Docker.Position.X + Docker.Size.X / 4 && dpos.X <= Docker.Position.X + Docker.Size.X - Docker.Size.X / 4)
-                {
-                    if (dpos.Y >= Docker.Position.Y + Docker.Size.Y / 4 && dpos.Y <= Docker.Position.Y + Docker.Size.Y - Docker.Size.Y / 4)
-                    {
-                        HighlightZone = Q.Quantum.Forms.DockZone.Center;
-                    }
-
-                }  
             }
 
             if (key_in)
