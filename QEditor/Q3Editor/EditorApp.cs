@@ -93,9 +93,9 @@ namespace Q3Editor
             var obj2 = treeview.RootItem.AddItem("Object2", null);
             obj2.AddItem("Other1", null);
             obj2.AddItem("Other2", null);
-            for(int i = 0; i < 25; i++)
+            for(int i = 0; i < 50; i++)
             {
-                obj2.AddItem("Testing", null);
+                obj2.AddItem("Testing:"+i.ToString(), null);
             }
             win.Content.Add(treeview);
 

@@ -15,7 +15,7 @@ namespace Q.Quantum.Forms
             set;
         }
 
-        public IWindowContent Content
+        public IActiveContent Content
         {
             get;
             set;
@@ -30,7 +30,7 @@ namespace Q.Quantum.Forms
         public IWindow()
         {
             Title = new IWindowTitle();
-            Content = new IWindowContent();
+            Content = new IActiveContent();
             Title.SetText("Window");// ")
             Add(Title, Content);
             TitleHeight = 25;

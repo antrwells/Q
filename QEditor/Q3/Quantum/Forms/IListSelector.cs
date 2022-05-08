@@ -70,7 +70,7 @@ namespace Q.Quantum.Forms
         public override void RenderForm()
         {
             base.RenderForm();
-            DrawFrame();
+            DrawFrameRounded();
 
             int dx = RenderPosition.X + 5;
             int dy = RenderPosition.Y + 5;

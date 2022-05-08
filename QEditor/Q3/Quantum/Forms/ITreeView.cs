@@ -52,7 +52,7 @@ namespace Q.Quantum.Forms
         
     }
 
-    public class ITreeView : IWindowContent
+    public class ITreeView : IActiveContent
     {
 
         public TreeItem RootItem
@@ -103,6 +103,9 @@ namespace Q.Quantum.Forms
             max_y = max_y + ScrollPosition.Y;
             max_y = max_y - RenderPosition.Y;
 
+            max_y = max_y - Size.Y;
+            max_y += 30;
+            
             Console.WriteLine("scroll:" + ScrollPosition.Y);
             Console.WriteLine("MAXY:" + max_y);
 

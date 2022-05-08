@@ -27,6 +27,12 @@ namespace Q.Quantum
             set;
         }
 
+        public Texture2D FrameRounded
+        {
+            get;
+            set;
+        }
+
         public Texture2D Button
         {
             get;

@@ -263,7 +263,7 @@ namespace Q.Quantum
         
 
 
-            if (this is Forms.IWindow || this is Forms.IWindowContent)
+            if (this is Forms.IWindow || this is Forms.IActiveContent)
             {
                 int ty = App.AppInfo.Height - (RenderPosition.Y + Size.Y);
 
@@ -507,8 +507,11 @@ namespace Q.Quantum
         {
             Draw(UserInterface.ActiveInterface.Theme.Button);
             var txt = UserInterface.ActiveInterface.Theme.SystemFont.GenString(text);
-            Draw(txt, RenderPosition.X + Size.X / 2 - (txt.Width / 2), RenderPosition.Y + Size.Y / 2 - (txt.Height / 2),txt.Width,txt.Height, new Vector4(1, 1, 1, 1));
+            if (txt != null)
+            {
+                Draw(txt, RenderPosition.X + Size.X / 2 - (txt.Width / 2), RenderPosition.Y + Size.Y / 2 - (txt.Height / 2), txt.Width, txt.Height, new Vector4(1, 1, 1, 1));
 
+            }                
         }
         public void DrawFrame(Vector4 color)
         {
@@ -523,7 +526,11 @@ namespace Q.Quantum
         {
             Draw(UserInterface.ActiveInterface.Theme.Frame);
         }
-    
+        public void DrawFrameRounded()
+        {
+            Draw(UserInterface.ActiveInterface.Theme.FrameRounded);
+        }
+
         public void DrawTitle()
         {
             Draw(UserInterface.ActiveInterface.Theme.WindowTitle);

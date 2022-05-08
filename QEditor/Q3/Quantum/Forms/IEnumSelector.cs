@@ -54,7 +54,7 @@ namespace Q.Quantum.Forms
         public override void RenderForm()
         {
             base.RenderForm();
-            DrawFrame();
+            DrawFrameRounded();
             DrawText(Values[CurrentSelection], RenderPosition.X+5, RenderPosition.Y+10, UserInterface.ActiveInterface.Theme.SystemTextColor);
         }
 
