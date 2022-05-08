@@ -81,7 +81,7 @@ namespace Q.Quantum.Forms
 
         }
 
-        public override void Resized()
+        public override void OnResized()
         {
 
             float w3 = Size.X / 3.0f;

@@ -90,7 +90,7 @@ namespace Q.Quantum.Forms
             
         }
 
-        public override void Resized()
+        public override void OnResized()
         {
             VerticalScroll.Set(Size.X - 10, 0, 10, Size.Y - 10);
             HorizontalScroll.Set(0, Size.Y - 10, Size.X - 10, 10);
@@ -230,7 +230,11 @@ namespace Q.Quantum.Forms
             };
             if (ContentSize.Y > Size.Y)
             {
-                Add(VerticalScroll, HorizontalScroll);
+                
+                Add(VerticalScroll);
+                Console.WriteLine("ADDING SCROLLER");
+                VerticalScroll.Position = new OpenTK.Mathematics.Vector2i(Size.X - 15, 0);
+                VerticalScroll.Size = new OpenTK.Mathematics.Vector2i(15, Size.Y);
             }
                 if (ToolBar != null)
             {

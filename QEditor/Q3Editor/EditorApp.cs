@@ -20,7 +20,10 @@ namespace Q3Editor
        
 
         UserInterface UI;
-
+        enum Locality
+        {
+            Local,Global,Smart
+        }
         public EditorApp(GameWindowSettings window_settings,NativeWindowSettings native_settings) : base(window_settings,native_settings)
         {
             
@@ -45,7 +48,16 @@ namespace Q3Editor
 
             tb.AddItem(new Texture2D("Data/UI/moveicon2.png"));
             tb.AddItem(new Texture2D("Data/UI/rotateicon.png"));
+            tb.AddSeperator();
+            tb.AddItem(new Texture2D("Data/UI/Moveicon2.png"));
+            tb.AddEnumSelector(typeof(Locality));
 
+
+            tb.AddSpace(25);
+            tb.AddItem(new Texture2D("Data/UI/Playicon.png"));
+            tb.AddItem(new Texture2D("Data/UI/PauseIcon.png"));
+            tb.AddItem(new Texture2D("Data/UI/StopIcon.png"));
+            
             var file = menu.AddItem("File");
             var edit = menu.AddItem("Edit");
             var help = menu.AddItem("Help");
@@ -72,6 +84,21 @@ namespace Q3Editor
             win.Set(200, 200, 300, 300);
             win.Title.SetText("Scene View");
 
+
+            var treeview = new ITreeView();
+
+            var obj1 = treeview.RootItem.AddItem("Object1",null);
+            obj1.AddItem("Sub1", null);
+            obj1.AddItem("Sub2", null);
+            var obj2 = treeview.RootItem.AddItem("Object2", null);
+            obj2.AddItem("Other1", null);
+            obj2.AddItem("Other2", null);
+            for(int i = 0; i < 25; i++)
+            {
+                obj2.AddItem("Testing", null);
+            }
+            win.Content.Add(treeview);
+
             var win2 = new IWindow();
             win2.Set(50, 50, 250, 250);
             win2.Title.SetText("Console");
@@ -97,9 +124,9 @@ namespace Q3Editor
             win4.Content.Add(esel);
 
             UI.Root.Add(win);
-            UI.Root.Add(win2);
-            UI.Root.Add(win3);
-            UI.Root.Add(win4);
+         //   UI.Root.Add(win2);
+          //  UI.Root.Add(win3);
+           // UI.Root.Add(win4);
             UI.Docker = dock_area;
             
             lm_2.CLick = (item) =>

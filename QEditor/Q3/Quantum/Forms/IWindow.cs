@@ -59,7 +59,7 @@ namespace Q.Quantum.Forms
         }
         private bool _TitleOn = true;
 
-        public override void Resized()
+        public override void OnResized()
         {
             Title.Set(0, 0, Size.X+3, TitleHeight);
             Content.Set(0, TitleHeight, Size.X, Size.Y - TitleHeight-1);

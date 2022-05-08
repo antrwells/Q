@@ -28,6 +28,12 @@ namespace Q.Quantum.Forms
             get;
             set;
         }
+
+        public Q.Quantum.Forms.IEnumSelector Enum
+        {
+            get;
+            set;
+        }
         
     }
     public class IToolBar : IForm
@@ -35,10 +41,22 @@ namespace Q.Quantum.Forms
         public IToolBar()
         {
             Scroll = false;
+            if (SeperatorImg == null)
+            {
+                SeperatorImg = new Texture.Texture2D("Data/UI/Seperator.png");
+            }
         }
 
         int _editx = 5;
 
+        public static Texture.Texture2D SeperatorImg
+        {
+            get;
+            set;
+        }
+
+
+       
         public ToolItem AddItem(Q.Texture.Texture2D icon,string text="")
         {
             ToolItem item = new ToolItem();
@@ -51,6 +69,35 @@ namespace Q.Quantum.Forms
             Add(item.Button);
             _editx += 56;
             return item;
+        }
+
+        public ToolItem AddEnumSelector(Type type)
+        {
+            ToolItem item = new ToolItem();
+
+            item.Enum = new Q.Quantum.Forms.IEnumSelector(type);
+            item.Enum.Set(_editx, 8, 196, 30);
+            Add(item.Enum);
+            _editx += 204;
+            
+            return item;
+        }
+
+        public void AddSeperator()
+        {
+
+            IImage sep = new IImage();
+            sep.SetImage(SeperatorImg);
+            sep.Set(_editx, 8, 4, 30);
+            _editx += 12;
+            Add(sep);
+
+        }
+
+        public void AddSpace(int x)
+        {
+
+            _editx += x;
         }
 
         public override void RenderForm()

@@ -108,7 +108,7 @@ namespace Q.Quantum
             set;
         }
 
-        public Vector2i ContentSize
+        public virtual Vector2i ContentSize
         {
 
             get
@@ -230,12 +230,16 @@ namespace Q.Quantum
             }
             return forms[0];
         }
-
+        public void SetSizeUnsafe(Vector2i size)
+        {
+            _Size = size;
+        }
         public IForm Add(IForm form)
         {
 
             form.Root = this;
             Child.Add(form);
+            form.Resized();
             return this;
         }
 
@@ -297,10 +301,19 @@ namespace Q.Quantum
         }
 
 
-        public virtual void Resized()
+        public virtual void OnResized()
         {
 
 
+        }
+
+        public void Resized()
+        {
+            OnResized();
+            foreach(var form in Child)
+            {
+                form.Resized();
+            }
         }
 
         public virtual void Renamed()
@@ -371,6 +384,17 @@ namespace Q.Quantum
         /// Drawing
         /// </summary>
         /// 
+
+        public void DrawOutline(int x,int y,int w,int h,Vector4 color)
+        {
+
+            DrawLine(x,y, x+w, y, color);
+            DrawLine(x,y, x, y+h, color);
+            DrawLine(x,y+h,x+w, y+h, color);
+            DrawLine(x+w, y, x+w,y+h, color);
+            
+
+        }
 
         public void DrawOutline(Vector4 color)
         {
