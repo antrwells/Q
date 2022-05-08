@@ -11,7 +11,7 @@ using OpenTK.Windowing.Desktop;
 using Q.Draw.Simple;
 using Q.Quantum;
 using Q.Quantum.Forms;
-using Q3.Quantum.Forms;
+using Q.Quantum.Forms;
     
 namespace Q3Editor
 {
@@ -41,7 +41,11 @@ namespace Q3Editor
             
             var menu = UI.AddMainMenu() as IMainMenu;
 
-            
+            var tb = UI.AddToolBar() as IToolBar;
+
+            tb.AddItem(new Texture2D("Data/UI/moveicon2.png"));
+            tb.AddItem(new Texture2D("Data/UI/rotateicon.png"));
+
             var file = menu.AddItem("File");
             var edit = menu.AddItem("Edit");
             var help = menu.AddItem("Help");
@@ -92,9 +96,9 @@ namespace Q3Editor
 
             win4.Content.Add(esel);
 
-            //UI.Root.Add(win);
-            //UI.Root.Add(win2);
-           // UI.Root.Add(win3);
+            UI.Root.Add(win);
+            UI.Root.Add(win2);
+            UI.Root.Add(win3);
             UI.Root.Add(win4);
             UI.Docker = dock_area;
             

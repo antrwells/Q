@@ -1,4 +1,4 @@
-﻿namespace Q3
+﻿namespace Q
 {
     public class Class1
     {

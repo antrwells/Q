@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Q.Quantum.Forms;
 using Q.Quantum;
-using Q3.Quantum.Forms;
+using Q.Quantum.Forms;
 
-namespace Q3.Quantum.Forms
+namespace Q.Quantum.Forms
 {
 
     public enum DockZone

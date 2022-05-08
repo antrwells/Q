@@ -7,6 +7,7 @@ using OpenTK.Mathematics;
 using Q.Texture;
 using Q.Draw.Simple;
 using Q.Quantum.Forms;
+using Q.Quantum.Forms;
 
 namespace Q.Quantum
 {
@@ -33,7 +34,7 @@ namespace Q.Quantum
             set;
         }
         
-        private Q3.Quantum.Forms.DockZone HighlightZone
+        private Q.Quantum.Forms.DockZone HighlightZone
         {
             get;
             set;
@@ -45,7 +46,7 @@ namespace Q.Quantum
             set;
         }
 
-        public Q3.Quantum.Forms.IDockArea Docker
+        public Q.Quantum.Forms.IDockArea Docker
         {
             get;
             set;
@@ -90,6 +91,12 @@ namespace Q.Quantum
             set;
         }
 
+        public IToolBar ToolBar
+        {
+            get;
+            set;
+        }
+
         bool key_in = false;
         int next_key = 0;
         OpenTK.Windowing.GraphicsLibraryFramework.Keys key;
@@ -103,7 +110,7 @@ namespace Q.Quantum
             Cursor = new Texture2D("Data/ui/cursor/normal.png", false);
             Draw = new BasicDraw2D();
             Root = new Forms.IGroup();
-            Root.Set(0, 60, App.AppInfo.Width, App.AppInfo.Height-60);
+            Root.Set(0, 70, App.AppInfo.Width, App.AppInfo.Height-70);
             ActiveInterface = this;
             prev_mouse = new Vector2(0, 0);
             FormPressed = new IForm[32];
@@ -111,9 +118,24 @@ namespace Q.Quantum
             Input.AppInput.OnKeyDown += AppInput_OnKeyDown;
             Input.AppInput.OnKeyUp += AppInput_OnKeyUp;
             Docker = null;
-            HighlightZone = Q3.Quantum.Forms.DockZone.None;
+            HighlightZone = Q.Quantum.Forms.DockZone.None;
         }
 
+        public IToolBar AddToolBar()
+        {
+            ToolBar = new IToolBar();
+
+            if (MainMenu == null)
+            {
+                ToolBar.Set(0, 0, App.AppInfo.Width, 44);
+            }
+            else
+            {
+                ToolBar.Set(0, 25, App.AppInfo.Width, 44);
+            }
+
+            return ToolBar;
+        }
         private void AppInput_OnKeyUp(OpenTK.Windowing.GraphicsLibraryFramework.Keys obj)
         {
             //throw new NotImplementedException();
@@ -194,7 +216,7 @@ namespace Q.Quantum
             {
                 foreach (var win in Docker.Center.ToArray())
                 {
-                    MoveTo(Q3.Quantum.Forms.DockZone.Center, win);
+                    MoveTo(Q.Quantum.Forms.DockZone.Center, win);
                 }
                 
                 /*
@@ -223,14 +245,14 @@ namespace Q.Quantum
 
 
 
-            HighlightZone = Q3.Quantum.Forms.DockZone.None;
+            HighlightZone = Q.Quantum.Forms.DockZone.None;
         }
 
-        private void MoveTo(Q3.Quantum.Forms.DockZone zone,IWindow DragWin)
+        private void MoveTo(Q.Quantum.Forms.DockZone zone,IWindow DragWin)
         {
             switch (zone)
             {
-                case Q3.Quantum.Forms.DockZone.Left:
+                case Q.Quantum.Forms.DockZone.Left:
 
                     //DragWin.Set(0, 0, Docker.Size.X / 4, Docker.Size.Y);
 
@@ -255,7 +277,7 @@ namespace Q.Quantum
                     Docker.AddLeft(DragWin);
 
                     break;
-                case Q3.Quantum.Forms.DockZone.Right:
+                case Q.Quantum.Forms.DockZone.Right:
 
                     //DragWin.Set(Docker.Size.X - Docker.Size.X / 4, 0, Docker.Size.X / 4, Docker.Size.Y);
                     if (Docker.TopCount() == 0 && Docker.BottomCount() == 0)
@@ -281,7 +303,7 @@ namespace Q.Quantum
                     Docker.AddRight(DragWin);
 
                     break;
-                case Q3.Quantum.Forms.DockZone.Top:
+                case Q.Quantum.Forms.DockZone.Top:
 
                     //DragWin.Set(0, 0, Docker.Size.X, Docker.Size.Y / 4);
 
@@ -310,7 +332,7 @@ namespace Q.Quantum
 
 
                     break;
-                case Q3.Quantum.Forms.DockZone.Bottom
+                case Q.Quantum.Forms.DockZone.Bottom
 
                 :
                     if (Docker.LeftCount() == 0 && Docker.RightCount() == 0)
@@ -344,7 +366,7 @@ namespace Q.Quantum
 
                     break;
 
-                case Q3.Quantum.Forms.DockZone.Center:
+                case Q.Quantum.Forms.DockZone.Center:
 
 
                     if (Docker.LeftCount() == 0 && Docker.RightCount() == 0)
@@ -443,7 +465,7 @@ namespace Q.Quantum
             {
                 var dpos = DragWin.RenderPosition;
 
-                HighlightZone = Q3.Quantum.Forms.DockZone.None;
+                HighlightZone = Q.Quantum.Forms.DockZone.None;
 
                 //left
                 if (dpos.X > Docker.RenderPosition.X && dpos.X < Docker.RenderPosition.X + Docker.Size.X / 4)
@@ -451,7 +473,7 @@ namespace Q.Quantum
                     if (dpos.Y > Docker.RenderPosition.Y && dpos.Y < Docker.RenderPosition.Y + Docker.Size.Y)
                     {
 
-                        HighlightZone = Q3.Quantum.Forms.DockZone.Left;
+                        HighlightZone = Q.Quantum.Forms.DockZone.Left;
 
                     }
 
@@ -462,7 +484,7 @@ namespace Q.Quantum
                     if (dpos.Y > Docker.RenderPosition.Y && dpos.Y < Docker.RenderPosition.Y + Docker.Size.Y)
                     {
 
-                        HighlightZone = Q3.Quantum.Forms.DockZone.Right;
+                        HighlightZone = Q.Quantum.Forms.DockZone.Right;
 
                     }
                 }
@@ -473,7 +495,7 @@ namespace Q.Quantum
                     if(dpos.X>=Docker.RenderPosition.X && dpos.X<=Docker.RenderPosition.X+Docker.Size.X)
                     {
 
-                        HighlightZone = Q3.Quantum.Forms.DockZone.Top;
+                        HighlightZone = Q.Quantum.Forms.DockZone.Top;
 
                     }
 
@@ -485,7 +507,7 @@ namespace Q.Quantum
                     if (dpos.X >= Docker.RenderPosition.X && dpos.X <= Docker.RenderPosition.X + Docker.Size.X)
                     {
 
-                        HighlightZone = Q3.Quantum.Forms.DockZone.Bottom;
+                        HighlightZone = Q.Quantum.Forms.DockZone.Bottom;
 
                     }
 
@@ -495,7 +517,7 @@ namespace Q.Quantum
                 {
                     if (dpos.Y >= Docker.Position.Y + Docker.Size.Y / 4 && dpos.Y <= Docker.Position.Y + Docker.Size.Y - Docker.Size.Y / 4)
                     {
-                        HighlightZone = Q3.Quantum.Forms.DockZone.Center;
+                        HighlightZone = Q.Quantum.Forms.DockZone.Center;
                     }
 
                 }  
@@ -519,10 +541,15 @@ namespace Q.Quantum
             List<IForm> forms = new List<IForm>();
 
             AddForms(forms, Root);
+            if (ToolBar != null)
+            {
+                AddForms(forms, ToolBar);
+            }
             if (MainMenu != null)
             {
                 AddForms(forms, MainMenu);
             }
+            
             forms.Reverse();
 
             foreach(var form in forms)
@@ -722,26 +749,26 @@ namespace Q.Quantum
 
             switch (HighlightZone)
             {
-                case Q3.Quantum.Forms.DockZone.Left:
+                case Q.Quantum.Forms.DockZone.Left:
 
                     Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y, Docker.Size.X / 4, Docker.Size.Y, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
                     
                     break;
-                case Q3.Quantum.Forms.DockZone.Right:
+                case Q.Quantum.Forms.DockZone.Right:
 
                     Draw.Rect(Docker.RenderPosition.X + Docker.Size.X - Docker.Size.X / 4, Docker.RenderPosition.Y, Docker.Size.X / 4, Docker.Size.Y, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
 
                     break;
-                case Q3.Quantum.Forms.DockZone.Top:
+                case Q.Quantum.Forms.DockZone.Top:
 
                     Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y, Docker.Size.X, Docker.Size.Y / 4, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
 
                     break;
-                case Q3.Quantum.Forms.DockZone.Bottom:
+                case Q.Quantum.Forms.DockZone.Bottom:
 
                     Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y + Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X, Docker.Size.Y / 4, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
                     break;
-                case Q3.Quantum.Forms.DockZone.Center:
+                case Q.Quantum.Forms.DockZone.Center:
 
                     Draw.Rect(Docker.RenderPosition.X + Docker.Size.X / 4, Docker.RenderPosition.Y + Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y / 2, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
 
@@ -752,11 +779,16 @@ namespace Q.Quantum
             }
             
             OpenTK.Graphics.OpenGL.GL.Disable(OpenTK.Graphics.OpenGL.EnableCap.ScissorTest);
+           
+            OpenTK.Graphics.OpenGL.GL.Disable(OpenTK.Graphics.OpenGL.EnableCap.ScissorTest);
+            if (ToolBar != null)
+            {
+                ToolBar.Render();
+            }
             if (MainMenu != null)
             {
                 MainMenu.Render();
             }
-            OpenTK.Graphics.OpenGL.GL.Disable(OpenTK.Graphics.OpenGL.EnableCap.ScissorTest);
 
             RenderCursor();
 
