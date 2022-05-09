@@ -65,7 +65,8 @@ namespace Q.Quantum.Forms
         {
             get
             {
-                return new Vector2i(Size.X, max_y);
+           
+                return new Vector2i(Size.X, max_y-Size.Y);
             }
         }
 
@@ -92,8 +93,9 @@ namespace Q.Quantum.Forms
 
         public override void RenderForm()
         {
+
             base.RenderForm();
-            DrawFrame(new OpenTK.Mathematics.Vector4(1.5f, 1.5f, 1.5f, 3));
+            DrawFrame(new OpenTK.Mathematics.Vector4(1.2f, 1.2f, 1.2f, 0.7f));
 
             int startx = RenderPosition.X + 5;
             int starty = RenderPosition.Y + 5;
@@ -103,11 +105,11 @@ namespace Q.Quantum.Forms
             max_y = max_y + ScrollPosition.Y;
             max_y = max_y - RenderPosition.Y;
 
-            max_y = max_y - Size.Y;
+           //max_y = max_y - Size.Y;
             max_y += 30;
             
-            Console.WriteLine("scroll:" + ScrollPosition.Y);
-            Console.WriteLine("MAXY:" + max_y);
+            //Console.WriteLine("scroll:" + ScrollPosition.Y);
+            //Console.WriteLine("MAXY:" + max_y);
 
         
         }
@@ -125,7 +127,8 @@ namespace Q.Quantum.Forms
 
         public override void OnMouseDown(int button)
         {
-            //base.OnMouseDown(button);
+            base.OnMouseDown(button);
+
             if(button==0)
             {
                 if (OverItem != null)
@@ -162,7 +165,7 @@ namespace Q.Quantum.Forms
 
             if(OverItem == node)
             {
-                DrawFrame(RenderPosition.X, dy, Size.X, 25, new Vector4(0, 2, 2, 1));
+                DrawFrame(RenderPosition.X, dy, Size.X, 25, new Vector4(0, 1.5f, 1.5f, 1));
             }else if(ActiveItem == node)
             {
                 DrawFrame(RenderPosition.X, dy, Size.X, 25, new Vector4(2, 1, 1, 1));

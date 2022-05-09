@@ -24,7 +24,10 @@ namespace Q.Quantum.Forms
             set
             {
                 _Value = value;
-                
+                VX.EditText = value.X.ToString();
+                VY.EditText = value.Y.ToString();
+                VZ.EditText = value.Z.ToString();
+
             }
         }
         private Vector3 _Value;
@@ -72,7 +75,7 @@ namespace Q.Quantum.Forms
 
         private void VX_OnNumberChanged(float num)
         {
-            Console.WriteLine("VX:" + num);
+           // Console.WriteLine("VX:" + num);
             _Value = new Vector3(num, _Value.Y, _Value.Z);
             OnValueChanged?.Invoke(_Value);
             //throw new NotImplementedException();

@@ -12,9 +12,51 @@ using Q.Draw.Simple;
 using Q.Quantum;
 using Q.Quantum.Forms;
 using Q.Quantum.Forms;
-    
+using OpenTK.Mathematics;    
+
 namespace Q3Editor
 {
+
+    class TestClass
+    {
+        public Vector3 TestVec1
+        {
+            get;
+            set;
+        }
+
+        public Vector3 TestVec2
+        {
+            get;
+            set;
+        }
+
+        public float TestFloat
+        {
+            get;
+            set;
+        }
+
+        public string TestString
+        {
+            get;
+            set;
+        }
+
+        public int TestInt
+        {
+            get;
+            set;
+        }
+
+        public Texture2D TestImage
+        {
+            get;
+            set;
+        }
+
+    }
+
     public class EditorApp : Application
     {
        
@@ -124,6 +166,20 @@ namespace Q3Editor
             win4.Set(20, 20, 350, 250);
             win4.Title.SetText("Properties");
 
+            var cls_prop = new IClassProperties();
+            TestClass test = new TestClass();
+            test.TestVec1 = new Vector3(20, 30, 40);
+            test.TestVec2 = new Vector3(50, 60, 70);
+            test.TestFloat = 99;
+            test.TestInt = 66;
+            test.TestString = "Testing String 1";
+            test.TestImage = new Texture2D("Data/test1.jpg");
+
+
+
+            win4.Content.Add(cls_prop);
+            cls_prop.ActiveClass = test;
+
             var v3 = new IVector3();
             v3.Set(20, 20, 280, 30);
             //win4.Content.Add(v3);
@@ -134,11 +190,11 @@ namespace Q3Editor
 
             esel.OnSelected += Esel_OnSelected;
 
-            win4.Content.Add(esel);
+           // win4.Content.Add(esel);
 
             UI.Root.Add(win);
-            UI.Root.Add(win2);
-            UI.Root.Add(win3);
+         //   UI.Root.Add(win2);
+        //    UI.Root.Add(win3);
             UI.Root.Add(win4);
             UI.Docker = dock_area;
             

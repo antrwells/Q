@@ -104,7 +104,7 @@ namespace Q.Quantum.Forms
         {
             base.RenderForm();
             
-            DrawFrame(new Vector4(0.75f, 0.75f,0.75f, 1));
+            DrawFrame(new Vector4(0.8f, 0.8f,0.8f, 1));
             //DrawOutline(new Vector4(1, 1, 1, 1));
         }
     }

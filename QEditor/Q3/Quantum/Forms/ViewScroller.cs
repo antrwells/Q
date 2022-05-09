@@ -210,11 +210,11 @@ namespace Q.Quantum.Forms
             DrawOutline(new OpenTK.Mathematics.Vector4(1, 1, 1, 1));
             if (Horizontal)
             {
-                DrawFrame(RenderPosition.X + CurrentValue, RenderPosition.Y + 1, (int)dh,Size.Y, new OpenTK.Mathematics.Vector4(1, 3, 3, 1));
+                DrawDragger(RenderPosition.X + CurrentValue, RenderPosition.Y + 1, (int)dh,Size.Y, new OpenTK.Mathematics.Vector4(1.5f,1.5f, 1.5f, 1));
             }
             else
             {
-                DrawFrame(RenderPosition.X + 1, RenderPosition.Y + CurrentValue, Size.X - 1, (int)dh, new OpenTK.Mathematics.Vector4(1, 3, 3, 1));
+                DrawDragger(RenderPosition.X + 1, RenderPosition.Y + CurrentValue, Size.X - 1, (int)dh, new OpenTK.Mathematics.Vector4(1.5f, 1.5f, 1.5f, 1));
                 
             }
         }

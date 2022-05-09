@@ -100,7 +100,7 @@ namespace Q.Texture
                 GCHandle pinnedArray = GCHandle.Alloc(Raw, GCHandleType.Pinned);
                 IntPtr pointer = pinnedArray.AddrOfPinnedObject();
                 GL.TextureSubImage2D(Handle, 0, 0, 0, Width, Height, PixelFormat.Rgba, PixelType.UnsignedByte, pointer);
-                Console.WriteLine("Created texture2D. W:" + Width + " H:" + Height + " Handle:" + Handle.Handle);
+                //Console.WriteLine("Created texture2D. W:" + Width + " H:" + Height + " Handle:" + Handle.Handle);
             }
             GL.TextureParameteri(Handle, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TextureParameteri(Handle, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
@@ -199,7 +199,7 @@ namespace Q.Texture
                 GCHandle pinnedArray = GCHandle.Alloc(Raw, GCHandleType.Pinned);
                 IntPtr pointer = pinnedArray.AddrOfPinnedObject();
                 GL.TextureSubImage2D(Handle, 0, 0, 0, Width, Height, PixelFormat.Rgba, PixelType.UnsignedByte, pointer);
-                Console.WriteLine("Created texture2D. W:" + Width + " H:" + Height + " Handle:" + Handle.Handle);
+                //Console.WriteLine("Created texture2D. W:" + Width + " H:" + Height + " Handle:" + Handle.Handle);
             }
             GL.TextureParameteri(Handle, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TextureParameteri(Handle, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);

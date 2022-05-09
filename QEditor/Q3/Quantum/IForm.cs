@@ -31,6 +31,12 @@ namespace Q.Quantum
             set;
         }
 
+        public bool NoInteract
+        {
+            get;
+            set;
+        }
+
 
 
         public Vector2i Size
@@ -193,6 +199,7 @@ namespace Q.Quantum
            // Set(0, 0, 0, 0);
             SetText("");
             SetColor(1, 1, 1, 1);
+            NoInteract = false;
 
         }
 
@@ -283,9 +290,16 @@ namespace Q.Quantum
             foreach (var form in Child)
             {
                 //if (form.Position.X > 0 && form.RenderPosition.Y)
-               // {
+                // {
                 //    if(form.render)
-               
+                if (form.RenderPosition.Y < RenderPosition.Y)
+                {
+                 //   form.NoInteract = true;
+                }
+                else
+                {
+               //    form.NoInteract = false;
+                }
                     form.Render();
                 //}
             }
@@ -293,6 +307,10 @@ namespace Q.Quantum
 
         public virtual bool InBounds(int x,int y)
         {
+            if (NoInteract)
+            {
+                return false;
+            }
             if (x >= RenderPosition.X && x <= RenderPosition.X + Size.X && y >= RenderPosition.Y && y <= RenderPosition.Y + Size.Y)
             {
                 return true;
@@ -526,6 +544,16 @@ namespace Q.Quantum
         {
             Draw(UserInterface.ActiveInterface.Theme.Frame);
         }
+
+        public void DrawDragger()
+        {
+            Draw(UserInterface.ActiveInterface.Theme.Dragger);
+        }
+
+        public void DrawDragger(int x, int y, int w, int h, Vector4 color)
+        {
+            Draw(UserInterface.ActiveInterface.Theme.Dragger, x, y, w, h, color);
+        }
         public void DrawFrameRounded()
         {
             Draw(UserInterface.ActiveInterface.Theme.FrameRounded);
@@ -544,6 +572,15 @@ namespace Q.Quantum
             {
                 bg = new Texture2D(w, h);
             }
+            else
+            {
+                if(bg.Width!=h || bg.Height!=h)
+                {
+                    bg.DestroyNow = true;
+                    bg.DestroyTexture();
+                    bg = new Texture2D(w, h);
+                }
+            }
             int ty = App.AppInfo.Height - (y + h);
 
             int sy = App.AppInfo.Height - ty;
@@ -552,9 +589,9 @@ namespace Q.Quantum
                         bg.CopyTex(x, ty);
 
 
-          //  UserInterface.Draw.Rect(UserInterface.ActiveInterface.DrawBlur,x, y+h, w, -h, bg, new Vector4(1,1,1, 1.0f)) ;
+            UserInterface.Draw.Rect(UserInterface.ActiveInterface.DrawBlur,x, y+h, w, -h, bg, new Vector4(1,1,1, 1.0f)) ;
 
-            Console.WriteLine("B:" + x + " Y:" + y + " W:" + w + " H:" + h);
+            //Console.WriteLine("B:" + x + " Y:" + y + " W:" + w + " H:" + h);
 
         }
         

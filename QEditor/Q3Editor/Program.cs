@@ -18,7 +18,7 @@ native_settings.Flags = OpenTK.Windowing.Common.ContextFlags.ForwardCompatible;
 native_settings.IsEventDriven = false;
 native_settings.IsFullscreen = false;
 native_settings.Profile = OpenTK.Windowing.Common.ContextProfile.Core;
-native_settings.Size = new OpenTK.Mathematics.Vector2i(1024, 768);
+native_settings.Size = new OpenTK.Mathematics.Vector2i(1424, 980);
 native_settings.Title = "Q3 Editor (c)Q Research 2022";
 native_settings.WindowBorder = OpenTK.Windowing.Common.WindowBorder.Resizable;
 

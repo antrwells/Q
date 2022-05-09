@@ -106,7 +106,7 @@ namespace Q.Quantum.Forms
                         new_sub.Set(Size.X+3, ay, s_w+150, need_y);
                         OverItem.SubMenu = new_sub;
                         ay = ay + 25;
-                        Console.WriteLine("Item:" + OverItem.Text);
+                        //Console.WriteLine("Item:" + OverItem.Text);
                         Add(new_sub);
                         //Environment.Exit(0);
 

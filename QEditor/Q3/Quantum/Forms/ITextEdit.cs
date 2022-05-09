@@ -187,7 +187,7 @@ namespace Q.Quantum.Forms
         {
             bool next = false;
             //base.OnMouseDown(button);
-            Console.WriteLine("MSX:" + msx);
+           // Console.WriteLine("MSX:" + msx);
             if (msx < 8)
             {
                 edit_x = 0;
@@ -197,7 +197,7 @@ namespace Q.Quantum.Forms
             {
                
                 int cx = char_x[i];
-                Console.WriteLine("C:" + i + " CX:" + cx);
+                //Console.WriteLine("C:" + i + " CX:" + cx);
                 if (msx > cx)
                 {
                     next = true;

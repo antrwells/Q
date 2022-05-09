@@ -202,6 +202,11 @@ namespace Q.Quantum.Forms
                 resizing = true;
                 //Console.WriteLine("Mouse Down Window.");
             }
+            if(Root.Root is IWindow)
+            {
+                Root.Root.Root.Child.Remove(Root.Root);
+                Root.Root.Root.Child.Add(Root.Root);
+            }
             
         }
 
@@ -228,13 +233,17 @@ namespace Q.Quantum.Forms
             {
                 Add(HorizontalScroll);  
             };
-            if (ContentSize.Y > Size.Y)
+            if (true)
             {
                 
                 Add(VerticalScroll);
                 Console.WriteLine("ADDING SCROLLER");
                 VerticalScroll.Position = new OpenTK.Mathematics.Vector2i(Size.X - 15, 0);
                 VerticalScroll.Size = new OpenTK.Mathematics.Vector2i(15, Size.Y);
+            }
+            else
+            {
+               // ScrollPosition = new OpenTK.Mathematics.Vector2i(ScrollPosition.X, 0);
             }
                 if (ToolBar != null)
             {

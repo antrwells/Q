@@ -33,6 +33,11 @@ namespace Q.Quantum
             set;
         }
 
+        public Texture2D Dragger
+        {
+            get;
+            set;
+        }
         public Texture2D Button
         {
             get;
