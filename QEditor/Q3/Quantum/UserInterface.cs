@@ -761,26 +761,26 @@ namespace Q.Quantum
             {
                 case Q.Quantum.Forms.DockZone.Left:
 
-                    Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y, Docker.Size.X / 4, Docker.Size.Y, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
+                    Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y, Docker.Size.X / 4, Docker.Size.Y, Theme.Frame, new Vector4(1, 1.5f, 1.5f, 0.8f));
                     
                     break;
                 case Q.Quantum.Forms.DockZone.Right:
 
-                    Draw.Rect(Docker.RenderPosition.X + Docker.Size.X - Docker.Size.X / 4, Docker.RenderPosition.Y, Docker.Size.X / 4, Docker.Size.Y, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
+                    Draw.Rect(Docker.RenderPosition.X + Docker.Size.X - Docker.Size.X / 4, Docker.RenderPosition.Y, Docker.Size.X / 4, Docker.Size.Y, Theme.Frame, new Vector4(1, 1.5f,1.5f, 0.8f));
 
                     break;
                 case Q.Quantum.Forms.DockZone.Top:
 
-                    Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y, Docker.Size.X, Docker.Size.Y / 4, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
+                    Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y, Docker.Size.X, Docker.Size.Y / 4, Theme.Frame, new Vector4(1, 1.5f,1.5f, 0.8f));
 
                     break;
                 case Q.Quantum.Forms.DockZone.Bottom:
 
-                    Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y + Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X, Docker.Size.Y / 4, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
+                    Draw.Rect(Docker.RenderPosition.X, Docker.RenderPosition.Y + Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X, Docker.Size.Y / 4, Theme.Frame, new Vector4(1, 1.5f,1.5f, 0.8f));
                     break;
                 case Q.Quantum.Forms.DockZone.Center:
 
-                    Draw.Rect(Docker.RenderPosition.X + Docker.Size.X / 4, Docker.RenderPosition.Y + Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y / 2, Theme.Frame, new Vector4(1, 3, 3, 0.8f));
+                    Draw.Rect(Docker.RenderPosition.X + Docker.Size.X / 4, Docker.RenderPosition.Y + Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y / 2, Theme.Frame, new Vector4(1, 1.5f,1.5f, 0.8f));
 
                                  break;
                     

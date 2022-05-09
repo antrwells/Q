@@ -552,7 +552,7 @@ namespace Q.Quantum
                         bg.CopyTex(x, ty);
 
 
-            UserInterface.Draw.Rect(UserInterface.ActiveInterface.DrawBlur,x, y+h, w, -h, bg, new Vector4(1,1,1, 1.0f)) ;
+          //  UserInterface.Draw.Rect(UserInterface.ActiveInterface.DrawBlur,x, y+h, w, -h, bg, new Vector4(1,1,1, 1.0f)) ;
 
             Console.WriteLine("B:" + x + " Y:" + y + " W:" + w + " H:" + h);
 

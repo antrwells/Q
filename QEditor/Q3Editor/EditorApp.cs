@@ -78,13 +78,13 @@ namespace Q3Editor
 
             dock_area.Set(0, 0, AppInfo.Width-1, UI.Root.Size.Y-1);
 
-            // UI.Root.Add(dock_area);
+             UI.Root.Add(dock_area);
 
             var img = new IImage();
             img.Set(0, 80, AppInfo.Width, AppInfo.Height - 100);
             img.SetImage(new Texture2D("Data/test1.jpg"));
 
-            UI.Root.Add(img);
+           //UI.Root.Add(img);
 
             var win = new IWindow();
             win.Set(200, 200, 300, 300);
@@ -136,11 +136,11 @@ namespace Q3Editor
 
             win4.Content.Add(esel);
 
-          //  UI.Root.Add(win);
+            UI.Root.Add(win);
             UI.Root.Add(win2);
-           // UI.Root.Add(win3);
-            //UI.Root.Add(win4);
-         //   UI.Docker = dock_area;
+            UI.Root.Add(win3);
+            UI.Root.Add(win4);
+            UI.Docker = dock_area;
             
             lm_2.CLick = (item) =>
             {

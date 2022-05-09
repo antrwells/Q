@@ -31,7 +31,7 @@ namespace Q.Quantum.Forms
             if (Icon != null)
             {
                 DrawButtonNoText();
-                Draw(Icon, RenderPosition.X+Size.X/2-8, RenderPosition.Y+Size.Y/2-8,16,16, Color);
+                Draw(Icon, RenderPosition.X+Size.X/2-11, RenderPosition.Y+Size.Y/2-11,22,22, Color);
             }
             else
             {
