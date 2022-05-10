@@ -229,15 +229,17 @@ namespace Q.Quantum.Forms
 
             Child.Remove(VerticalScroll);
             Child.Remove(HorizontalScroll);
-            if(ContentSize.X>Size.X)
+            if(true)
             {
-                Add(HorizontalScroll);  
+                Add(HorizontalScroll);
+                HorizontalScroll.Position = new OpenTK.Mathematics.Vector2i(0,Size.Y - 15);
+                HorizontalScroll.Size = new OpenTK.Mathematics.Vector2i(Size.X,15);
             };
             if (true)
             {
                 
                 Add(VerticalScroll);
-                Console.WriteLine("ADDING SCROLLER");
+              //  Console.WriteLine("ADDING SCROLLER");
                 VerticalScroll.Position = new OpenTK.Mathematics.Vector2i(Size.X - 15, 0);
                 VerticalScroll.Size = new OpenTK.Mathematics.Vector2i(15, Size.Y);
             }

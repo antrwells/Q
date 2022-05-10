@@ -59,8 +59,8 @@ namespace Q3Editor
 
     public class EditorApp : Application
     {
-       
 
+        TestClass test;
         UserInterface UI;
         enum Locality
         {
@@ -151,11 +151,16 @@ namespace Q3Editor
             win2.Set(50, 50, 350, 450);
             win2.Title.SetText("Console");
 
+            var browser = new IContentBrowser();
+            browser.BrowsePath = "C:\\Vivid3D\\QEditor";
+
+            win2.Content.Add(browser);
+
             var cb1 = new ICheckBox();
             cb1.Set(20, 50, 80, 30);
             cb1.SetText("Render");
             cb1.OnCheckChanged += Cb1_OnCheckChanged;
-            win2.Content.Add(cb1);
+            //win2.Content.Add(cb1);
 
             
             var win3 = new IWindow();
@@ -167,15 +172,15 @@ namespace Q3Editor
             win4.Title.SetText("Properties");
 
             var cls_prop = new IClassProperties();
-            TestClass test = new TestClass();
+            test = new TestClass();
             test.TestVec1 = new Vector3(20, 30, 40);
             test.TestVec2 = new Vector3(50, 60, 70);
             test.TestFloat = 99;
             test.TestInt = 66;
             test.TestString = "Testing String 1";
             test.TestImage = new Texture2D("Data/test1.jpg");
-
-
+          
+            
 
             win4.Content.Add(cls_prop);
             cls_prop.ActiveClass = test;
@@ -193,7 +198,7 @@ namespace Q3Editor
            // win4.Content.Add(esel);
 
             UI.Root.Add(win);
-         //   UI.Root.Add(win2);
+            UI.Root.Add(win2);
         //    UI.Root.Add(win3);
             UI.Root.Add(win4);
             UI.Docker = dock_area;
@@ -281,12 +286,18 @@ namespace Q3Editor
         {
             //    throw new NotImplementedException();
             Console.WriteLine("Vec:" + value.ToString());
+          
         }
 
         public override void UpdateApp()
         {
             base.UpdateApp();
             UI.UpdateUI();
+            Console.WriteLine("TestVec:" + test.TestVec1);
+            Console.WriteLine("Vec2:" + test.TestVec2.ToString());
+            Console.WriteLine("Float:" + test.TestFloat.ToString());
+            Console.WriteLine("Int:" + test.TestInt.ToString());
+            Console.WriteLine("String:" + test.TestString);
         }
 
         public override void RenderApp()

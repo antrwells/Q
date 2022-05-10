@@ -77,6 +77,11 @@ namespace Q.Quantum.Forms
                         vec3.Value = (Vector3)value;
                         Add(vec3);
                         dy = dy + 45;
+                        vec3.OnValueChanged += (value) =>
+                        {
+                            property.SetValue(_ActiveClass, value);
+                        };
+                        
                         break;
                     case "String":
                     case "string":
@@ -84,6 +89,9 @@ namespace Q.Quantum.Forms
                         ITextEdit str = new ITextEdit();
                         str.Set(20, dy, 260, 30);
                         str.EditText = (string)value;
+                        str.OnTextChanged += (value)=>{
+                            property.SetValue(_ActiveClass, value);
+                        };
                         Add(str);
                         dy = dy + 45;
                         break;
@@ -92,6 +100,10 @@ namespace Q.Quantum.Forms
                         ITextEdit flt = new ITextEdit();
                         flt.Set(20, dy, 260, 30);
                         flt.EditText = value.ToString();
+                        flt.OnNumberChanged += (value) =>
+                        {
+                            property.SetValue(_ActiveClass, value);
+                        };
                         Add(flt);
                         dy = dy + 45;
                         flt.NumericOnly = true;
@@ -102,6 +114,10 @@ namespace Q.Quantum.Forms
                         ITextEdit it = new ITextEdit();
                         it.Set(20, dy, 260, 30);
                         it.EditText = value.ToString();
+                        it.OnNumberChanged += (value) =>
+                        {
+                            property.SetValue(_ActiveClass, (int)value);
+                        };
                         Add(it);
                         dy = dy + 45;
                         it.NumericOnly = true;
