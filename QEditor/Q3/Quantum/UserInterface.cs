@@ -110,7 +110,7 @@ namespace Q.Quantum
         public UserInterface()
         {
 
-            Theme = new Themes.ThemeDarkFlat();
+            Theme = new Themes.ThemeDark();
             Cursor = new Texture2D("Data/ui/cursor/normal.png", false);
             Draw = new BasicDraw2D();
             DrawBlur = new Shader._2D.EXBasicBlur();

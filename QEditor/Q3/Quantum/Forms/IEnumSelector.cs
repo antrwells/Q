@@ -44,8 +44,12 @@ namespace Q.Quantum.Forms
             foreach (object enumValue in enumValues)
             {
                 Values.Add(enumValue.ToString());
+                
               //  Console.WriteLine("V:" + Values[Values.Count - 1]);
             }
+
+            
+
             CurrentSelection = 0;
             Open = false;
 

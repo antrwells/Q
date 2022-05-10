@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using SharpFont.TrueType;
 
+/// <summary>
+/// This is an internal class mostly, but feel free to use it to generate your own font based images.
+/// </summary>
 namespace Q.Font
 {
     public class FontTTF

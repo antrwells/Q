@@ -7,6 +7,10 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Graphics;
 using OpenTK.Mathematics;
 using Q.Shader._2D;
+
+/// <summary>
+/// The Draw.Simple namespace is a set of easy to use functions to display basic 2D imagary.
+/// </summary>
 namespace Q.Draw.Simple
 {
     public class BasicDraw2D
@@ -85,6 +89,16 @@ namespace Q.Draw.Simple
             data[23] = 0;
         }
 
+        /// <summary>
+        /// This method allows you to draw a image rect, using your own Effect class, to achieve custom effects.
+        /// </summary>
+        /// <param name="fx">The effect class</param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <param name="tex">The texture to use as the imagary.</param>
+        /// <param name="col">The color. components should range from 0(dark) to 1(white)</param>
         public void Rect(Q.Shader.Effect fx,int x, int y, int w, int h, Q.Texture.Texture2D tex, Vector4 col)
         {
             //tex.Bind(Texture.TextureUnit.Unit0);
@@ -116,6 +130,15 @@ namespace Q.Draw.Simple
 
         }
 
+        /// <summary>
+        /// A simple method to display an image of any size/color. There is no need for a custom effect, it uses a built-in one.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <param name="tex"></param>
+        /// <param name="col"></param>
         public void Rect(int x, int y, int w, int h, Q.Texture.Texture2D tex, Vector4 col)
         {
             //tex.Bind(Texture.TextureUnit.Unit0);

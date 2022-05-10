@@ -59,6 +59,20 @@ namespace Q.Quantum.Forms
 
                 //get property type
                 var type = property.PropertyType.Name;
+
+                Type enum_type;
+                string enum_name = "";
+                bool is_enum = false;
+                if (property.PropertyType.IsEnum)
+                {
+                    is_enum = true;
+                    enum_name = property.PropertyType.GetEnumName(value);
+                    //enum_type = property.PropertyType
+                    //enum_type = property.PropertyType.Name;                  
+
+                    
+
+                }
                 
                 var lab = new ILabel();
                 lab.SetText(name);
@@ -71,7 +85,7 @@ namespace Q.Quantum.Forms
                 {
                     case "Vector3":
 
-                        
+
                         IVector3 vec3 = new IVector3();
                         vec3.Set(20, dy, 260, 30);
                         vec3.Value = (Vector3)value;
@@ -81,7 +95,7 @@ namespace Q.Quantum.Forms
                         {
                             property.SetValue(_ActiveClass, value);
                         };
-                        
+
                         break;
                     case "String":
                     case "string":
@@ -89,7 +103,8 @@ namespace Q.Quantum.Forms
                         ITextEdit str = new ITextEdit();
                         str.Set(20, dy, 260, 30);
                         str.EditText = (string)value;
-                        str.OnTextChanged += (value)=>{
+                        str.OnTextChanged += (value) =>
+                        {
                             property.SetValue(_ActiveClass, value);
                         };
                         Add(str);
@@ -137,11 +152,42 @@ namespace Q.Quantum.Forms
                             img.SetImage(value as Texture.Texture2D);
                         }
                         dy = dy + 145;
-                        
+
                         break;
                     default:
 
-                        int a = 5;
+                        //int a = 5;
+                        if (is_enum)
+                        {
+                            int ii = 0;
+                            IEnumSelector esel = new IEnumSelector(property.PropertyType);
+                            foreach (var val in property.PropertyType.GetEnumNames())
+                            {
+                                if (val == enum_name)
+                                {
+                                    esel.CurrentSelection = ii;
+                                    break;
+                                }
+                                ii++;
+                            }
+                            esel.Set(20, dy, 260, 30);
+                            Add(esel);
+                            dy = dy + 45;
+                            esel.OnSelected += (value) =>
+                            {
+                                int v = 0;
+                                foreach(var val in property.PropertyType.GetEnumNames())
+                                {
+                                    if (val == value)
+                                    {
+                                        break;
+                                    }
+                                    v++;
+                                }
+                                property.SetValue(_ActiveClass, v);
+                            };
+                        };
+                
 
                         break;
                 }

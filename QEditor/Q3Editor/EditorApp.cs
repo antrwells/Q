@@ -16,7 +16,10 @@ using OpenTK.Mathematics;
 
 namespace Q3Editor
 {
-
+    public enum TestEnum
+    {
+        Single,Second,Third
+    }
     class TestClass
     {
         public Vector3 TestVec1
@@ -55,6 +58,11 @@ namespace Q3Editor
             set;
         }
 
+        public TestEnum Enum1
+        {
+            get;
+            set;
+        }
     }
 
     public class EditorApp : Application
@@ -179,7 +187,7 @@ namespace Q3Editor
             test.TestInt = 66;
             test.TestString = "Testing String 1";
             test.TestImage = new Texture2D("Data/test1.jpg");
-          
+            test.Enum1 = TestEnum.Second;
             
 
             win4.Content.Add(cls_prop);
@@ -293,11 +301,14 @@ namespace Q3Editor
         {
             base.UpdateApp();
             UI.UpdateUI();
-            Console.WriteLine("TestVec:" + test.TestVec1);
-            Console.WriteLine("Vec2:" + test.TestVec2.ToString());
-            Console.WriteLine("Float:" + test.TestFloat.ToString());
-            Console.WriteLine("Int:" + test.TestInt.ToString());
-            Console.WriteLine("String:" + test.TestString);
+
+            Console.WriteLine("E:" + test.Enum1.ToString());
+            //Console.WriteLine("TestVec:" + test.TestVec1);
+            //Console.WriteLine("Vec2:" + test.TestVec2.ToString());
+            //Console.WriteLine("Float:" + test.TestFloat.ToString());
+            //Console.WriteLine("Int:" + test.TestInt.ToString());
+            //Console.WriteLine("String:" + test.TestString);
+
         }
 
         public override void RenderApp()

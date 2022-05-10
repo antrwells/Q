@@ -8,29 +8,49 @@ using Q.Texture;
 using OpenTK.Graphics.OpenGL;
 
 
+/// <summary>
+/// Q.Quantum is a custom GUI for Q that is easy to extend and comes with a rich
+/// set of already buillt forms.
+/// </summary>
 namespace Q.Quantum
 {
+
+    /// <summary>
+    /// The baseline class for any form. Always inherit from this if adding your own elements.
+    /// </summary>
     public class IForm
     {
 
+        /// <summary>
+        /// The parent form of any form.
+        /// </summary>
         public IForm Root
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// A list of child forms.
+        /// </summary>
         public List<IForm> Child
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// The local position of a form in pixels.
+        /// </summary>
         public Vector2i Position
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// If true, a form will not generate any InBound calls, making it purely cosmetic.
+        /// </summary>
         public bool NoInteract
         {
             get;
@@ -38,7 +58,9 @@ namespace Q.Quantum
         }
 
 
-
+        /// <summary>
+        /// The size of a form in pixels.
+        /// </summary>
         public Vector2i Size
         {
             get
@@ -53,18 +75,27 @@ namespace Q.Quantum
         }
         private Vector2i _Size = new Vector2i(0, 0);
 
+        /// <summary>
+        /// The color of a form, used in different ways for different forms.
+        /// </summary>
         public Vector4 Color
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// If true, a formo is rendered and visible, if false, then it is not.
+        /// </summary>
         public bool Visible
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// If true, a form is active and reciving input.
+        /// </summary>
         public bool Active
         {
             get;
@@ -77,18 +108,27 @@ namespace Q.Quantum
             set;
         }
 
+        /// <summary>
+        /// If the mouse is hovering over the form, this property will be set to true, false if not.
+        /// </summary>
         public bool Over
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Is true if the form is being dragged by the user.
+        /// </summary>
         public bool Drag
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// The main text of a form. For a button this would be it's label text, for example.
+        /// </summary>
         public string Text
         {
             get
@@ -102,18 +142,28 @@ namespace Q.Quantum
         }
         private string _Text = "";
 
+        /// <summary>
+        /// The scroll position. This alters all child forms in some forms, not all.
+        /// </summary>
         public Vector2i ScrollPosition
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// If true, this form can be scrolled by it's parent form.
+        /// </summary>
         public bool Scroll
         {
             get;
             set;
         }
 
+
+        /// <summary>
+        /// The content size of a form. This can be overriden to allow extended functionality.
+        /// </summary>
         public virtual Vector2i ContentSize
         {
 
@@ -126,7 +176,7 @@ namespace Q.Quantum
                 foreach(var form in Child)
                 {
                     var x = form.Position.X+ (form.Size.X-Size.X);
-                    var y = form.Position.Y+ (form.Size.Y-Size.Y);
+                    var y = form.Position.Y + (form.Size.Y - Size.Y) + 25;
 
                     if (x < 0) x = 0;
                     if (y < 0) y = 0;
@@ -149,6 +199,10 @@ namespace Q.Quantum
             
         }
 
+
+        /// <summary>
+        /// This generates the final render position of a form, in pixels.
+        /// </summary>
         public Vector2i RenderPosition
         {
             get
@@ -182,13 +236,18 @@ namespace Q.Quantum
             }
         }
 
+        /// <summary>
+        /// If true, this form can generate it's child forms scrolling based on input.
+        /// </summary>
         public bool ChildScroll
         {
             get;
             set;
         }
        
-
+        /// <summary>
+        /// The constructor, this sets up the form for basic use.
+        /// </summary>
         public IForm()
         {
 
@@ -203,17 +262,39 @@ namespace Q.Quantum
 
         }
 
+        /// <summary>
+        /// Lets you set the color property of the form.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="g"></param>
+        /// <param name="b"></param>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public IForm SetColor(float r,float g,float b,float a)
         {
             SetColor(new Vector4(r, g, b, a));
             return this;
         }
+
+        /// <summary>
+        /// Lets you see the color property of the form.
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
         public IForm SetColor(Vector4 color)
         {
             Color = color;
             return this;
         }
 
+        /// <summary>
+        /// This is the primary way of setting up a forms position and size.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <returns></returns>
         public IForm Set(int x, int y, int w, int h)
         {
             Position = new Vector2i(x, y);
@@ -222,6 +303,11 @@ namespace Q.Quantum
             return this;
         }
 
+        /// <summary>
+        /// Allows you to set the primary text of a form.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public IForm SetText(string text)
         {
             Text = text;
@@ -229,6 +315,11 @@ namespace Q.Quantum
             return this;
         }
 
+        /// <summary>
+        /// Allows you to add a list of forms in a single call.
+        /// </summary>
+        /// <param name="forms"></param>
+        /// <returns></returns>
         public IForm Add(params IForm[] forms)
         {
             foreach (var form in forms)
@@ -237,10 +328,21 @@ namespace Q.Quantum
             }
             return forms[0];
         }
+
+        /// <summary>
+        /// Allows you to change the size of a form, without it generating resized methods.
+        /// </summary>
+        /// <param name="size"></param>
         public void SetSizeUnsafe(Vector2i size)
         {
             _Size = size;
         }
+
+        /// <summary>
+        /// Lets you add a child form to this form.
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         public IForm Add(IForm form)
         {
 
@@ -250,6 +352,9 @@ namespace Q.Quantum
             return this;
         }
 
+        /// <summary>
+        /// Renders a form. This is an internal method.
+        /// </summary>
         public void Render()
         {
 
@@ -258,11 +363,17 @@ namespace Q.Quantum
 
         }
 
+        /// <summary>
+        /// This is the method to override to render your own custom forms.
+        /// </summary>
         public virtual void RenderForm()
         {
 
         }
 
+        /// <summary>
+        /// Internal method.
+        /// </summary>
         public void RenderChildren()
         {
             //GL.Viewport(RenderPosition.X, RenderPosition.Y, Size.X, Size.Y);
@@ -305,6 +416,13 @@ namespace Q.Quantum
             }
         }
 
+        /// <summary>
+        /// returns true if the coords (x,y) are within bounds of a form.
+        /// This can be overriden for more complex behaviour.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public virtual bool InBounds(int x,int y)
         {
             if (NoInteract)
@@ -318,7 +436,10 @@ namespace Q.Quantum
             return false;
         }
 
-
+        /// <summary>
+        /// This is called whenever a form is resized. You can override this method
+        /// for your own logic when resized.
+        /// </summary>
         public virtual void OnResized()
         {
 
@@ -334,11 +455,18 @@ namespace Q.Quantum
             }
         }
 
+        /// <summary>
+        /// Called if a form is renamed.
+        /// </summary>
         public virtual void Renamed()
         {
             
         }
 
+        /// <summary>
+        /// Called once per frame, you override this method to provide your own update
+        /// logic for your own custom forms.
+        /// </summary>
         public virtual void OnUpdate()
         {
             
@@ -359,41 +487,73 @@ namespace Q.Quantum
 
         }
 
+        /// <summary>
+        /// This method is called when the mouse enters a form's area.
+        /// You can override this for your own logic.
+        /// </summary>
         public virtual void OnEnter()
         {
 
         }
 
+        /// <summary>
+        /// This method is called when the mouse leaves a form's area.
+        /// </summary>
         public virtual void OnLeave()
         {
 
         }
 
+        /// <summary>
+        /// This is called when the mouse is moving across a form's surface.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="x_delta"></param>
+        /// <param name="y_delta"></param>
         public virtual void OnMouseMove(int x,int y,int x_delta,int y_delta)
         {
             
         }
 
+        /// <summary>
+        /// Called when a mouse down event happens when the mouse is over a form.
+        /// </summary>
+        /// <param name="button"></param>
         public virtual void OnMouseDown(int button)
         {
             
         }
 
+        /// <summary>
+        /// Called if the mouse is double clicked when over a form.
+        /// </summary>
+        /// <param name="button"></param>
         public virtual void OnDoubleClick(int button)
         {
             
         }
 
+        /// <summary>
+        /// Called when a mouse up event happens when the mouse is over a form.
+        /// </summary>
+        /// <param name="button"></param>
         public virtual void OnMouseUp(int button)
         {
             
         }
 
+        /// <summary>
+        /// Called when a form is activated.
+        /// </summary>
         public virtual void OnActivate()
         {
 
         }
 
+        /// <summary>
+        /// Called when a form is deactivated.
+        /// </summary>
         public virtual void OnDeactivate()
         {
 

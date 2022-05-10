@@ -10,30 +10,49 @@ using OpenTK.Windowing.Common.Input;
 using Q.Texture;
 using Q.Shader;
 
+
+/// <summary>
+/// The Q.App namespace contains the classes required to implement a new application utilizing Q.
+/// </summary>
 namespace Q.App
 {
 
     //opengl callback class
     //
+    /// <summary>
+    /// AppInfo contains app-wide information, such as display width, height and currently bound frame width,height.
+    /// </summary>
     public class AppInfo
     {
+        /// <summary>
+        /// The visible application width, such as the window or fullscreen display
+        /// </summary>
         public static int Width
         {
             get;
             set;
         }
+        /// <summary>
+        /// The visible application height, such as the window or fullscreen display
+        /// </summary>
         public static int Height
         {
             get;
             set;
         }
     
+        /// <summary>
+        /// The width of the currently bound RenderTarget, or display width if none is bound.
+        /// </summary>
         public static int FrameWidth
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// The height of the currently bound RenderTarget, or display width if none is bound.
+        /// </summary>        
         public static int FrameHeight
         {
             get;
@@ -44,6 +63,11 @@ namespace Q.App
     public class Application : GameWindow
     {
 
+        /// <summary>
+        /// Any application that inherits the application class, must implement this constructor to begin the app.
+        /// </summary>
+        /// <param name="window_settings"></param>
+        /// <param name="native_settings"></param>
         public Application(GameWindowSettings window_settings, NativeWindowSettings native_settings) : base(window_settings,native_settings)
         {
             Console.WriteLine("Application Created");
@@ -118,20 +142,29 @@ namespace Q.App
 
         }
 
-        
-        
 
 
+
+
+        /// <summary>
+        /// You can override this method to add your own application initializtion.
+        /// </summary>
         public virtual void InitApp()
         {
             
         }
 
+        /// <summary>
+        /// You can override this method to add your own application update logic.
+        /// </summary>
         public virtual void UpdateApp()
         {
             
         }
 
+        /// <summary>
+        /// You can override this method to add your own application render logic.
+        /// </summary>
         public virtual void RenderApp()
         {
 
