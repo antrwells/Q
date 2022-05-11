@@ -175,6 +175,10 @@ namespace Q3Editor
             win3.Set(300, 300, 250, 250);
             win3.Title.SetText("Editor");
 
+            var ren_tar = new IRenderTarget();
+            win3.Content.Add(ren_tar);
+            ren_tar.Set(0, 0, win.Content.Size.X, win.Content.Size.Y);
+
             var win4 = new IWindow();
             win4.Set(20, 20, 350, 250);
             win4.Title.SetText("Properties");
@@ -207,7 +211,7 @@ namespace Q3Editor
 
             UI.Root.Add(win);
             UI.Root.Add(win2);
-        //    UI.Root.Add(win3);
+          //  UI.Root.Add(win3);
             UI.Root.Add(win4);
             UI.Docker = dock_area;
             
@@ -302,7 +306,7 @@ namespace Q3Editor
             base.UpdateApp();
             UI.UpdateUI();
 
-            Console.WriteLine("E:" + test.Enum1.ToString());
+           // Console.WriteLine("E:" + test.Enum1.ToString());
             //Console.WriteLine("TestVec:" + test.TestVec1);
             //Console.WriteLine("Vec2:" + test.TestVec2.ToString());
             //Console.WriteLine("Float:" + test.TestFloat.ToString());

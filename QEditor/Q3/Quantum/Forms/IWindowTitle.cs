@@ -11,7 +11,7 @@ namespace Q.Quantum.Forms
 
         public override void RenderForm()
         {
-            Size = new OpenTK.Mathematics.Vector2i(192, Size.Y);
+            //Size = new OpenTK.Mathematics.Vector2i(192, Size.Y);
             //base.RenderForm();
             if (Over)
             {

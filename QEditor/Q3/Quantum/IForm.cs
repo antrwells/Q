@@ -69,8 +69,13 @@ namespace Q.Quantum
             }
             set
             {
+                var ps = _Size;
                 _Size = value;
-                Resized();
+                if (ps != _Size)
+                {
+                    //   OnSizeChanged();
+                    Resized();
+                }
             }
         }
         private Vector2i _Size = new Vector2i(0, 0);
@@ -126,6 +131,12 @@ namespace Q.Quantum
             set;
         }
 
+        public bool AcceptDrops
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// The main text of a form. For a button this would be it's label text, for example.
         /// </summary>
@@ -146,6 +157,12 @@ namespace Q.Quantum
         /// The scroll position. This alters all child forms in some forms, not all.
         /// </summary>
         public Vector2i ScrollPosition
+        {
+            get;
+            set;
+        }
+
+        public bool CanDragAndDrop
         {
             get;
             set;
@@ -173,24 +190,31 @@ namespace Q.Quantum
                 int bx = 0;
                 int by = 0;
 
-                foreach(var form in Child)
+                if (Child.Count > 0)
                 {
-                    var x = form.Position.X+ (form.Size.X-Size.X);
-                    var y = form.Position.Y + (form.Size.Y - Size.Y) + 25;
 
-                    if (x < 0) x = 0;
-                    if (y < 0) y = 0;
-                  
-                    // x = x - Size.X/2;
-                    //y = y - Size.Y;
-                    
-//                    x = form.Position.X 
-                
-                    
-                    if (x > bx) bx = x;
-                    if (y > by) by = y;
+                    foreach (var form in Child)
+                    {
+                        var x = form.Position.X + (form.Size.X - Size.X);
+                        var y = form.Position.Y + (form.Size.Y - Size.Y) + 25;
+
+                        if (x < 0) x = 0;
+                        if (y < 0) y = 0;
+
+                        // x = x - Size.X/2;
+                        //y = y - Size.Y;
+
+                        //                    x = form.Position.X 
+
+
+                        if (x > bx) bx = x;
+                        if (y > by) by = y;
+                    }
                 }
-
+                else
+                {
+                    
+                }
 
                
                 return new Vector2i(bx, by);
@@ -245,12 +269,17 @@ namespace Q.Quantum
             set;
         }
        
+
+        public virtual void CompleteDrop(DragInfo info)
+        {
+            
+        }
         /// <summary>
         /// The constructor, this sets up the form for basic use.
         /// </summary>
         public IForm()
         {
-
+            AcceptDrops = false;
             Root = null;
             Child = new List<IForm>();
             Scroll = true;
@@ -260,6 +289,14 @@ namespace Q.Quantum
             SetColor(1, 1, 1, 1);
             NoInteract = false;
 
+        }
+
+        public virtual DragInfo GetDragInfo()
+        {
+
+
+            return null;
+            
         }
 
         /// <summary>
@@ -299,7 +336,7 @@ namespace Q.Quantum
         {
             Position = new Vector2i(x, y);
             Size = new Vector2i(w, h);
-            Resized();
+            //Resized();
             return this;
         }
 
@@ -348,7 +385,7 @@ namespace Q.Quantum
 
             form.Root = this;
             Child.Add(form);
-            form.Resized();
+            //form.Resized();
             return this;
         }
 
@@ -358,9 +395,22 @@ namespace Q.Quantum
         public void Render()
         {
 
+            PreRender();
             RenderForm();
+            PostRender();
             RenderChildren();
 
+        }
+
+
+        public virtual void PreRender()
+        {
+
+        }
+        
+        public virtual void PostRender()
+        {
+            
         }
 
         /// <summary>
@@ -381,7 +431,7 @@ namespace Q.Quantum
         
 
 
-            if (this is Forms.IWindow || this is Forms.IActiveContent)
+            if (this is Forms.IWindow)
             {
                 int ty = App.AppInfo.Height - (RenderPosition.Y + Size.Y);
 
@@ -389,7 +439,7 @@ namespace Q.Quantum
 
                 GL.Enable(EnableCap.ScissorTest);
 
-                GL.Scissor(RenderPosition.X-1, ty, Size.X+3, Size.Y-2);
+                GL.Scissor(RenderPosition.X-3, ty-3, Size.X+3, Size.Y);
 
             }
             else
@@ -414,8 +464,10 @@ namespace Q.Quantum
                     form.Render();
                 //}
             }
-        }
 
+         //   GL.Disable(EnableCap.ScissorTest);
+        }
+        
         /// <summary>
         /// returns true if the coords (x,y) are within bounds of a form.
         /// This can be overriden for more complex behaviour.
@@ -451,7 +503,7 @@ namespace Q.Quantum
             OnResized();
             foreach(var form in Child)
             {
-                form.Resized();
+               // form.Resized();
             }
         }
 

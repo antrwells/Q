@@ -65,6 +65,12 @@ namespace Q.Quantum
             set;
         }
 
+        public DragInfo DragAndDropInfo
+        {
+            get;
+            set;
+        }
+
         private long[] PrevClick
         {
             get;
@@ -109,7 +115,7 @@ namespace Q.Quantum
 
         public UserInterface()
         {
-
+            DragAndDropInfo = null;
             Theme = new Themes.ThemeDark();
             Cursor = new Texture2D("Data/ui/cursor/normal.png", false);
             Draw = new BasicDraw2D();
@@ -524,7 +530,7 @@ namespace Q.Quantum
 
                     if (dpos.X >= Docker.Position.X + Docker.Size.X / 4 && dpos.X <= Docker.Position.X + Docker.Size.X - Docker.Size.X / 4)
                     {
-                        if (dpos.Y >= Docker.Position.Y + Docker.Size.Y / 4 && dpos.Y <= Docker.Position.Y + Docker.Size.Y - Docker.Size.Y / 4)
+                        if (dpos.Y >= Docker.Position.Y + Docker.Size.Y / 4+80 && dpos.Y <= Docker.Position.Y + Docker.Size.Y - Docker.Size.Y / 6)
                         {
                             HighlightZone = Q.Quantum.Forms.DockZone.Center;
                         }
@@ -594,6 +600,7 @@ namespace Q.Quantum
                         if (Input.AppInput.MouseButton[0] == false)
                         {
                             FormOver.OnMouseUp(0);
+                            DragAndDropInfo = null; 
                             FormPressed[0] = null;
                         }
                     }
@@ -673,6 +680,10 @@ namespace Q.Quantum
                     if (FormPressed[i] == null && form_over!=null)
                     {
                         form_over.OnMouseDown(i);
+                        if (form_over.CanDragAndDrop)
+                        {
+                            DragAndDropInfo = form_over.GetDragInfo();
+                        }
                         FormPressed[i] = form_over;
                         if(FormActive!=null && FormActive != form_over)
                         {
@@ -698,6 +709,20 @@ namespace Q.Quantum
                     if (FormPressed[i] !=null)
                     {
                         FormPressed[i].OnMouseUp(i);
+
+                        if (DragAndDropInfo != null)
+                        {
+                            var over = GetFormOver(forms, (int)Input.AppInput.MousePosition.X, (int)Input.AppInput.MousePosition.Y);
+
+                            if (over.AcceptDrops)
+                            {
+                                over.CompleteDrop(DragAndDropInfo);
+                            }
+
+                            //int a = 5;
+                        }
+
+                        DragAndDropInfo = null;
                         FormPressed[i] = null;
 
                     }
@@ -754,8 +779,18 @@ namespace Q.Quantum
         public void RenderUI()
         {
             Root.Render();
-
             OpenTK.Graphics.OpenGL.GL.Disable(OpenTK.Graphics.OpenGL.EnableCap.ScissorTest);
+            if (DragAndDropInfo != null)
+            {
+                Draw.Rect((int)Input.AppInput.MousePosition.X-12, (int)Input.AppInput.MousePosition.Y-12, DragAndDropInfo.Size.X, DragAndDropInfo.Size.Y, DragAndDropInfo.Icon, new Vector4(1, 1, 1, 1));
+                var img = UserInterface.ActiveInterface.Theme.SystemFont.GenString(DragAndDropInfo.Text);
+                Draw.Rect((int)Input.AppInput.MousePosition.X-12, (int)Input.AppInput.MousePosition.Y+58, img.Width, img.Height, img, new Vector4(1, 1, 1, 1));
+
+            }
+
+
+
+
 
             switch (HighlightZone)
             {

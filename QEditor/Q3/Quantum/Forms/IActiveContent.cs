@@ -62,6 +62,7 @@ namespace Q.Quantum.Forms
         public override void OnUpdate()
         {
             base.OnUpdate();
+            return;
             int max_y = ContentSize.Y;
             int max_X = ContentSize.X;
 
@@ -231,14 +232,14 @@ namespace Q.Quantum.Forms
             Child.Remove(HorizontalScroll);
             if(true)
             {
-                Add(HorizontalScroll);
+              //  Add(HorizontalScroll);
                 HorizontalScroll.Position = new OpenTK.Mathematics.Vector2i(0,Size.Y - 15);
                 HorizontalScroll.Size = new OpenTK.Mathematics.Vector2i(Size.X,15);
             };
             if (true)
             {
                 
-                Add(VerticalScroll);
+             //   Add(VerticalScroll);
               //  Console.WriteLine("ADDING SCROLLER");
                 VerticalScroll.Position = new OpenTK.Mathematics.Vector2i(Size.X - 15, 0);
                 VerticalScroll.Size = new OpenTK.Mathematics.Vector2i(15, Size.Y);

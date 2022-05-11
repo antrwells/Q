@@ -21,7 +21,7 @@ namespace Q.Texture
     public class Texture
     {
 
-        protected TextureHandle Handle
+        public TextureHandle Handle
         {
             get;
             set;

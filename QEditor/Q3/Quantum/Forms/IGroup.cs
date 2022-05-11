@@ -8,5 +8,10 @@ namespace Q.Quantum.Forms
 {
     public class IGroup : IForm
     {
+        public override void RenderForm()
+        {
+            base.RenderForm();
+            DrawOutline(new OpenTK.Mathematics.Vector4(1, 1, 1, 1)) ;
+        }
     }
 }

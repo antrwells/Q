@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using OpenTK.Mathematics;
 namespace Q.Quantum.Forms
 {
-    public class IContentFile : IForm
+    public class IContent : IForm
     {
         public Texture.Texture2D Icon
         {
@@ -20,32 +20,89 @@ namespace Q.Quantum.Forms
             set;
         }
 
+        public string Path
+        {
+            get;
+            set;
+        }
+
+        public bool Over
+        {
+            get;
+            set;
+        }
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            Over = true;
+        }
+
+        public override void OnLeave()
+        {
+            base.OnLeave();
+            Over = false;
+        }
+
+        public override DragInfo GetDragInfo()
+        {
+            DragInfo info = new DragInfo();
+            info.Icon = Icon;
+            info.Text = Name;
+            info.Form = this;
+            info.Path = Path;
+            return info;
+            //return base.GetDragInfo();
+            
+        }
+    }
+    public class IContentFile : IContent
+    {
+
+
+        public IContentFile()
+        {
+            CanDragAndDrop = true;
+        }
+
         public override void RenderForm()
         {
             base.RenderForm();
-            Draw(Icon);
+
+            if (Over)
+            {
+                Draw(Icon, RenderPosition.X - 4, RenderPosition.Y - 4, Size.X + 8, Size.Y + 8, new Vector4(6, 6, 6, 1.0f));
+            }
+                Draw(Icon);
+                
+           // if (Over)
+            //{
+             //   Draw
+            //}
+
             DrawText(Name, RenderPosition.X, RenderPosition.Y + 70, new OpenTK.Mathematics.Vector4(1, 1, 1, 1));
         }
     }
-    public class IContentFolder : IForm
+    public class IContentFolder : IContent
     {
 
-        public Texture.Texture2D Icon
+        public IContentFolder()
         {
-            get;
-            set;
+            CanDragAndDrop = true;
         }
-
-        public string Name
-        {
-            get;
-            set;
-        }
-
+   
         public override void RenderForm()
         {
             base.RenderForm();
-            Draw(Icon);
+            if (Over)
+            {
+             //   DrawFrame();
+            }
+            if (Over)
+            {
+                Draw(Icon, RenderPosition.X - 4, RenderPosition.Y - 4, Size.X + 8, Size.Y + 8, new Vector4(6, 6, 6, 1.0f));
+            }
+                Draw(Icon);
             DrawText(Name, RenderPosition.X, RenderPosition.Y + 70, new OpenTK.Mathematics.Vector4(1, 1, 1, 1));
         }
     }
@@ -116,7 +173,7 @@ namespace Q.Quantum.Forms
                     dx = 20;
                     dy = dy + 92;
                 }
-
+                folder.Path = dir.FullName;                
                 scan_contents.Add(folder);
             }
             foreach(var file in new DirectoryInfo(_BrowsePath).GetFiles())
@@ -132,6 +189,7 @@ namespace Q.Quantum.Forms
                     dx = 20;
                     dy = dy + 92;
                 }
+                cfile.Path = file.FullName;
                 scan_contents.Add(cfile);
             }
 

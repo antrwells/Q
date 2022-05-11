@@ -45,6 +45,29 @@ namespace Q.Quantum.Forms
         }
         public string p_text = "";
         public float p_num = 0.0f;
+
+        public ITextEdit()
+        {
+            AcceptDrops = true;
+        }
+
+        public override void CompleteDrop(DragInfo info)
+        {
+            //base.CompleteDrop(info);
+
+            if (info.Path.Length > 0)
+            {
+                edit_text = info.Path;
+            }
+            else
+            {
+                edit_text = info.Text;
+            }
+             edit_x = 0;
+            start_x = 0;
+
+        }
+
         public override void RenderForm()
         {
             base.RenderForm();
