@@ -679,6 +679,10 @@ namespace Q.Quantum
                     }                    
                     if (FormPressed[i] == null && form_over!=null)
                     {
+                        if (i == 1)
+                        {
+                            int a = 1;
+                        }
                         form_over.OnMouseDown(i);
                         if (form_over.CanDragAndDrop)
                         {

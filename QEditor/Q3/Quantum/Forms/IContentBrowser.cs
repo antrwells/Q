@@ -105,11 +105,21 @@ namespace Q.Quantum.Forms
                 Draw(Icon);
             DrawText(Name, RenderPosition.X, RenderPosition.Y + 70, new OpenTK.Mathematics.Vector4(1, 1, 1, 1));
         }
+
+        public override void OnDoubleClick(int button)
+        {
+            //base.OnDoubleClick(button);
+            if (button == 0)
+            {
+                IContentBrowser.Instance.BrowsePath = Path;
+            }
+        }
     }
 
     public class IContentBrowser : IActiveContent
     {
 
+        public static IContentBrowser Instance = null;
         public static Texture.Texture2D FolderIcon
         {
             get;
@@ -136,6 +146,26 @@ namespace Q.Quantum.Forms
         }
         public string _BrowsePath = "";
 
+        public Stack<string> Paths = new Stack<string>();
+
+        public override void OnMouseDown(int button)
+        {
+            base.OnMouseDown(button);
+            Console.WriteLine("!!!!");
+            
+            if (button == 1)
+            {
+
+                if (Paths.Count > 1)
+                {
+                    Paths.Pop();
+                    BrowsePath = Paths.Peek();
+                }
+                   
+                
+            }
+        }
+
         public IContentBrowser()
         {
             if(FolderIcon == null)
@@ -143,6 +173,7 @@ namespace Q.Quantum.Forms
                 FolderIcon = new Texture.Texture2D("Data/UI/Browser/Foldericon.png");
                 FileIcon = new Texture.Texture2D("Data/UI/Browser/Fileicon.png");
             }
+            Instance = this;
         }
         public List<IForm> scan_contents = new List<IForm>();
         public void Scan()
@@ -151,6 +182,18 @@ namespace Q.Quantum.Forms
 
             dx = 20;
             dy = 15;
+
+
+            bool found = false;
+            //foreach(var p in Paths)
+            //{
+            //  if(p==Paths.con
+            //}
+            if (!Paths.Contains(_BrowsePath))
+            {
+                 Paths.Push(_BrowsePath);
+            }
+
             foreach(IForm sc in scan_contents.ToArray())
             {
                 Child.Remove(sc);
@@ -198,7 +241,14 @@ namespace Q.Quantum.Forms
         {
             SetSizeUnsafe(Root.Size);
             Scan();
+            Console.WriteLine("Resized.......");
             //base.OnResized();
+        }
+
+        public override bool InBounds(int x, int y)
+        {
+            return base.InBounds(x, y);
+            
         }
     }
 }

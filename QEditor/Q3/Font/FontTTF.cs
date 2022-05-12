@@ -67,15 +67,10 @@ namespace Q.Font
         {
             if (Cache.ContainsKey(text))
             {
-                if (Cache[text].Destroyed == false)
-                {
-                  //  Cache[text].DestoryWhen(2000);
+        
                     return Cache[text];
-                }
-                else
-                {
-                    Cache.Remove(text);
-                }
+                
+               
             }
 
             var measuredChars = new List<DebugChar>();
@@ -389,7 +384,7 @@ namespace Q.Font
          
 
             Cache.Add(text, new_Tex);
-            new_Tex.DestoryWhen(1500);
+        //    new_Tex.DestoryWhen(1500);
 
             return new_Tex;
         }

@@ -269,6 +269,12 @@ namespace Q.Quantum
             set;
         }
        
+        public Vector4 ScissorOffset
+        {
+            get;
+            set;
+                
+        }
 
         public virtual void CompleteDrop(DragInfo info)
         {
@@ -288,6 +294,7 @@ namespace Q.Quantum
             SetText("");
             SetColor(1, 1, 1, 1);
             NoInteract = false;
+            ScissorOffset = new Vector4();
 
         }
 
@@ -385,7 +392,7 @@ namespace Q.Quantum
 
             form.Root = this;
             Child.Add(form);
-            //form.Resized();
+            form.Resized();
             return this;
         }
 
@@ -428,10 +435,10 @@ namespace Q.Quantum
         {
             //GL.Viewport(RenderPosition.X, RenderPosition.Y, Size.X, Size.Y);
             //GL.Viewport(0, RenderPosition.Y-Size.Y, App.AppInfo.Width, Size.Y);
-        
 
 
-            if (this is Forms.IWindow)
+
+            if (this is Forms.IGroup)
             {
                 int ty = App.AppInfo.Height - (RenderPosition.Y + Size.Y);
 
@@ -439,12 +446,12 @@ namespace Q.Quantum
 
                 GL.Enable(EnableCap.ScissorTest);
 
-                GL.Scissor(RenderPosition.X-3, ty-3, Size.X+3, Size.Y);
+                GL.Scissor(RenderPosition.X - 3 + (int)ScissorOffset.X, ty  + (int)ScissorOffset.Y, Size.X + 3 + (int)ScissorOffset.Z,(Size.Y -3) + (int)ScissorOffset.W);
 
             }
             else
             {
-             //   GL.Disable(EnableCap.ScissorTest);
+                //   GL.Disable(EnableCap.ScissorTest);
 
             }
 
@@ -455,17 +462,19 @@ namespace Q.Quantum
                 //    if(form.render)
                 if (form.RenderPosition.Y < RenderPosition.Y)
                 {
-                 //   form.NoInteract = true;
+                    //   form.NoInteract = true;
                 }
                 else
                 {
-               //    form.NoInteract = false;
+                    //    form.NoInteract = false;
                 }
-                    form.Render();
+                form.Render();
                 //}
             }
-
-         //   GL.Disable(EnableCap.ScissorTest);
+            if (this is Forms.IGroup)
+            {
+                GL.Disable(EnableCap.ScissorTest);
+            }
         }
         
         /// <summary>
@@ -786,7 +795,7 @@ namespace Q.Quantum
             }
             else
             {
-                if(bg.Width!=h || bg.Height!=h)
+                if(bg.Width!=w || bg.Height!=h)
                 {
                     bg.DestroyNow = true;
                     bg.DestroyTexture();

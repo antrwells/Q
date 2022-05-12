@@ -197,6 +197,7 @@ namespace Q.Quantum.Forms
 
         public override void OnMouseDown(int button)
         {
+            return;
             base.OnMouseDown(button);
             if (resizeLeft || resizeRight || resizeBottom || resizeTop || resizeCorner)
             {

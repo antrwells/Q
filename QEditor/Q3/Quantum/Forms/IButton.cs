@@ -8,11 +8,12 @@ namespace Q.Quantum.Forms
 {
 
     public delegate void ButtonClicked(int button);
+    public delegate void ButtonDragged(int x, int y);
 
     public class IButton : IForm
     {
-        bool drag = false;
-
+        //bool drag = false;
+        public event ButtonDragged Dragged;
         public event ButtonClicked Click = null;
         public event ButtonClicked DoubleClick = null;
 
@@ -56,7 +57,11 @@ namespace Q.Quantum.Forms
 
         public override void OnMouseMove(int x, int y, int x_delta, int y_delta)
         {
-           
+
+            if (Drag)
+            {
+                Dragged?.Invoke(x_delta, y_delta);
+            }
         }
 
         public override void OnDoubleClick(int button)
@@ -71,14 +76,15 @@ namespace Q.Quantum.Forms
         {
             Color = new OpenTK.Mathematics.Vector4(1.3f, 1, 1, 1);
             Click?.Invoke(button);
-            drag = true;
+            Drag = true;
+            //drag = true;
         }
 
         public override void OnMouseUp(int button)
         {
             Color = new OpenTK.Mathematics.Vector4(1, 1, 1, 1);
-            drag = false;
-            base.OnMouseUp(button);
+            Drag = false;
+            //base.OnMouseUp(button);
         }
 
     }

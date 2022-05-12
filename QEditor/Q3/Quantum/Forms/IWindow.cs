@@ -56,10 +56,18 @@ namespace Q.Quantum.Forms
             HScroller = new ViewScroller();
             VScroller = new ViewScroller();
             Resizer = new IButton();
-            Add(Title, Content);
+            Add(Title);
             Add(VScroller, HScroller);
             Add(Resizer);
-            
+            Add(Content);
+
+            Resizer.Dragged += (x, y) =>
+            {
+                Set(Position.X,Position.Y,Size.X + x, Size.Y + y);
+                //Set(Position.X, Position.Y, Size.W, Size.H);
+            };
+           // ScissorOffset = new OpenTK.Mathematics.Vector4(0, 0, 0, -30);
+
             TitleHeight = 25;
         }
 

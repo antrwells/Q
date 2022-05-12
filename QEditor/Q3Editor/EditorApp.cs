@@ -153,6 +153,12 @@ namespace Q3Editor
             {
                 obj2.AddItem("Testing:"+i.ToString(), null);
             }
+
+            treeview.Selected += (item) =>
+            {
+                Console.WriteLine("Selected:" + item.Text);
+            };
+
             win.Content.Add(treeview);
 
             var win2 = new IWindow();
@@ -212,7 +218,7 @@ namespace Q3Editor
             UI.Root.Add(win);
             UI.Root.Add(win2);
           //  UI.Root.Add(win3);
-            UI.Root.Add(win4);
+          //  UI.Root.Add(win4);
             UI.Docker = dock_area;
             
             lm_2.CLick = (item) =>

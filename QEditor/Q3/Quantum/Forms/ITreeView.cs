@@ -52,8 +52,12 @@ namespace Q.Quantum.Forms
         
     }
 
+    public delegate void TreeItemSelected(TreeItem item);
+
     public class ITreeView : IActiveContent
     {
+
+        public event TreeItemSelected Selected;
 
         public TreeItem RootItem
         {
@@ -129,12 +133,14 @@ namespace Q.Quantum.Forms
         {
             base.OnMouseDown(button);
 
-            if(button==0)
+            if (button == 0)
             {
                 if (OverItem != null)
                 {
                     OverItem.Open = OverItem.Open ? false : true;
                     ActiveItem = OverItem;
+
+                    Selected?.Invoke(OverItem);
                 }
             }
         }

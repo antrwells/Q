@@ -89,24 +89,26 @@ namespace Q.Texture
 
         public Texture2D(int width, int height)
         {
+            Console.WriteLine("Creating tex W/H");
             Width = width;
             Height = height;
-            Raw = new byte[Width * Height * 4];
+           // Raw = new byte[Width * Height * 4];
             Format = InternalFormat.Rgba8;
             Handle = GL.CreateTexture(TextureTarget.Texture2d);
             GL.TextureStorage2D(Handle, 1, SizedInternalFormat.Rgba8, Width, Height);
             unsafe
             {
-                GCHandle pinnedArray = GCHandle.Alloc(Raw, GCHandleType.Pinned);
-                IntPtr pointer = pinnedArray.AddrOfPinnedObject();
-                GL.TextureSubImage2D(Handle, 0, 0, 0, Width, Height, PixelFormat.Rgba, PixelType.UnsignedByte, pointer);
+               // GCHandle pinnedArray = GCHandle.Alloc(Raw, GCHandleType.Pinned);
+               // IntPtr pointer = pinnedArray.AddrOfPinnedObject();
+               // GL.TextureSubImage2D(Handle, 0, 0, 0, Width, Height, PixelFormat.Rgba, PixelType.UnsignedByte, pointer);
+               // pinnedArray.Free();
                 //Console.WriteLine("Created texture2D. W:" + Width + " H:" + Height + " Handle:" + Handle.Handle);
             }
             GL.TextureParameteri(Handle, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TextureParameteri(Handle, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TextureParameteri(Handle, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
             GL.TextureParameteri(Handle, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-            GL.GenerateTextureMipmap(Handle);
+            //GL.GenerateTextureMipmap(Handle);
             Loading = false;
             DataBound = true;
 
@@ -124,7 +126,8 @@ namespace Q.Texture
 
         public Texture2D(Q.Pixels.PixelMap map)
         {
-
+            //return;
+            Console.WriteLine("Creating texture.");
             Width = map.Width;
             Height = map.Height;
             Format = InternalFormat.Rgba8;
@@ -135,23 +138,27 @@ namespace Q.Texture
             
 
         }
+        
+        
 
         public override void DestroyTexture()
         {
             //base.DestroyTexture();
-            if (DestroyNow)
-            {
+       
+         //   {
                 GL.DeleteTexture(Handle);
+                //GL.delete
+               
                 Raw = null;
                 DestroyNow = false;
                 Destroyed = true;
                 //Console.WriteLine("Tex destroyed.");
-            }
+       //     }
         }
 
         public Texture2D(string path,bool force_alpha = false)
         {
-
+            Console.WriteLine("Loading texture.");
             int image_width=64;
             int image_height=64;
 
