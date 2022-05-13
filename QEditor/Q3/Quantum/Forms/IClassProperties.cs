@@ -83,6 +83,17 @@ namespace Q.Quantum.Forms
                 //switch types
                 switch (type)
                 {
+                    case "Vector4":
+                        IVector4 vec4 = new IVector4();
+                        vec4.Set(20, dy, 260, 30);
+                        vec4.Value = (Vector4)value;
+                        Add(vec4);
+                        dy = dy + 45;
+                        vec4.OnValueChanged += (value) =>
+                        {
+                            property.SetValue(_ActiveClass, value);
+                        };
+                        break;
                     case "Vector3":
 
 

@@ -276,6 +276,12 @@ namespace Q.Quantum
                 
         }
 
+        public bool CheckBounds
+        {
+            get;
+                set;
+        }
+
         public virtual void CompleteDrop(DragInfo info)
         {
             
@@ -294,6 +300,7 @@ namespace Q.Quantum
             SetText("");
             SetColor(1, 1, 1, 1);
             NoInteract = false;
+            CheckBounds = false;
             ScissorOffset = new Vector4();
 
         }

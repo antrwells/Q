@@ -43,7 +43,10 @@ namespace Q.Quantum.Forms
             base.OnLeave();
             Over = false;
         }
-
+        public IContent()
+        {
+            CheckBounds = true;
+        }
         public override DragInfo GetDragInfo()
         {
             DragInfo info = new DragInfo();

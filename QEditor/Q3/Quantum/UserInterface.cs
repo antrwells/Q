@@ -20,7 +20,7 @@ namespace Q.Quantum
             set;
         }
 
-        
+
 
 
         public ITheme Theme
@@ -33,7 +33,7 @@ namespace Q.Quantum
             get;
             set;
         }
-        
+
         private Q.Quantum.Forms.DockZone HighlightZone
         {
             get;
@@ -51,7 +51,7 @@ namespace Q.Quantum
             get;
             set;
         }
-            
+
 
         public IForm FormOver
         {
@@ -84,7 +84,7 @@ namespace Q.Quantum
         }
 
         public static BasicDraw2D Draw;
-                //public static BasicDraw2D DrawBlur;
+        //public static BasicDraw2D DrawBlur;
 
 
         public Q.Shader._2D.EXBasicBlur DrawBlur;
@@ -120,10 +120,10 @@ namespace Q.Quantum
             Cursor = new Texture2D("Data/ui/cursor/normal.png", false);
             Draw = new BasicDraw2D();
             DrawBlur = new Shader._2D.EXBasicBlur();
-            
+
             // DrawBlur = new BasicDraw2D();
             Root = new Forms.IGroup();
-            Root.Set(0, 70, App.AppInfo.Width, App.AppInfo.Height-70);
+            Root.Set(0, 70, App.AppInfo.Width, App.AppInfo.Height - 70);
             ActiveInterface = this;
             prev_mouse = new Vector2(0, 0);
             FormPressed = new IForm[32];
@@ -163,7 +163,7 @@ namespace Q.Quantum
         {
             //throw new NotImplementedException();
             //Console.WriteLine("Key:" + obj.ToString());
-           // Console.WriteLine(obj.ToString());
+            // Console.WriteLine(obj.ToString());
             if (FormActive != null)
             {
                 FormActive.OnKeyDown(obj);
@@ -185,7 +185,7 @@ namespace Q.Quantum
                 key = obj;
                 //FormActive
                 FormActive.OnKey(obj);
-                
+
             }
 
         }
@@ -193,10 +193,10 @@ namespace Q.Quantum
         public IMainMenu AddMainMenu()
         {
             MainMenu = new Forms.IMainMenu();
-            MainMenu.Set(0, 0, App.AppInfo.Width,25);
+            MainMenu.Set(0, 0, App.AppInfo.Width, 25);
             return MainMenu;
         }
-        
+
 
         public IForm Add(IForm form)
         {
@@ -206,7 +206,7 @@ namespace Q.Quantum
 
         public IForm Add(params IForm[] forms)
         {
-            foreach(var form in forms)
+            foreach (var form in forms)
             {
                 Add(form);
             }
@@ -231,7 +231,7 @@ namespace Q.Quantum
                 {
                     MoveTo(Q.Quantum.Forms.DockZone.Center, win);
                 }
-                
+
                 /*
                 foreach (var win in Docker.Left.ToArray())
                 {
@@ -261,7 +261,7 @@ namespace Q.Quantum
             HighlightZone = Q.Quantum.Forms.DockZone.None;
         }
 
-        private void MoveTo(Q.Quantum.Forms.DockZone zone,IWindow DragWin)
+        private void MoveTo(Q.Quantum.Forms.DockZone zone, IWindow DragWin)
         {
             switch (zone)
             {
@@ -269,15 +269,15 @@ namespace Q.Quantum
 
                     //DragWin.Set(0, 0, Docker.Size.X / 4, Docker.Size.Y);
 
-                    if(Docker.TopCount()==0 && Docker.BottomCount() == 0)
+                    if (Docker.TopCount() == 0 && Docker.BottomCount() == 0)
                     {
                         DragWin.Set(0, 0, Docker.Size.X / 4, Docker.Size.Y);
-                    }else if (Docker.TopCount() == 0)
+                    } else if (Docker.TopCount() == 0)
                     {
 
-                        DragWin.Set(0,0, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
+                        DragWin.Set(0, 0, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
 
-                    }else if (Docker.BottomCount() == 0)
+                    } else if (Docker.BottomCount() == 0)
                     {
                         DragWin.Set(0, Docker.Size.Y / 4, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
                     }
@@ -295,21 +295,21 @@ namespace Q.Quantum
                     //DragWin.Set(Docker.Size.X - Docker.Size.X / 4, 0, Docker.Size.X / 4, Docker.Size.Y);
                     if (Docker.TopCount() == 0 && Docker.BottomCount() == 0)
                     {
-                        DragWin.Set(Docker.Size.X-Docker.Size.X/4, 0, Docker.Size.X / 4, Docker.Size.Y);
+                        DragWin.Set(Docker.Size.X - Docker.Size.X / 4, 0, Docker.Size.X / 4, Docker.Size.Y);
                     }
                     else if (Docker.TopCount() == 0)
                     {
 
-                        DragWin.Set(Docker.Size.X-Docker.Size.X/4, 0, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
+                        DragWin.Set(Docker.Size.X - Docker.Size.X / 4, 0, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
 
                     }
                     else if (Docker.BottomCount() == 0)
                     {
-                        DragWin.Set(Docker.Size.X-Docker.Size.X/4, Docker.Size.Y / 4, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
+                        DragWin.Set(Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y / 4, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4);
                     }
                     else
                     {
-                        DragWin.Set(Docker.Size.X-Docker.Size.X/4, Docker.Size.Y / 4, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 2);
+                        DragWin.Set(Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y / 4, Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 2);
                     }
 
 
@@ -322,11 +322,11 @@ namespace Q.Quantum
 
                     if (Docker.LeftCount() == 0 && Docker.RightCount() == 0)
                     {
-                        DragWin.Set(0,0, Docker.Size.X, Docker.Size.Y / 4);
+                        DragWin.Set(0, 0, Docker.Size.X, Docker.Size.Y / 4);
                     }
                     else if (Docker.LeftCount() == 0)
                     {
-                        DragWin.Set(0,0, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y / 4);
+                        DragWin.Set(0, 0, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y / 4);
                         //DragWin.Set(0, Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X / 2, Docker.Size.Y / 4);
                     }
                     else if (Docker.RightCount() == 0)
@@ -337,7 +337,7 @@ namespace Q.Quantum
                     }
                     else
                     {
-                        DragWin.Set(Docker.Size.X / 4,0, Docker.Size.X / 2, Docker.Size.Y / 4);
+                        DragWin.Set(Docker.Size.X / 4, 0, Docker.Size.X / 2, Docker.Size.Y / 4);
                     }
 
 
@@ -364,9 +364,9 @@ namespace Q.Quantum
 
                             DragWin.Set(Docker.Size.X / 4, Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X - Docker.Size.X / 4, Docker.Size.Y / 4);
                         }
-                      //  else
+                        //  else
                         {
-                          //  DragWin.Set(0, Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X, Docker.Size.Y / 4);
+                            //  DragWin.Set(0, Docker.Size.Y - Docker.Size.Y / 4, Docker.Size.X, Docker.Size.Y / 4);
                         }
                     }
                     else
@@ -530,7 +530,7 @@ namespace Q.Quantum
 
                     if (dpos.X >= Docker.Position.X + Docker.Size.X / 4 && dpos.X <= Docker.Position.X + Docker.Size.X - Docker.Size.X / 4)
                     {
-                        if (dpos.Y >= Docker.Position.Y + Docker.Size.Y / 4+80 && dpos.Y <= Docker.Position.Y + Docker.Size.Y - Docker.Size.Y / 6)
+                        if (dpos.Y >= Docker.Position.Y + Docker.Size.Y / 4 + 80 && dpos.Y <= Docker.Position.Y + Docker.Size.Y - Docker.Size.Y / 6)
                         {
                             HighlightZone = Q.Quantum.Forms.DockZone.Center;
                         }
@@ -565,20 +565,20 @@ namespace Q.Quantum
             {
                 AddForms(forms, MainMenu);
             }
-            
+
             forms.Reverse();
 
-            foreach(var form in forms)
+            foreach (var form in forms)
             {
                 form.OnUpdate();
             }
 
 
             var form_over = GetFormOver(forms, (int)Input.AppInput.MousePosition.X, (int)Input.AppInput.MousePosition.Y);
-            
-            
 
-            if (form_over != FormOver && form_over !=null)
+
+
+            if (form_over != FormOver && form_over != null)
             {
 
                 if (FormPressed[0] != form_over)
@@ -593,14 +593,14 @@ namespace Q.Quantum
                         FormOver.OnLeave();
                     }
                 }
-                if(FormOver!=form_over && FormOver!=null)
+                if (FormOver != form_over && FormOver != null)
                 {
                     if (FormOver == FormPressed[0])
                     {
                         if (Input.AppInput.MouseButton[0] == false)
                         {
                             FormOver.OnMouseUp(0);
-                            DragAndDropInfo = null; 
+                            DragAndDropInfo = null;
                             FormPressed[0] = null;
                         }
                     }
@@ -611,13 +611,13 @@ namespace Q.Quantum
             else
             {
 
-                
+
 
             }
 
 
             //check for double click
-            
+
 
             if (Input.AppInput.MouseButton[0])
             {
@@ -640,9 +640,9 @@ namespace Q.Quantum
                 }
                 if (clicked)
                 {
-                   
 
-                    
+
+
                     clicked = false;
                     int tt = Environment.TickCount - clicktime;
                     if (tt < 250)
@@ -662,12 +662,12 @@ namespace Q.Quantum
                             clicks = 0;
                         }
                     }
-                    
+
                 }
             }
 
-              
-            
+
+
 
             for (int i = 0; i < 16; i++)
             {
@@ -675,9 +675,9 @@ namespace Q.Quantum
                 {
                     if (i == 0)
                     {
-                      
-                    }                    
-                    if (FormPressed[i] == null && form_over!=null)
+
+                    }
+                    if (FormPressed[i] == null && form_over != null)
                     {
                         if (i == 1)
                         {
@@ -689,7 +689,7 @@ namespace Q.Quantum
                             DragAndDropInfo = form_over.GetDragInfo();
                         }
                         FormPressed[i] = form_over;
-                        if(FormActive!=null && FormActive != form_over)
+                        if (FormActive != null && FormActive != form_over)
                         {
                             FormActive.OnDeactivate();
                             FormActive.Active = false;
@@ -697,7 +697,7 @@ namespace Q.Quantum
                         FormActive = form_over;
                         form_over.OnActivate();
                         form_over.Active = true;
-                        
+
                     }
                     else
                     {
@@ -708,9 +708,9 @@ namespace Q.Quantum
                 {
                     if (i == 0)
                     {
-                       
+
                     }
-                    if (FormPressed[i] !=null)
+                    if (FormPressed[i] != null)
                     {
                         FormPressed[i].OnMouseUp(i);
 
@@ -756,19 +756,47 @@ namespace Q.Quantum
             prev_mouse = Input.AppInput.MousePosition;
         }
 
-        private IForm GetFormOver(List<IForm> forms,int x,int y)
+        private IForm GetFormOver(List<IForm> forms, int x, int y)
         {
 
             foreach (var form in forms)
             {
-                if (form.InBounds(x,y))
+                if (form.CheckBounds)
                 {
-                    return form;
+                    if (form.Root != null)
+                    {
+                        if (form.RenderPosition.Y < form.Root.RenderPosition.Y || form.RenderPosition.Y + form.Size.Y > form.Root.RenderPosition.Y + form.Root.Size.Y)
+                        {
+
+                        }
+                        else
+                        {
+                            if (form.InBounds(x, y))
+                            {
+                                return form;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (form.InBounds(x, y))
+                        {
+                            return form;
+                        }
+                    }
+                }
+                else
+                {
+                    if (form.InBounds(x, y))
+                    {
+                        return form;
+                    }
                 }
             }
             return null;
 
         }
+    
 
 
         private void AddForms(List<IForm> forms, IForm form)

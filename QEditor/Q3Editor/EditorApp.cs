@@ -34,6 +34,12 @@ namespace Q3Editor
             set;
         }
 
+        public Vector4 TestVec3
+        {
+            get;
+            set;
+        }
+
         public float TestFloat
         {
             get;
@@ -218,7 +224,7 @@ namespace Q3Editor
             UI.Root.Add(win);
             UI.Root.Add(win2);
           //  UI.Root.Add(win3);
-          //  UI.Root.Add(win4);
+            UI.Root.Add(win4);
             UI.Docker = dock_area;
             
             lm_2.CLick = (item) =>
