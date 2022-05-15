@@ -11,20 +11,26 @@ namespace Q.PostProcessing.PP
     {
 
         RenderTarget.RenderTargetTex2D fb1;
+        RenderTarget.RenderTargetTex2D fb2;
 
         public PPEmissionGlow(Scene.SceneGraph graph) : base(graph)
         {
-            fb1 = GenFB(App.AppInfo.Width / 2, App.AppInfo.Height / 2);
+            fb1 = GenFB(App.AppInfo.Width,App.AppInfo.Height );
+            fb2 = GenFB(App.AppInfo.Width, App.AppInfo.Height);
         }
 
         public override Texture2D Process(Texture2D frame)
         {
             //return base.Process(frame);
-          
+            
             fb1.Bind();
             Graph.RenderEmissive();
             fb1.Release();
-            return fb1.BB;
+            fb2.Bind();
+            Draw.RectBlur(0, App.AppInfo.FrameHeight, App.AppInfo.FrameWidth, -App.AppInfo.FrameHeight, fb1.BB, new OpenTK.Mathematics.Vector4(1, 1, 1, 1),0.6f);
+            fb2.Release();
+
+            return fb2.BB;
         }
 
     }

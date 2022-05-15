@@ -9,10 +9,13 @@ namespace Q.PostProcessing
     public class PostProcess
     {
         public Scene.SceneGraph Graph = null;
+        public Draw.Simple.Draw2D Draw;
 
         public PostProcess(Scene.SceneGraph graph)
         {
             Graph = graph;
+            Draw = new Draw.Simple.Draw2D();
+            Draw.SetBlend(Q.Draw.Simple.Blend.None);
         }
         public virtual Texture.Texture2D Process(Texture.Texture2D frame)
         {

@@ -8,6 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 namespace Q.Draw.Simple
 {
+    public delegate void SetFXPars();
     public enum Blend
     {
         None,Additive,Mod,Alpha
@@ -24,7 +25,9 @@ namespace Q.Draw.Simple
         Q.Shader._2D.EXBasic2D fx1;
         Q.Shader._2D.EXBasicBlur fxblur;
         Blend BlendMode = Blend.None;
-        
+
+        public GLState DrawState;
+
         public Draw2D()
         {
 
@@ -35,6 +38,13 @@ namespace Q.Draw.Simple
             fxblur = new Shader._2D.EXBasicBlur();
             int a = 1;
             BlendMode = Blend.Additive;
+            DrawState = new GLState();
+            DrawState.Blend = true;
+            DrawState.BlendMode = BlendFunc.Solid;
+            DrawState.DepthTest = false;
+            DrawState.CullFace = false;
+       
+
         }
 
         public void SetBlend(Blend blendmode)
@@ -141,29 +151,20 @@ namespace Q.Draw.Simple
             Gen(x, y, w, h, c);
             Matrix4 pm = Matrix4.CreateOrthographicOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, -1.0f, 1.0f);
 
-            switch (BlendMode)
-            {
-                case Blend.None:
-                    GL.Disable(EnableCap.Blend);
-                    break;
-                case Blend.Additive:
-                    GL.Enable(EnableCap.Blend);
-                    GL.BlendFunc(BlendingFactor.One, BlendingFactor.One);
-
-                    break;
-                    //GL.Disable(EnableCap.Blend);
-
-            }
+            DrawState.VX = 0;
+            DrawState.VY = 0;
+            DrawState.VW = App.AppInfo.FrameWidth;
+            DrawState.VH = App.AppInfo.FrameHeight;
+            DrawState.Bind();
             //   GL.Disable(EnableCap.DepthTest);
             //GL.Disable(EnableCap.CullFace);
-            GL.Disable(EnableCap.DepthTest);
-
+      
             fxblur.Bind();
             tex.Bind(Texture.TextureUnit.Unit0);
             fxblur.SetUniform("tR", 0);
             fxblur.SetUniform("proj", pm);
             fxblur.SetUniform("blur", blur);
-            fxblur.SetUniform("res", new Vector2(App.AppInfo.FrameWidth, App.AppInfo.FrameHeight));
+            fxblur.SetUniform("res", new Vector2(App.AppInfo.FrameWidth/2, App.AppInfo.FrameHeight/2));
             //    fx1.SetUniform("texSize", new Vector2(tex.Width, tex.Height));
             //      fx1.SetUniform("drawCol", col);e
             GL.BindVertexArray(vao);
@@ -176,11 +177,19 @@ namespace Q.Draw.Simple
 
             GL.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, IntPtr.Zero);
             fxblur.Release();
-            GL.Disable(EnableCap.Blend);
+
+    
+
+            GL.DeleteVertexArray(vao);
+            GL.DeleteBuffer(posBuf);
+            GL.DeleteBuffer(uvBuf);
+            GL.DeleteBuffer(colBuf);
+            GL.DeleteBuffer(indexBuf);
+
+            //   GL.Disable(EnableCap.Blend);
 
         }
-
-        public void Rect(int x,int y,int w,int h,Q.Texture.Texture2D tex,Vector4 c)
+        public void RectFX(Q.Shader.Effect fx, int x, int y, int w, int h, Q.Texture.Texture2D tex, Vector4 c, SetFXPars pars)
         {
             Gen(x, y, w, h, c);
 
@@ -209,6 +218,51 @@ namespace Q.Draw.Simple
             //GL.Disable(EnableCap.CullFace);
             GL.Disable(EnableCap.DepthTest);
 
+            fx.Bind();
+            tex.Bind(Texture.TextureUnit.Unit0);
+            fx.SetUniform("tR", 0);
+            fx.SetUniform("proj", pm);
+            pars.Invoke();
+            //    fx1.SetUniform("texSize", new Vector2(tex.Width, tex.Height));
+            //      fx1.SetUniform("drawCol", col);e
+            GL.BindVertexArray(vao);
+
+            GL.BindBuffer(BufferTargetARB.ElementArrayBuffer, indexBuf);
+            //GL.DrawArrays(PrimitiveType.Triangles, 0, 32);
+            // GL.DrawElements(PrimitiveType.Triangles,)
+
+
+
+            GL.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, IntPtr.Zero);
+            fx.Release();
+            GL.Disable(EnableCap.Blend);
+
+            GL.DeleteVertexArray(vao);
+            GL.DeleteBuffer(posBuf);
+            GL.DeleteBuffer(uvBuf);
+            GL.DeleteBuffer(colBuf);
+            GL.DeleteBuffer(indexBuf);
+
+            //  GL.Enable(EnableCap.Depth
+        }
+        public void Rect(int x,int y,int w,int h,Q.Texture.Texture2D tex,Vector4 c)
+        {
+            Gen(x, y, w, h, c);
+
+
+
+            Matrix4 pm = Matrix4.CreateOrthographicOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight,0, -1.0f, 1.0f);
+
+            DrawState.VX = 0;
+            DrawState.VY = 0;
+            DrawState.VW = App.AppInfo.FrameWidth;
+            DrawState.VH = App.AppInfo.FrameHeight;
+            DrawState.Bind();
+
+            //   GL.Disable(EnableCap.DepthTest);
+           // GL.Disable(EnableCap.CullFace);
+          //  GL.Disable(EnableCap.DepthTest);
+
             fx1.Bind();
             tex.Bind(Texture.TextureUnit.Unit0);
             fx1.SetUniform("tR", 0);
@@ -225,15 +279,24 @@ namespace Q.Draw.Simple
 
             GL.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, IntPtr.Zero);
             fx1.Release();
-            GL.Disable(EnableCap.Blend);
+        //    GL.Disable(EnableCap.Blend);
 
             GL.DeleteVertexArray(vao);
             GL.DeleteBuffer(posBuf);
             GL.DeleteBuffer(uvBuf);
             GL.DeleteBuffer(colBuf);
             GL.DeleteBuffer(indexBuf);
+            GL.BindBuffer(BufferTargetARB.ArrayBuffer, BufferHandle.Zero);
+            GL.BindBuffer(BufferTargetARB.ElementArrayBuffer,BufferHandle.Zero);
+            GL.BindVertexArray(VertexArrayHandle.Zero);
             
-            //  GL.Enable(EnableCap.DepthTest);
+
+            //GL.BindTexture(TextureTarget.Texture2D, 0);
+
+
+            //      GL.Enable(EnableCap.CullFace);
+
+         //   GL.Enable(EnableCap.DepthTest);
 
 
 

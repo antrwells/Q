@@ -89,8 +89,8 @@ namespace Q.App
             //base.OnLoad();
             this.VSync = VSyncMode.On;
             GL.Enable(EnableCap.DepthTest);
-            GL.Disable(EnableCap.CullFace);
-         //   GL.CullFace(CullFaceMode.Back);
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(CullFaceMode.Back);
             GL.Disable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha); 
             GL.Viewport(0, 0, Size.X, Size.Y);

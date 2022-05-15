@@ -52,9 +52,15 @@ namespace Q.Scene
         {
             Camera = camera;
         }
-    
+
         public void RenderGraph()
         {
+            Root.Render();
+        }
+    
+        public void RenderGraph2()
+        {
+            GL.Clear(ClearBufferMask.DepthBufferBit);
             GL.Disable(EnableCap.Blend);
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Lequal);
@@ -79,8 +85,14 @@ namespace Q.Scene
         }
         public void RenderEmissive()
         {
-            GL.Disable(EnableCap.Blend);
+
+            //GL.Disable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Lequal);
+
+            GL.Disable(EnableCap.CullFace);
+
+            GL.Disable(EnableCap.Blend);
             Root.RenderEmissive();            
         }
         public void RenderDepth()
@@ -94,7 +106,7 @@ namespace Q.Scene
         public void RenderShadows()
         {
             int ls = 0;
-            GL.Disable(EnableCap.Blend);
+         //   GL.Disable(EnableCap.Blend);
            // GL.Disable(EnableCap.DepthTest);
          //   GL.Disable(EnableCap.CullFace);
             
