@@ -83,7 +83,7 @@ namespace Q.Quantum
             set;
         }
 
-        public static BasicDraw2D Draw;
+        public static Draw2D Draw;
         //public static BasicDraw2D DrawBlur;
 
 
@@ -118,7 +118,8 @@ namespace Q.Quantum
             DragAndDropInfo = null;
             Theme = new Themes.ThemeDark();
             Cursor = new Texture2D("Data/ui/cursor/normal.png", false);
-            Draw = new BasicDraw2D();
+            Draw = new Draw2D();
+            Draw.SetBlend(Blend.Alpha);
             DrawBlur = new Shader._2D.EXBasicBlur();
 
             // DrawBlur = new BasicDraw2D();

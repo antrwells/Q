@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Q.Shader._2D
+namespace Q.Shader._3D
 {
-    public class EXBasicBlur : Effect
+    public class EBasic3D : Effect
     {
-
-        public EXBasicBlur() : base("engine/shader/blur2vs.glsl", "engine/shader/blur2fs.glsl")
+        public EBasic3D() : base("engine/shader/vsColorOnly.glsl","engine/shader/fsColorOnly.glsl")
         {
-
+            
         }
+
         public override void BindPars()
         {
             //base.BindPars();
-            SetUniform("image", 0);
+           // SetUniform("image", 0);
         }
 
     }

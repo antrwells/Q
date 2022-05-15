@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Q3", "Q3\Q3.csproj", "{5F0F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Q3Editor", "Q3Editor\Q3Editor.csproj", "{20A3D3A3-3E92-4872-8A68-B2D07AA741C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QSamplerExplorer", "QSamplerExplorer\QSamplerExplorer.csproj", "{3A3D07B3-29CD-4954-9085-D1EA5A9C909C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QSamplerExplorer", "QSamplerExplorer\QSamplerExplorer.csproj", "{3A3D07B3-29CD-4954-9085-D1EA5A9C909C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{10AFB5CE-9E1F-4269-915A-7875FEA6627A}"
 EndProject
@@ -15,11 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{48AD7E00
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EE17B7F9-0001-4E85-94C6-B9C89D5A120E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBase", "SampleBase\SampleBase.csproj", "{C57D5B21-B906-44DE-8531-E93B2E8F1396}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleBase", "SampleBase\SampleBase.csproj", "{C57D5B21-B906-44DE-8531-E93B2E8F1396}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{9E8692B3-9953-4B45-AAE9-44D6FB5D5624}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSimple1", "Samples\SampleSimple1\SampleSimple1.csproj", "{0706025C-5B1B-4BFC-94A5-E2C89A9BF0AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleSimple1", "Samples\SampleSimple1\SampleSimple1.csproj", "{0706025C-5B1B-4BFC-94A5-E2C89A9BF0AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test3D", "Test3D\Test3D.csproj", "{88EB70C8-E24C-453E-8C1C-95B9C8B4F08F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,14 @@ Global
 		{0706025C-5B1B-4BFC-94A5-E2C89A9BF0AC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0706025C-5B1B-4BFC-94A5-E2C89A9BF0AC}.Release|x64.ActiveCfg = Release|Any CPU
 		{0706025C-5B1B-4BFC-94A5-E2C89A9BF0AC}.Release|x64.Build.0 = Release|Any CPU
+		{88EB70C8-E24C-453E-8C1C-95B9C8B4F08F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88EB70C8-E24C-453E-8C1C-95B9C8B4F08F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88EB70C8-E24C-453E-8C1C-95B9C8B4F08F}.Debug|x64.ActiveCfg = Debug|x64
+		{88EB70C8-E24C-453E-8C1C-95B9C8B4F08F}.Debug|x64.Build.0 = Debug|x64
+		{88EB70C8-E24C-453E-8C1C-95B9C8B4F08F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88EB70C8-E24C-453E-8C1C-95B9C8B4F08F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88EB70C8-E24C-453E-8C1C-95B9C8B4F08F}.Release|x64.ActiveCfg = Release|Any CPU
+		{88EB70C8-E24C-453E-8C1C-95B9C8B4F08F}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

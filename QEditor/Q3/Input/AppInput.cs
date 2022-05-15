@@ -26,6 +26,12 @@ namespace Q.Input
             set;
         }
 
+        public static Vector2 MouseDelta
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// The current state of all mouse buttons. false = not pressed, true = pressed.
         /// </summary>
@@ -35,17 +41,26 @@ namespace Q.Input
             set;
         }
 
+        public static bool[] Key = new bool[512];
+
         public static event Action<Keys> OnKeyDown;
         public static event Action<Keys> OnKeyUp;
 
+        public static bool IsKeyDown(Keys key)
+        {
+            return Key[(int)key];
+        }
+
         public static void KeyDown(Keys key)
         {
-            OnKeyDown(key);
+            OnKeyDown?.Invoke(key);
+            Key[(int)key] = true;
         }
 
         public static void KeyUp(Keys key)
         {
-            OnKeyUp(key);
+            OnKeyUp?.Invoke(key);
+            Key[(int)key] = false;
         }
 
     }

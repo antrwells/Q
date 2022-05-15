@@ -686,6 +686,7 @@ namespace Q.Quantum
             if (text == null) return;
             if (text == "") return;
             var img = UserInterface.ActiveInterface.Theme.SystemFont.GenString(text);
+            UserInterface.Draw.SetBlend(Q.Draw.Simple.Blend.Alpha);
             Draw(img, x, y, img.Width, img.Height,color);
             
 
@@ -814,11 +815,11 @@ namespace Q.Quantum
             int sy = App.AppInfo.Height - ty;
                       
 
-                        bg.CopyTex(x, ty);
+             //           bg.CopyTex(x, ty);
 
 
-            UserInterface.Draw.Rect(UserInterface.ActiveInterface.DrawBlur,x, y+h, w, -h, bg, new Vector4(1,1,1, 1.0f)) ;
-
+           // UserInterface.Draw.RectBlur(x, y+h, w, -h, bg, new Vector4(1,1,1, 1.0f),0.6f) ;
+            
             //Console.WriteLine("B:" + x + " Y:" + y + " W:" + w + " H:" + h);
 
         }

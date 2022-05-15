@@ -11,7 +11,7 @@ namespace Q.Texture
 {
     public class Texture2D : Texture
     {
-
+        public static Dictionary<string,Texture> Cached = new Dictionary<string, Texture>();
         public void _LoadDataBM()
         {
 
@@ -132,10 +132,32 @@ namespace Q.Texture
             Height = map.Height;
             Format = InternalFormat.Rgba8;
             Raw = map.Data;
-            BindData();
+            //  BindData();
+
+            GL.Enable(EnableCap.Texture2d);
+             Handle = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2d, Handle);
+            GL.TexImage2D(TextureTarget.Texture2d, 0, (int)InternalFormat.Rgba, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, Raw);
             Loading = false;
             DataBound = true;
-            
+
+            //Handle = GL.CreateTexture(TextureTarget.Texture2d);
+            //GL.TextureStorage2D(Handle, 1, SizedInternalFormat.Rgba8, Width, Height);
+
+
+            /*
+            unsafe
+            {
+                GCHandle pinnedArray = GCHandle.Alloc(Raw, GCHandleType.Pinned);
+                IntPtr pointer = pinnedArray.AddrOfPinnedObject();
+                GL.TextureSubImage2D(Handle, 0, 0, 0, Width, Height, PixelFormat.Rgba, PixelType.UnsignedByte, pointer);
+                //Console.WriteLine("Created texture2D. W:" + Width + " H:" + Height + " Handle:" + Handle.Handle);
+            }
+            */
+            GL.TextureParameteri(Handle, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TextureParameteri(Handle, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TextureParameteri(Handle, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TextureParameteri(Handle, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
 
         }
         
@@ -158,6 +180,7 @@ namespace Q.Texture
 
         public Texture2D(string path,bool force_alpha = false)
         {
+          
             Console.WriteLine("Loading texture.");
             int image_width=64;
             int image_height=64;
@@ -165,6 +188,7 @@ namespace Q.Texture
             Format = InternalFormat.Rgba8;
 
             byte[] raw;
+            Handle = GL.GenTexture();
 
             if (File.Exists(path + ".cache"))
             {
@@ -198,9 +222,18 @@ namespace Q.Texture
 
         public void BindData()
         {
-            Handle = GL.CreateTexture(TextureTarget.Texture2d);
-            GL.TextureStorage2D(Handle, 1, SizedInternalFormat.Rgba8, Width, Height);
+            GL.Enable(EnableCap.Texture2d);
+           // Handle = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2d, Handle);
+            GL.TexImage2D(TextureTarget.Texture2d, 0,(int)InternalFormat.Rgba, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, Raw);
 
+            DataBound = true;
+            
+            //Handle = GL.CreateTexture(TextureTarget.Texture2d);
+            //GL.TextureStorage2D(Handle, 1, SizedInternalFormat.Rgba8, Width, Height);
+
+
+            /*
             unsafe
             {
                 GCHandle pinnedArray = GCHandle.Alloc(Raw, GCHandleType.Pinned);
@@ -208,8 +241,9 @@ namespace Q.Texture
                 GL.TextureSubImage2D(Handle, 0, 0, 0, Width, Height, PixelFormat.Rgba, PixelType.UnsignedByte, pointer);
                 //Console.WriteLine("Created texture2D. W:" + Width + " H:" + Height + " Handle:" + Handle.Handle);
             }
-            GL.TextureParameteri(Handle, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
-            GL.TextureParameteri(Handle, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.LinearSharpenColorSgis);
+            */
+            GL.TextureParameteri(Handle, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TextureParameteri(Handle, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TextureParameteri(Handle, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
             GL.TextureParameteri(Handle, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
            // GL.GenerateTextureMipmap(Handle);
@@ -234,8 +268,21 @@ namespace Q.Texture
 
             uint t_unit = (uint)unit;
 
-            GL.BindImageTexture(t_unit, Handle, 0, false, 0, BufferAccessARB.ReadOnly,Format);
-             
+            OpenTK.Graphics.OpenGL.TextureUnit texu = OpenTK.Graphics.OpenGL.TextureUnit.Texture0;
+
+            int oid = (int)texu + (int)unit;
+
+            texu = (OpenTK.Graphics.OpenGL.TextureUnit)oid;
+
+
+            GL.Enable(EnableCap.Texture2d);
+            GL.ActiveTexture(texu);
+            // GL.ClientActiveTexture((TextureUnit)((int)TextureUnit.Texture0 + texu));
+            GL.BindTexture(TextureTarget.Texture2d,Handle);
+
+
+            // GL.BindImageTexture(t_unit, Handle, 0, false, 0, BufferAccessARB.ReadOnly,Format);
+
             base.Bind(unit);
         }
 

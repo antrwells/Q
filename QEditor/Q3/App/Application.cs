@@ -88,19 +88,23 @@ namespace Q.App
         {
             //base.OnLoad();
             this.VSync = VSyncMode.On;
-            GL.Disable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.DepthTest);
             GL.Disable(EnableCap.CullFace);
-            GL.Enable(EnableCap.Blend);
+         //   GL.CullFace(CullFaceMode.Back);
+            GL.Disable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha); 
             GL.Viewport(0, 0, Size.X, Size.Y);
+            GL.Disable(EnableCap.ScissorTest);
             Console.WriteLine("Setup OpenGL. Resolution X:" + Size.X + " Resolution Y:" + Size.Y);
             Input.AppInput.MousePosition = new OpenTK.Mathematics.Vector2(0, 0);
             Input.AppInput.MouseButton = new bool[32];
             Font.FontTTF.Init();
             Texture.Texture.StartTextureSubSystem();
+            Global.GlobalEffects.Init();
             InitApp();
 
-            CursorVisible = false;
+
+           // CursorVisible = false;
             
 
             //Texture2D tex = new Texture2D("data/test1.jpg", false);
@@ -126,7 +130,10 @@ namespace Q.App
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
             //base.OnMouseMove(e);
+
+            Input.AppInput.MouseDelta = new OpenTK.Mathematics.Vector2(e.X, e.Y) - Input.AppInput.MousePosition;
             Input.AppInput.MousePosition = new OpenTK.Mathematics.Vector2(e.X, e.Y);
+             
 
         }
 
@@ -195,7 +202,9 @@ namespace Q.App
             frame++;
             
 
-            GL.ClearColor(0, 0, 0, 1);
+            GL.ClearColor(0, 0, 0, 0.5f);
+                        //GL.ClearDepthf(1.0f);
+
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 

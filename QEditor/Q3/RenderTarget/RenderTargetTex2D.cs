@@ -27,7 +27,7 @@ namespace Q.RenderTarget
             DB = new TextureDepth(w, h);
             RB = GL.CreateRenderbuffer();
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, RB);
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer,InternalFormat.DepthComponent, w, h);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer,InternalFormat.DepthComponent32, w, h);
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, RB);
             GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, BB.Handle, 0);
             DrawBufferMode db = DrawBufferMode.ColorAttachment0;
