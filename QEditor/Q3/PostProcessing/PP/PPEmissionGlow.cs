@@ -27,7 +27,7 @@ namespace Q.PostProcessing.PP
             Graph.RenderEmissive();
             fb1.Release();
             fb2.Bind();
-            Draw.RectBlur(0, App.AppInfo.FrameHeight, App.AppInfo.FrameWidth, -App.AppInfo.FrameHeight, fb1.BB, new OpenTK.Mathematics.Vector4(1, 1, 1, 1),0.6f);
+            Draw.RectBlur(0, App.AppInfo.FrameHeight, App.AppInfo.FrameWidth, -App.AppInfo.FrameHeight, fb1.BB, new OpenTK.Mathematics.Vector4(1, 1, 1, 1),0.0002f);
             fb2.Release();
 
             return fb2.BB;

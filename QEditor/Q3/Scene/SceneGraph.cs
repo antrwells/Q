@@ -28,14 +28,39 @@ namespace Q.Scene
             get;
             set;
         }
-
+        private GLState FirstLight, SecondLight;
+        private GLState ShadowState;
         public SceneGraph()
         {
 
             Root = new SceneNode();
             Camera = new SceneCamera();
             Lights = new List<SceneLight>();
+            FirstLight = new GLState();
+            SecondLight = new GLState();
+            ShadowState = new GLState();
 
+            FirstLight.Blend = true;
+            FirstLight.BlendMode = BlendFunc.Alpha;
+            FirstLight.DepthTest = true;
+            FirstLight.DepthMode = DepthFunc.LEqual;
+            FirstLight.CullFace = true;
+            FirstLight.CullFunc = CullMode.Back;
+            FirstLight.SetViewport(0, 0, App.AppInfo.Width, App.AppInfo.Height);
+
+            SecondLight.Blend = true;
+            SecondLight.BlendMode = BlendFunc.Additive;
+            SecondLight.DepthTest = true;
+            SecondLight.DepthMode = DepthFunc.Equal;
+            SecondLight.CullFace = true;
+            SecondLight.CullFunc = CullMode.Back;
+            SecondLight.SetViewport(0, 0, App.AppInfo.Width, App.AppInfo.Height);
+
+            ShadowState.Blend = false;
+            ShadowState.DepthTest = true;
+            ShadowState.DepthMode = DepthFunc.LEqual;
+            ShadowState.CullFace = true;
+            ShadowState.CullFunc = CullMode.Back;
         }
 
         public void Add(SceneNode node)
@@ -55,7 +80,17 @@ namespace Q.Scene
 
         public void RenderGraph()
         {
-            Root.Render();
+            SceneGlobal.ActiveCamera = Camera;
+            FirstLight.Bind();
+            foreach (var light in Lights)
+            {
+                SceneGlobal.ActiveLight = light;
+                Root.Render();
+
+                SecondLight.Bind();
+
+            }
+            //Root.Render();
         }
     
         public void RenderGraph2()

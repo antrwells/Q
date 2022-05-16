@@ -25,6 +25,7 @@ namespace Q.PostProcessing.PP
             Graph.RenderGraph();
             fb1.Release();
 
+            
             Q.Draw.Simple.SetFXPars pars = () =>
             {
                 Q.Global.GlobalEffects.ColorLimitFX.SetUniform("limit", 0.4f);
@@ -34,8 +35,9 @@ namespace Q.PostProcessing.PP
             Draw.RectFX(Q.Global.GlobalEffects.ColorLimitFX, 0, Q.App.AppInfo.FrameHeight, Q.App.AppInfo.FrameWidth, -Q.App.AppInfo.FrameHeight, fb1.BB, new OpenTK.Mathematics.Vector4(1, 1, 1, 1), pars);
             fb2.Release();
 
+            
             fb1.Bind();
-            Draw.RectBlur(0, Q.App.AppInfo.Height, Q.App.AppInfo.Width, -Q.App.AppInfo.Height, fb2.BB, new OpenTK.Mathematics.Vector4(1, 1, 1, 1),0.8f);
+            Draw.RectBlur(0, Q.App.AppInfo.Height, Q.App.AppInfo.Width, -Q.App.AppInfo.Height, fb2.BB, new OpenTK.Mathematics.Vector4(1, 1, 1, 1),0.002f);
             fb1.Release();
 
 
@@ -44,12 +46,12 @@ namespace Q.PostProcessing.PP
             //    Q.Global.GlobalEffects.ColorLimitFX.SetUniform("", 0.2f);
             };
 
-            Graph.RenderGraph();
+            //Graph.RenderGraph();
 
-            Draw.SetBlend(Q.Draw.Simple.Blend.Additive);
-            Draw.RectFX(Q.Global.GlobalEffects.BloomFX, 0, Q.App.AppInfo.FrameHeight, Q.App.AppInfo.FrameWidth, -Q.App.AppInfo.FrameHeight, fb1.BB, new OpenTK.Mathematics.Vector4(1, 1, 1, 1), bpars);
-            Draw.SetBlend(Q.Draw.Simple.Blend.None);
-
+            //Draw.SetBlend(Q.Draw.Simple.Blend.Additive);
+           // Draw.RectFX(Q.Global.GlobalEffects.BloomFX, 0, Q.App.AppInfo.FrameHeight, Q.App.AppInfo.FrameWidth, -Q.App.AppInfo.FrameHeight, fb1.BB, new OpenTK.Mathematics.Vector4(1, 1, 1, 1), bpars);
+           // Draw.SetBlend(Q.Draw.Simple.Blend.None);
+            
             return fb1.BB;
 
             

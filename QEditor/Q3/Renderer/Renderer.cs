@@ -67,8 +67,11 @@ namespace Q.Renderer
         {
             RenderGraph = graph;
             var emGlow = new PostProcessing.PP.PPEmissionGlow(graph);
+            var glow = new PostProcessing.PP.PPGlow(graph);
 
             PP.Add(emGlow);
+            PP.Add(glow);
+
             PP.SetState(FirstLight);
         }
 
@@ -80,20 +83,11 @@ namespace Q.Renderer
 
             RenderGraph.RenderShadows();
 
-          //  FirstLight.Bind();
+            //  FirstLight.Bind();
 
-          
-          
-            SceneGlobal.ActiveCamera = RenderGraph.Camera;
-            FirstLight.Bind();
-            foreach (var light in RenderGraph.Lights)
-            {
-                SceneGlobal.ActiveLight = light;
-                RenderGraph.RenderGraph();
 
-               SecondLight.Bind();
-
-            }
+            RenderGraph.RenderGraph();
+           
 
             PP.Process();
             
