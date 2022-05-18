@@ -11,7 +11,9 @@ using Q.Mesh;
 using Q;
 using Q.Scene;
 using Q.Scene.Nodes;
+using Q.Anim;
 //using Vivid.Scene;
+
 
 using Q.Scene.Modules;
 namespace Q.Import
@@ -69,7 +71,9 @@ namespace Q.Import
             {
 
                 //r1.AddMesh(ml[s.MeshIndices[i]]);
-                mm.Meshes.Add(ml[s.MeshIndices[i]]);
+                //mm.Meshes.Add(ml[s.MeshIndices[i]]);
+                r1.AddMesh(ml[s.MeshIndices[i]]);
+
                 //r1.AddModule(mm);
 
                 
@@ -83,9 +87,210 @@ namespace Q.Import
             }
         }
 
+        public SceneNode ImportActor(string path)
+        {
+
+
+            List<Q.Material.Material3D> materials = new List<Material.Material3D>();
+            List<Mesh3D> meshes = new List<Mesh3D>();
+            if (NormBlank == null)
+            {
+                NormBlank = new Q.Texture.Texture2D("data/tex/normblank.png");
+                DiffBlank = new Q.Texture.Texture2D("data/tex/diffblank.png");
+                SpecBlank = new Q.Texture.Texture2D("data/tex/specblank.png");
+            }
+            string ip = path;
+            int ic = ip.LastIndexOf("/");
+            if (ic < 1) ic = ip.LastIndexOf("\\");
+            if (ic > 0)
+            {
+                IPath = ip.Substring(0, ic);
+            }
+
+            //Entity3D root = new Entity3D();
+            SceneNode root = new SceneNode();
+            string file = path;
+            root.Type = NodeType.Actor;
+
+            AssimpContext e = new Assimp.AssimpContext();
+            Assimp.Configs.NormalSmoothingAngleConfig c1 = new Assimp.Configs.NormalSmoothingAngleConfig(75);
+            //e.SetConfig(c1);
+
+            Console.WriteLine("Impporting:" + file);
+            Assimp.Scene s = null;
+            if (Optimize)
+            {
+                s = e.ImportFile(file, PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.CalculateTangentSpace | PostProcessSteps.GenerateSmoothNormals);
+            }
+            else
+            {
+
+                //s = e.ImportFile(file, PostProcessSteps.Triangulate | PostProcessSteps.CalculateTangentSpace | PostProcessSteps.GenerateNormals);
+            }
+
+            if (s == null)
+            {
+                Console.WriteLine("Error importing:" + file);
+                return null;
+            }
+            Matrix4x4 tf = s.RootNode.Transform;
+
+            tf.Inverse();
+
+
+            
+            SceneGlobal.GlobalInverse = ToTK(tf);
+
+            for (int i = 0; i < s.MaterialCount; i++)
+            {
+
+                Q.Material.Material3D new_mat = new Material.Material3D();
+                var amat = s.Materials[i];
+                string mat_name = amat.Name;
+
+                int color_texc = amat.GetMaterialTextureCount(TextureType.Unknown);
+
+                materials.Add(new_mat);
+                
+
+            }
+
+            for (int i = 0; i < s.MeshCount; i++)
+            {
+
+                var mesh = s.Meshes[i];
+
+                Q.Mesh.Mesh3D new_mesh = new Mesh3D();
+
+                new_mesh.Material = materials[mesh.MaterialIndex];
+
+                meshes.Add(new_mesh);
+
+                for (int index = 0; index < mesh.VertexCount; index++)
+                {
+
+                    var vert = mesh.Vertices[index];
+                    var normal = mesh.Normals[index];
+                    Vector3D bi_normal = new Vector3D(0, 0, 0);
+
+                    Vector3D tang = new Vector3D(0, 0, 0);
+
+                    if (mesh.HasTangentBasis)
+                    {
+                        bi_normal = mesh.BiTangents[index];
+                        tang = mesh.Tangents[index];
+                    }
+
+                    var uv = mesh.TextureCoordinateChannels[0][index];
+
+                    Vertex new_vert = new Vertex();
+
+                    new_vert.Pos = new Vector3(vert.X, vert.Y, vert.Z);
+                    new_vert.Norm = new Vector3(normal.X, normal.Y, normal.Z);
+                    new_vert.BiNorm = new Vector3(bi_normal.X, bi_normal.Y, bi_normal.Z);
+                    new_vert.Tan = new Vector3(tang.X, tang.Y, tang.Z);
+                    new_vert.UV = new Vector3(uv.X, uv.Y, uv.Z);
+                    new_vert.Col = new Vector3(1, 1, 1);
+
+                    new_mesh.AddVertex(new_vert);
+
+
+                }
+
+                Console.WriteLine("Mesh VertexCount:" + mesh.VertexCount);
+
+                Dictionary<string, BoneInfo> m_BoneInfoMap = new Dictionary<string, BoneInfo>();
+                int m_BoneCounter = 0;
+
+                int max_verts = new_mesh.VerticesCount;
+
+                for(int boneIndex=0;boneIndex<mesh.BoneCount;++boneIndex)
+                {
+                    int boneID = -1;
+                    string boneName = mesh.Bones[boneIndex].Name;
+                    Console.WriteLine("Bone:"+boneName);
+                    if(!m_BoneInfoMap.ContainsKey(boneName))
+                    {
+                        BoneInfo newBoneInfo = new BoneInfo();
+                        newBoneInfo.ID = m_BoneCounter;
+                        //boneMath
+                        newBoneInfo.Offset = ToTK(mesh.Bones[boneIndex].OffsetMatrix);
+                        m_BoneInfoMap.Add(boneName, newBoneInfo);
+                        boneID = m_BoneCounter;
+                        m_BoneCounter++;
+                    }
+                    else
+                    {
+                        boneID = m_BoneInfoMap[boneName].ID;
+                    }
+
+                    if(boneID ==-1)
+                    {
+                        Console.WriteLine("Non-valid bone id.");
+                        int b = 0;
+                    }
+
+                    var weights = mesh.Bones[boneIndex].VertexWeights;
+                    int numWeights = mesh.Bones[boneIndex].VertexWeightCount;
+
+                    for(int weightIndex=0;weightIndex<numWeights;++weightIndex)
+                    {
+                        
+                        int vertexId =  weights[weightIndex].VertexID;
+                        float weight = weights[weightIndex].Weight;
+                        if(!(vertexId<=max_verts))
+                        {
+                            Console.WriteLine("Non valid vertexId");
+                            int a = 0;
+                        }
+
+                        new_mesh.SetBoneData(vertexId, boneID, weight);
+
+
+                    }
+
+                }
+
+                root.SetBoneInfoMap(m_BoneInfoMap, m_BoneCounter);
+
+                for(int tri = 0; tri < mesh.FaceCount; tri++)
+                {
+                    var face = mesh.Faces[tri];
+                    if(face.IndexCount == 3)
+                    {
+                        Tri t = new Tri();
+                        t.V0 = face.Indices[0];
+                        t.V1 = face.Indices[1];
+                        t.V2 = face.Indices[2];
+
+                        new_mesh.AddTri(t);
+
+                    }
+                }
+
+                new_mesh.Finalize();
+                root.AddMesh(new_mesh);
+
+            }
+
+            NodeAnimator node_anim = new NodeAnimator();
+
+         
+            
+
+            Q.Anim.Animation anim = new Anim.Animation(s, root);
+            Q.Anim.Animator animer = new Animator(anim);
+
+            root.Animator = animer;
+            
+            
+            return root;
+           
+
+        }
 
         public static bool Optimize = true;
-        public SceneNode LoadNode(string path)
+        public SceneNode ImportNode(string path)
         {
             if (NormBlank == null)
             {
@@ -141,7 +346,8 @@ namespace Q.Import
 
             tf.Inverse();
 
-            root.GlobalInverse = ToTK(tf);
+          
+
 
             Dictionary<uint, List<VertexWeight>> boneToWeight = new Dictionary<uint, List<VertexWeight>>();
 
@@ -353,6 +559,7 @@ namespace Q.Import
             }
             */
             //  root.Rot(new OpenTK.Vector3(180, 0, 0), Space.Local);
+            root.Type = NodeType.Entity;
             return root;
         }
 
@@ -360,7 +567,14 @@ namespace Q.Import
 
         private Matrix4 ToTK(Matrix4x4 mat)
         {
-            return new Matrix4(mat.A1, mat.B1, mat.C1, mat.D1, mat.A2, mat.B2, mat.C2, mat.D2, mat.A3, mat.B3, mat.C3, mat.D3, mat.A4, mat.B4, mat.C4, mat.D4);
+            Matrix4 result = Matrix4.Identity;
+
+            result.Row0 = new Vector4(mat.A1, mat.B1, mat.C1, mat.D1);
+            result.Row1 = new Vector4(mat.A2, mat.B2, mat.C2, mat.D2);
+            result.Row2 = new Vector4(mat.A3, mat.B3, mat.C3, mat.D3);
+            result.Row3 = new Vector4(mat.A4, mat.B4, mat.C4, mat.D4);
+
+            return result;
         }
     }
 }

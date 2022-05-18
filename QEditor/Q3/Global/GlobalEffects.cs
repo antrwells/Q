@@ -10,6 +10,7 @@ namespace Q.Global
     public class GlobalEffects
     {
 
+        public static EAnimMesh AnimMeshFX;
         public static EDepth3D DepthFX;
         public static EEmissive3D EmissiveFX;
         public static Q.Shader._2D.EXBasicBlur BlurFX;
@@ -23,6 +24,7 @@ namespace Q.Global
             BlurFX = new Shader._2D.EXBasicBlur();
             ColorLimitFX = new Shader._2D.EColorLimit();
             BloomFX = new Shader._2D.EBloom();
+            AnimMeshFX = new EAnimMesh();
             int a = 1;
 
         }

@@ -13,6 +13,7 @@ namespace Q.Scene
         public static SceneCamera ActiveCamera;
         public static SceneNode ActiveNode;
         public static SceneLight ActiveLight;
+        public static OpenTK.Mathematics.Matrix4 GlobalInverse;
    
 
     }

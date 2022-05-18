@@ -33,8 +33,18 @@ namespace Test3D
         {
             base.InitApp();
             imp = new Q.Import.AssImpImport();
-            s1 = imp.LoadNode("data/test1.fbx");
-            s2 = imp.LoadNode("data/t3d/cybermale/scene.gltf");
+            s1 = imp.ImportNode("data/test1.fbx");
+           s2 = imp.ImportActor("data/a1.fbx");
+            Q.Anim.ActorAnim anim1 = new Q.Anim.ActorAnim("Walk", 0, 82, 0.1f, Q.Anim.AnimType.Forward);
+            s2.Animations.Add(anim1);
+            //s2.PlayAnim("Walk");
+            s2.CurrentAnim = anim1;
+
+
+                
+
+            s2.LocalScale = new OpenTK.Mathematics.Vector3(0.02f, 0.02f, 0.02f);
+            s2.LocalPosition = new OpenTK.Mathematics.Vector3(0, 1, 0);
             int a = 1;
             cam = new SceneCamera();
             cam.LocalPosition = new OpenTK.Mathematics.Vector3(0, 10, 25);
@@ -49,7 +59,7 @@ namespace Test3D
             g1.Add(s1);
             g1.Add(s2);
             g1.Add(l1);
-           //g1.Add(l2);
+           g1.Add(l2);
             g1.SetCamera(cam);
             l2.LocalPosition = new OpenTK.Mathematics.Vector3(-25, 10, 25);
             l1.Diffuse = new OpenTK.Mathematics.Vector3(1, 1, 1);
@@ -107,9 +117,15 @@ namespace Test3D
 
             Q.Input.AppInput.MouseDelta = new OpenTK.Mathematics.Vector2(0, 0);
 
-            //s1.RenderModules();
+            s2.Update();
 
-            mRender.RenderScene();
+            //s1.RenderModules();
+            g1.RenderShadows();
+            
+            g1.RenderGraph();
+
+
+            //mRender.RenderScene();
             
             //g1.RenderGraph();
             /*

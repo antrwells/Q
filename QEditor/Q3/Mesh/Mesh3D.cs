@@ -20,6 +20,7 @@ namespace Q.Mesh
         }
     }
 
+    
     public struct Vertex
     {
         public Vector3 Pos;
@@ -28,6 +29,23 @@ namespace Q.Mesh
         public Vector3 Norm;
         public Vector3 BiNorm;
         public Vector3 Tan;
+        public int[] m_BoneIDS = new int[4];
+        public float[] m_Weights = new float[4];
+        public Vertex()
+        {
+            Pos = new Vector3(0, 0, 0);
+            Col = Pos;
+            UV = Pos;
+            Norm = Pos;
+            BiNorm = Pos;
+            Tan = Pos;
+            for (int i = 0; i < 4; i++)
+            {
+                m_BoneIDS[i] = -1;
+                m_Weights[i] = 0;
+            }
+
+        }
     }
 
     public class Mesh3D
@@ -71,6 +89,25 @@ namespace Q.Mesh
             Material = null;
         }
 
+        public void SetBoneData(int index,int boneID,float weight)
+        {
+            int MAX_BONE_WEIGHTS = 4;
+
+            var vertex = Vertices[index];
+            for (int i = 0; i < MAX_BONE_WEIGHTS; ++i)
+            {
+                if (vertex.m_BoneIDS[i]<0)
+                {
+                
+                    vertex.m_BoneIDS[i] = boneID;
+                    vertex.m_Weights[i] = weight;
+                    Vertices[index] = vertex;
+                    break;
+                }
+            }
+            Vertices[index] = vertex;
+
+        }
         public void SetVertex(int id,Vector3 pos,Vector3 tan,Vector3 bi,Vector3 norm,Vector3 uv)
         {
             Vertex vertex = new Vertex();
@@ -109,6 +146,7 @@ namespace Q.Mesh
         BufferHandle[] tb = new BufferHandle[1];
 
         BufferHandle posBuf, uvBuf, normBuf, tanBuf, biBuf;
+        BufferHandle boneBuf, weightBuf;
 
         public void Finalize()
         {
@@ -120,6 +158,8 @@ namespace Q.Mesh
             float[] uv = new float[VerticesCount * 3];
 
             float[] fdat = new float[VerticesCount*3];
+            int[] bones = new int[VerticesCount * 4];
+            float[] weights = new float[VerticesCount * 4];
             int vi = 0;
             for (int i = 0; i < VerticesCount; i++)
             {
@@ -138,11 +178,25 @@ namespace Q.Mesh
                 tan[vi] = Vertices[i].Tan.X;
                 tan[vi + 1] = Vertices[i].Tan.Y;
                 tan[vi + 2] = Vertices[i].Tan.Z;
-                
+         
+
 
                 vi = vi + 3;
             }
-
+            vi = 0;
+            for(int i = 0; i < VerticesCount;i++)
+            {
+                bones[vi] = Vertices[i].m_BoneIDS[0];
+                bones[vi + 1] = Vertices[i].m_BoneIDS[1];
+                bones[vi + 2] = Vertices[i].m_BoneIDS[2];
+                bones[vi + 3] = Vertices[i].m_BoneIDS[3];
+                weights[vi] = Vertices[i].m_Weights[0];
+                weights[vi + 1] = Vertices[i].m_Weights[1];
+                weights[vi + 2] = Vertices[i].m_Weights[2];
+              
+                weights[vi + 3] = Vertices[i].m_Weights[3];
+                vi = vi + 4;
+            }
             posBuf = GL.GenBuffer();
             GL.BindBuffer(BufferTargetARB.ArrayBuffer,posBuf);
             GL.BufferData(BufferTargetARB.ArrayBuffer,verts, BufferUsageARB.StaticDraw);
@@ -162,7 +216,17 @@ namespace Q.Mesh
             tanBuf = GL.GenBuffer();
             GL.BindBuffer(BufferTargetARB.ArrayBuffer, tanBuf);
             GL.BufferData(BufferTargetARB.ArrayBuffer, tan, BufferUsageARB.StaticDraw);
+
+            boneBuf = GL.GenBuffer();
+            GL.BindBuffer(BufferTargetARB.ArrayBuffer, boneBuf);
+            GL.BufferData(BufferTargetARB.ArrayBuffer, bones, BufferUsageARB.StaticDraw);
+
+            weightBuf = GL.GenBuffer();
+            GL.BindBuffer(BufferTargetARB.ArrayBuffer, weightBuf);
+            GL.BufferData(BufferTargetARB.ArrayBuffer, weights, BufferUsageARB.StaticDraw);
             
+
+
 
 
 
@@ -178,13 +242,20 @@ namespace Q.Mesh
             GL.VertexAttribPointer(3, 3, VertexAttribPointerType.Float, false, 0, 0);
             GL.BindBuffer(BufferTargetARB.ArrayBuffer, tanBuf);
             GL.VertexAttribPointer(4, 3, VertexAttribPointerType.Float, false, 0, 0);
-            
+            GL.BindBuffer(BufferTargetARB.ArrayBuffer, boneBuf);
+            GL.VertexAttribPointer(5, 4, VertexAttribPointerType.Int, false, 0, 0);
+            GL.BindBuffer(BufferTargetARB.ArrayBuffer, weightBuf);
+            GL.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, 0, 0);
+
             GL.EnableVertexAttribArray(0);
             GL.EnableVertexAttribArray(1);
             GL.EnableVertexAttribArray(2);
             GL.EnableVertexAttribArray(3);
             GL.EnableVertexAttribArray(4);
+            GL.EnableVertexAttribArray(5);
+            GL.EnableVertexAttribArray(6);
             
+
 
 
 
