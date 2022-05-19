@@ -121,13 +121,7 @@ namespace Q.Scene
         public void RenderEmissive()
         {
 
-            //GL.Disable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.DepthTest);
-            GL.DepthFunc(DepthFunction.Lequal);
-
-            GL.Disable(EnableCap.CullFace);
-
-            GL.Disable(EnableCap.Blend);
+            FirstLight.Bind();
             Root.RenderEmissive();            
         }
         public void RenderDepth()
@@ -141,9 +135,10 @@ namespace Q.Scene
         public void RenderShadows()
         {
             int ls = 0;
-         //   GL.Disable(EnableCap.Blend);
-           // GL.Disable(EnableCap.DepthTest);
-         //   GL.Disable(EnableCap.CullFace);
+            //   GL.Disable(EnableCap.Blend);
+            // GL.Disable(EnableCap.DepthTest);
+            //   GL.Disable(EnableCap.CullFace);
+            FirstLight.Bind();
             
             foreach (SceneLight l in Lights)
             {

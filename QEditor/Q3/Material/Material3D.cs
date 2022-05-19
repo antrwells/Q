@@ -59,7 +59,7 @@ namespace Q.Material
             ColorMap = DefaultColor; 
             NormalMap = DefaultNormal;
             SpecularMap = DefaultSpecular;
-            EmissiveMap = DefaultEmissive;
+         //   EmissiveMap = DefaultEmissive;
             
         }
 

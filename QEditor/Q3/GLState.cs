@@ -66,6 +66,7 @@ namespace Q
 
         public void Bind()
         {
+            
 
             if (DepthTest)
             {

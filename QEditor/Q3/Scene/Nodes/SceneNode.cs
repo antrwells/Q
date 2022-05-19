@@ -228,37 +228,89 @@ namespace Q.Scene.Nodes
         }
         public void RenderEmissive()
         {
-            var fx = Global.GlobalEffects.EmissiveFX;
-            SceneGlobal.ActiveNode = this;
-
-            var rm = GetModule<Scene.Modules.ModuleMesh3D>() as Scene.Modules.ModuleMesh3D;
-            if (rm != null)
+            
+            switch (Type)
             {
-                fx.Bind();
+                case NodeType.Entity:
+                    var fx = Global.GlobalEffects.EmissiveFX;
+                    SceneGlobal.ActiveNode = this;
 
-                Matrix4 pm = Scene.SceneGlobal.ActiveCamera.ProjectionMatrix; //Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), App.AppInfo.Width / App.AppInfo.Height, 0.01f, 1000);  //.CreatePerspectiveOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, 0.1f, 2500.0f);
-                Matrix4 vm = Scene.SceneGlobal.ActiveCamera.WorldMatrix;
-                Matrix4 mm = Scene.SceneGlobal.ActiveNode.WorldMatrix;
+                    //var rm = GetModule<Scene.Modules.ModuleMesh3D>() as Scene.Modules.ModuleMesh3D;
+
+
+                    fx.Bind();
+
+                    Matrix4 pm = Scene.SceneGlobal.ActiveCamera.ProjectionMatrix; //Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), App.AppInfo.Width / App.AppInfo.Height, 0.01f, 1000);  //.CreatePerspectiveOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, 0.1f, 2500.0f);
+                    Matrix4 vm = Scene.SceneGlobal.ActiveCamera.WorldMatrix;
+                    Matrix4 mm = Scene.SceneGlobal.ActiveNode.WorldMatrix;
 
 
 
-                fx.SetUniform("proj", pm);
-                fx.SetUniform("model", mm);
-                fx.SetUniform("view", vm);
-                fx.SetUniform("tEmissive", 0);
+                    fx.SetUniform("proj", pm);
+                    fx.SetUniform("model", mm);
+                    fx.SetUniform("view", vm);
+                    fx.SetUniform("tEmissive", 0);
 
-                foreach (var mesh in rm.Meshes)
-                {
-                    if (mesh.Material.EmissiveMap != null)
+                    foreach (var mesh in Meshes)
                     {
-                        mesh.Material.EmissiveMap.Bind(Texture.TextureUnit.Unit0);
+                        if (mesh.Material.EmissiveMap != null)
+                        {
+                            mesh.Material.EmissiveMap.Bind(Texture.TextureUnit.Unit0);
 
-                        mesh.DrawBindOnly();
+                            mesh.DrawBindOnly();
+                        }
+
+                    }
+                    fx.Release();
+                    break;
+                case NodeType.Actor:
+
+                    var afx = Global.GlobalEffects.EmissiveAnimFX;
+                    
+                    SceneGlobal.ActiveNode = this;
+                    var finalMatrices = Animator.GetFinalBoneMatrices();
+                    //var rm = GetModule<Scene.Modules.ModuleMesh3D>() as Scene.Modules.ModuleMesh3D;
+
+
+                    afx.Bind();
+                    
+
+                    Matrix4 apm = Scene.SceneGlobal.ActiveCamera.ProjectionMatrix; //Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), App.AppInfo.Width / App.AppInfo.Height, 0.01f, 1000);  //.CreatePerspectiveOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, 0.1f, 2500.0f);
+                    Matrix4 avm = Scene.SceneGlobal.ActiveCamera.WorldMatrix;
+                    Matrix4 amm = Scene.SceneGlobal.ActiveNode.WorldMatrix;
+                    
+
+
+                    afx.SetUniform("mProj", apm);
+                    afx.SetUniform("mModel", amm);
+                    afx.SetUniform("mView", avm);
+                    afx.SetUniform("tEmissive", 0);
+
+                    for (int i = 0; i < finalMatrices.Count; ++i)
+                    {
+                        afx.SetUniform("bone_transforms[" + i + "]", finalMatrices[i]);
                     }
 
-                }
-                fx.Release();
+
+                    foreach (var mesh in Meshes)
+                    {
+                        if (mesh.Material.EmissiveMap != null)
+                        {
+                            mesh.Material.EmissiveMap.Bind(Texture.TextureUnit.Unit0);
+
+                            mesh.DrawBindOnly();
+
+                            mesh.Material.EmissiveMap.Release(Texture.TextureUnit.Unit0);
+                        }
+
+                    }
+                    afx.Release();
+
+                    break;
             }
+
+
+
             foreach (var child in Child)
             {
                 child.RenderEmissive();

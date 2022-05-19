@@ -148,14 +148,16 @@ namespace Q.Draw.Simple
 
         public void RectBlur(int x, int y, int w, int h, Q.Texture.Texture2D tex, Vector4 c, float blur)
         {
+            
             Gen(x, y, w, h, c);
             Matrix4 pm = Matrix4.CreateOrthographicOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, -1.0f, 1.0f);
-
+            
             DrawState.VX = 0;
             DrawState.VY = 0;
             DrawState.VW = App.AppInfo.FrameWidth;
             DrawState.VH = App.AppInfo.FrameHeight;
             DrawState.Bind();
+        
             //   GL.Disable(EnableCap.DepthTest);
             //GL.Disable(EnableCap.CullFace);
       

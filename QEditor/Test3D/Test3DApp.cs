@@ -68,7 +68,7 @@ namespace Test3D
             emGlow = new PPEmissionGlow(g1);
             glow = new PPGlow(g1);
             pp.Add(emGlow);
-            //pp.Add(glow);
+            pp.Add(glow);
             draw = new Q.Draw.Simple.Draw2D();
             map = new Q.Texture.Texture2D("data/test2.jpg");
             mRender = new Q.Renderer.Renderer();
@@ -77,6 +77,7 @@ namespace Test3D
             s2.Meshes[0].Material.ColorMap = new Q.Texture.Texture2D("data/Vampire_Diffuse.png");
             s2.Meshes[0].Material.NormalMap = new Q.Texture.Texture2D("data/norm_Vampire_Diffuse.png");
             s2.Meshes[0].Material.SpecularMap = new Q.Texture.Texture2D("data/spec_Vampire_Diffuse.png");
+            s2.Meshes[0].Material.EmissiveMap = new Q.Texture.Texture2D("data/vampire_emission.png");
         }
 
         public override void UpdateApp()
@@ -121,12 +122,21 @@ namespace Test3D
 
             Q.Input.AppInput.MouseDelta = new OpenTK.Mathematics.Vector2(0, 0);
 
-            s2.Update();
+            if (Q.Input.AppInput.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.Q))
+            {
+                s2.Update();
+               // emGlow.Glow = !emGlow.Glow;
+            }
+
+            //s2.Update();
 
             //s1.RenderModules();
             g1.RenderShadows();
-            
-            g1.RenderGraph();
+
+        
+                g1.RenderGraph();
+                pp.Process();
+         
 
 
             //mRender.RenderScene();
