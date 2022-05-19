@@ -16,6 +16,7 @@ namespace Q.Global
         public static Q.Shader._2D.EXBasicBlur BlurFX;
         public static Q.Shader._2D.EColorLimit ColorLimitFX;
         public static Q.Shader._2D.EBloom BloomFX;
+        public static Q.Shader._3D.EDepthAnimMesh DepthAnimMeshFX;
 
         public static void Init()
         {
@@ -25,6 +26,7 @@ namespace Q.Global
             ColorLimitFX = new Shader._2D.EColorLimit();
             BloomFX = new Shader._2D.EBloom();
             AnimMeshFX = new EAnimMesh();
+            DepthAnimMeshFX = new EDepthAnimMesh();
             int a = 1;
 
         }

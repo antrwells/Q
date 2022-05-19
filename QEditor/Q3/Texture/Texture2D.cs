@@ -288,7 +288,18 @@ namespace Q.Texture
 
         public override void Release(TextureUnit unit)
         {
+            uint t_unit = (uint)unit;
+
+            OpenTK.Graphics.OpenGL.TextureUnit texu = OpenTK.Graphics.OpenGL.TextureUnit.Texture0;
+
+            int oid = (int)texu + (int)unit;
+
+            texu = (OpenTK.Graphics.OpenGL.TextureUnit)oid;
             base.Release(unit);
+            GL.Enable(EnableCap.Texture2d);
+            GL.ActiveTexture(texu);
+            // GL.ClientActiveTexture((TextureUnit)((int)TextureUnit.Texture0 + texu));
+            GL.BindTexture(TextureTarget.Texture2d,OpenTK.Graphics.TextureHandle.Zero);
         }
 
     }

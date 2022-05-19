@@ -266,33 +266,93 @@ namespace Q.Scene.Nodes
         }
         public void RenderDepth()
         {
-            SceneGlobal.ActiveNode = this;
-            var rm = GetModule<Scene.Modules.ModuleMesh3D>() as Scene.Modules.ModuleMesh3D;
-            if (Meshes.Count > 0)
+            switch (Type)
             {
+                case NodeType.Entity:
 
-                var fx = Global.GlobalEffects.DepthFX;
+                    SceneGlobal.ActiveNode = this;
+                    var rm = GetModule<Scene.Modules.ModuleMesh3D>() as Scene.Modules.ModuleMesh3D;
+                    if (Meshes.Count > 0)
+                    {
 
-                fx.Bind();
+                        var fx = Global.GlobalEffects.DepthFX;
 
-                Matrix4 pm = Scene.SceneGlobal.ActiveCamera.ProjectionMatrix; //Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), App.AppInfo.Width / App.AppInfo.Height, 0.01f, 1000);  //.CreatePerspectiveOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, 0.1f, 2500.0f);
-                Matrix4 vm = Scene.SceneGlobal.ActiveCamera.WorldMatrix;
-                Matrix4 mm = Scene.SceneGlobal.ActiveNode.WorldMatrix;
+                        fx.Bind();
 
-                fx.SetUniform("proj", pm);
-                fx.SetUniform("model", mm);
-                fx.SetUniform("view", vm);
-                fx.SetUniform("camP", SceneGlobal.ActiveCamera.LocalPosition);
-                fx.SetUniform("minZ", SceneGlobal.ActiveCamera.MinDepth);
-                fx.SetUniform("maxZ", SceneGlobal.ActiveCamera.MaxDepth);
+                        Matrix4 epm = Scene.SceneGlobal.ActiveCamera.ProjectionMatrix; //Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), App.AppInfo.Width / App.AppInfo.Height, 0.01f, 1000);  //.CreatePerspectiveOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, 0.1f, 2500.0f);
+                        Matrix4 evm = Scene.SceneGlobal.ActiveCamera.WorldMatrix;
+                        Matrix4 emm = Scene.SceneGlobal.ActiveNode.WorldMatrix;
 
-                //int a = 1;
-                foreach (var mesh in Meshes)
-                {
-                    mesh.DrawBindOnly();
+                        fx.SetUniform("proj", epm);
+                        fx.SetUniform("model", emm);
+                        fx.SetUniform("view", evm);
+                        fx.SetUniform("camP", SceneGlobal.ActiveCamera.LocalPosition);
+                        fx.SetUniform("minZ", SceneGlobal.ActiveCamera.MinDepth);
+                        fx.SetUniform("maxZ", SceneGlobal.ActiveCamera.MaxDepth);
 
-                }
-                fx.Release();
+                        //int a = 1;
+                        foreach (var mesh in Meshes)
+                        {
+                            mesh.DrawBindOnly();
+
+                        }
+                        fx.Release();
+                    }
+                    break;
+                case NodeType.Actor:
+
+                    var finalMatrices = Animator.GetFinalBoneMatrices();
+                    SceneGlobal.ActiveNode = this;
+                    var afx = Global.GlobalEffects.DepthAnimMeshFX;
+
+                    Matrix4 pm = Scene.SceneGlobal.ActiveCamera.ProjectionMatrix; //Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), App.AppInfo.Width / App.AppInfo.Height, 0.01f, 1000);  //.CreatePerspectiveOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, 0.1f, 2500.0f);
+                    Matrix4 vm = Scene.SceneGlobal.ActiveCamera.WorldMatrix;
+                    Matrix4 mm = Scene.SceneGlobal.ActiveNode.WorldMatrix;
+
+                    var light = Scene.SceneGlobal.ActiveLight;
+
+                    foreach (var mesh in Meshes)
+                    {
+
+                        //mesh.Material.ColorMap.Bind(Texture.TextureUnit.Unit0);
+                        //mesh.Material.NormalMap.Bind(Texture.TextureUnit.Unit1);
+                        //mesh.Material.SpecularMap.Bind(Texture.TextureUnit.Unit3);
+                        //light.ShadowFB.Cube.Bind(2);
+
+                        afx.Bind();
+                        afx.SetUniform("mProj", pm);
+                        afx.SetUniform("mModel", mm);
+                        afx.SetUniform("mView", vm);
+                        afx.SetUniform("viewPos", Scene.SceneGlobal.ActiveCamera.LocalPosition);
+                        afx.SetUniform("tCol", 0);
+                        afx.SetUniform("tNorm", 1);
+                        afx.SetUniform("tSpec", 3);
+                        afx.SetUniform("tShadow", 2);
+                        afx.SetUniform("tEnv", 4);
+                        afx.SetUniform("lightDepth", Scene.SceneGlobal.ActiveCamera.MaxDepth);
+                        afx.SetUniform("light_position", light.LocalPosition);
+                        afx.SetUniform("lDiff", light.Diffuse);
+                        afx.SetUniform("lSpec", light.Specular);
+                        afx.SetUniform("lRange", light.Range);
+                        afx.SetUniform("shadowMapping", 0);
+                        afx.SetUniform("envMapping", 0);
+                        afx.SetUniform("refract", 0);
+                       afx.SetUniform("camP", SceneGlobal.ActiveCamera.LocalPosition);
+                        afx.SetUniform("minZ", SceneGlobal.ActiveCamera.MinDepth);
+                        afx.SetUniform("maxZ", SceneGlobal.ActiveCamera.MaxDepth);
+                        for (int i = 0; i < finalMatrices.Count; ++i)
+                        {
+                            afx.SetUniform("bone_transforms[" + i + "]", finalMatrices[i]);
+                        }
+
+
+                        mesh.DrawBindOnly();
+                        afx.Release();
+
+                    }
+
+                    int a = 0;
+                    break;
             }
             foreach (var child in Child)
             {
@@ -362,6 +422,10 @@ namespace Q.Scene.Nodes
 
                         mesh.DrawBindOnly();
                         afx.Release();
+
+                        mesh.Material.ColorMap.Release(Texture.TextureUnit.Unit0);
+                        mesh.Material.NormalMap.Release(Texture.TextureUnit.Unit1);
+                        mesh.Material.SpecularMap.Release(Texture.TextureUnit.Unit3);
 
                     }
 
