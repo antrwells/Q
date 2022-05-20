@@ -42,11 +42,11 @@ namespace Q.PostProcessing
                 Draw.DrawState.Blend = true;
                 Draw.DrawState.BlendMode = BlendFunc.Additive;
 
-                if (Q.Input.AppInput.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.V))
-                {
+                //if (Q.Input.AppInput.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.V))
+                //{
 
                   Draw.Rect(0, App.AppInfo.Height, App.AppInfo.Width, -App.AppInfo.Height, op, new OpenTK.Mathematics.Vector4(1, 1, 1, 1));
-                }
+                //}
             
 
                 

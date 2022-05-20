@@ -337,6 +337,59 @@ namespace Q.Mesh
 
         }
 
+
+        public void DrawParticle(Effect fx, Vector4 color)
+        {
+            Matrix4 pm = Scene.SceneGlobal.ActiveCamera.ProjectionMatrix; //Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), App.AppInfo.Width / App.AppInfo.Height, 0.01f, 1000);  //.CreatePerspectiveOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, 0.1f, 2500.0f);
+            Matrix4 vm = Scene.SceneGlobal.ActiveCamera.WorldMatrix;
+            Matrix4 mm = Scene.SceneGlobal.ActiveNode.WorldMatrix;
+
+            var light = Scene.SceneGlobal.ActiveLight;
+
+            fx.Bind();
+            Material.ColorMap.Bind(Texture.TextureUnit.Unit0);
+            Material.NormalMap.Bind(Texture.TextureUnit.Unit1);
+            Scene.SceneGlobal.ActiveLight.ShadowFB.Cube.Bind(2);
+            fx.SetUniform("viewPos", Scene.SceneGlobal.ActiveCamera.LocalPosition);
+            fx.SetUniform("tCol", 0);
+            fx.SetUniform("tNorm", 1);
+            fx.SetUniform("tSpec", 3);
+            fx.SetUniform("tShadow", 2);
+            fx.SetUniform("tEnv", 4);
+            fx.SetUniform("lightDepth", Scene.SceneGlobal.ActiveCamera.MaxDepth);
+            fx.SetUniform("lPos", light.LocalPosition);
+            fx.SetUniform("lDiff", light.Diffuse);
+            fx.SetUniform("lSpec", light.Specular);
+            fx.SetUniform("lRange", light.Range);
+            fx.SetUniform("shadowMapping", 1);
+            fx.SetUniform("envMapping", 0);
+            fx.SetUniform("refract", 0);
+            fx.SetUniform("pColor", color);
+
+
+            fx.SetUniform("tColor", 0);
+            fx.SetUniform("proj", pm);
+            fx.SetUniform("model", mm);
+            fx.SetUniform("view", vm);
+
+
+            // fx.SetUniform("texSize", new Vector2(Material.ColorMap.Width,Material.ColorMap.Height));
+            //fx.SetUniform("drawCol", new);
+
+            GL.BindVertexArray(arrays[0]);
+            GL.MemoryBarrier(MemoryBarrierMask.ShaderImageAccessBarrierBit);
+            //GL.draw;
+            GL.BindBuffer(BufferTargetARB.ElementArrayBuffer, tb[0]);
+            //GL.DrawArrays(PrimitiveType.Triangles, 0, 32);
+            // GL.DrawElements(PrimitiveType.Triangles,)
+
+            GL.DrawElements(PrimitiveType.Triangles, Tris.Count * 3, DrawElementsType.UnsignedInt, IntPtr.Zero);
+
+
+            fx.Release();
+
+            Scene.SceneGlobal.ActiveLight.ShadowFB.Cube.Release(2);
+        }
         public void Draw(Effect fx)
         {
             //Matrix4 pm = Matrix4.CreateOrthographicOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, 0, 1.0f);
@@ -392,6 +445,30 @@ namespace Q.Mesh
             Scene.SceneGlobal.ActiveLight.ShadowFB.Cube.Release(2);
         }
 
+
+        public Mesh3D Clone()
+        {
+
+            var res = new Mesh3D();
+
+            res.tb = tb;
+            res.buffer = buffer;
+            res.arrays = arrays;
+            res.biBuf = biBuf;
+            res.boneBuf = boneBuf;
+            res.buffer = buffer;
+            res.normBuf = normBuf;
+            res.posBuf = posBuf;
+            res.tanBuf = tanBuf;
+            res.uvBuf = uvBuf;
+            res.Vertices = Vertices;
+            res.Tris = Tris;
+
+            res.Material = Material;
+
+            return res;
+
+        }
             
 
     }

@@ -25,6 +25,11 @@ namespace Q
     public class GLState
     {
     
+        public bool DepthWrite
+        {
+            get;
+            set;
+        }
         public bool DepthTest
         {
             get;
@@ -131,6 +136,9 @@ namespace Q
             {
                 GL.Disable(EnableCap.Blend);
             }
+            
+                GL.DepthMask(DepthWrite);
+           
 
             GL.Viewport(VX, VY, VW, VH);
         }
@@ -141,6 +149,11 @@ namespace Q
             VY = y;
             VW = w;
             VH = h;
+        }
+
+        public GLState()
+        {
+            DepthWrite = true;
         }
 
     } 

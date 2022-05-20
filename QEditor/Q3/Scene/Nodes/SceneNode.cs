@@ -9,7 +9,7 @@ namespace Q.Scene.Nodes
 {
     public enum NodeType
     {
-        Entity,Actor
+        Entity,Actor,Particle
     }
     public class SceneNode
     {
@@ -52,6 +52,7 @@ namespace Q.Scene.Nodes
         }
 
         public static Shader.Effect MeshFX = new Q.Shader._3D.EBasic3D();
+        public static Shader.Effect ParticleFX = new Q.Shader._3D.EBasicParticle();
 
 
         public List<Mesh.Mesh3D> Meshes = new List<Mesh.Mesh3D>();
@@ -63,6 +64,12 @@ namespace Q.Scene.Nodes
         }
 
         public Q.Anim.ActorAnim CurrentAnim
+        {
+            get;
+            set;
+        }
+
+        public bool AlwaysFaceCamera
         {
             get;
             set;
@@ -139,6 +146,20 @@ namespace Q.Scene.Nodes
             get;
             set;
         }
+
+        public Vector4 Color
+        {
+            get;
+            set;
+               
+        }
+
+        public float Spin
+        {
+            get;
+            set;
+        }
+
         public NodeModule GetModule<T>() where T : NodeModule
         {
 
@@ -163,11 +184,24 @@ namespace Q.Scene.Nodes
             if (MeshFX == null)
             {
                 MeshFX = new Shader._3D.EBasic3D();
+                ParticleFX = new Shader._3D.EBasicParticle();
+                int bb = 0;
             }
+            AlwaysFaceCamera = false;
+            Color = new Vector4(1, 1, 1, 1);
+            Spin = 0;
         }
 
         public void Update()
         {
+            if (AlwaysFaceCamera)
+            {
+                LookAt(SceneGlobal.ActiveCamera.LocalPosition, new Vector3(0, 1, 0));
+                LocalRotation = Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(Spin)) * LocalRotation;
+
+
+
+            }
             if (CurrentAnim == null)
             {
                 return;
@@ -416,6 +450,29 @@ namespace Q.Scene.Nodes
 
             switch (Type)
             {
+                case NodeType.Particle:
+
+                    GLState state = new GLState();
+
+                    state.DepthTest = true;
+                    state.DepthMode = DepthFunc.LEqual;
+                    state.Blend = true;
+                    state.BlendMode = BlendFunc.Additive;
+                    state.VX = 0;
+                    state.VY = 0;
+                    state.VW = App.AppInfo.FrameWidth;
+                    state.VH = App.AppInfo.FrameHeight;
+                    state.CullFace = false;
+                    state.DepthWrite = false;
+                    state.Bind();
+
+                    SceneGlobal.ActiveNode = this;
+                    foreach(var mesh in Meshes)
+                    {
+                        mesh.DrawParticle(ParticleFX, Color);
+                    }
+
+                    break;
                 case NodeType.Entity:
                     SceneGlobal.ActiveNode = this;
                     foreach (var mesh in Meshes)
@@ -488,6 +545,19 @@ namespace Q.Scene.Nodes
             
     }
 
+        public void LookAt(Vector3 target,Vector3 up)
+        {
+            Matrix4 m = Matrix4.LookAt(Vector3.Zero, -(target - LocalPosition), up);
+            //Console.WriteLine("Local:" + LocalPos.ToString() + " TO:" + p.ToString());
+            //m=m.ClearTranslation();
+
+            //   m = m.Inverted();
+            //m = m.ClearScale();
+            //m = m.ClearProjection();
+            m = m.Inverted();
+
+            LocalRotation = m;
+        }
         public void LookAtZero(Vector3 p, Vector3 up)
         {
             Matrix4 m = Matrix4.LookAt(Vector3.Zero, p, up);

@@ -148,5 +148,47 @@ namespace Q.Scene
             }
         }
 
+        public void Update()
+        {
+            UpdateNode(Root);
+        }
+
+        public void UpdateNode(SceneNode node)
+        {
+
+            node.Update();
+            foreach(var cnode in node.Child)
+            {
+                UpdateNode(cnode);
+            }
+
+        }
+
+        public void Remove(SceneNode node)
+        {
+
+            RemoveNode(Root, node);
+
+
+        }
+
+        public void RemoveNode(SceneNode from,SceneNode node)
+        {
+
+            if (from.Child.Contains(node)){
+                from.Child.Remove(node);
+                return;
+            }
+
+            foreach(var cnode in from.Child.ToArray())
+            {
+                RemoveNode(cnode, node);
+            }
+
+
+
+        }
+
+
     }
 }

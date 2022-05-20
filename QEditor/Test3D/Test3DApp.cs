@@ -9,6 +9,8 @@ using Q.Scene;
 using Q.Scene.Nodes;
 using Q.PostProcessing;
 using Q.PostProcessing.PP;
+using Q.Elemental;
+using Q.Elemental.FX;
 namespace Test3D
 {
     public class Test3DApp : Application
@@ -24,9 +26,13 @@ namespace Test3D
         PPEmissionGlow emGlow;
         PPGlow glow;
         Q.Draw.Simple.Draw2D draw;
+        Elemental efx;
+        ParticleFX fx1;
+        Particle part1;
+        Particle part2;
         public Test3DApp(GameWindowSettings window_settings, NativeWindowSettings native_settings) : base(window_settings, native_settings)
         {
-
+            
         }
         Q.Texture.Texture2D map;
         public override void InitApp()
@@ -38,10 +44,14 @@ namespace Test3D
             Q.Anim.ActorAnim anim1 = new Q.Anim.ActorAnim("Walk", 0, 82, 0.5f, Q.Anim.AnimType.Forward);
             s2.Animations.Add(anim1);
             //s2.PlayAnim("Walk");
-            s2.CurrentAnim = anim1;
+            // s2.CurrentAnim = anim1;
 
-
-                
+            efx = new Elemental();
+            fx1 = new ParticleFX();
+            part1 = new Particle();
+            part2 = new Particle();
+            efx.Add(fx1);
+            fx1.Position = new OpenTK.Mathematics.Vector3(0, 2, 0);
 
             s2.LocalScale = new OpenTK.Mathematics.Vector3(0.02f, 0.02f, 0.02f);
             s2.LocalPosition = new OpenTK.Mathematics.Vector3(0, 1, 0);
@@ -57,9 +67,9 @@ namespace Test3D
 
             g1 = new SceneGraph();
             g1.Add(s1);
-            g1.Add(s2);
+            //g1.Add(s2);
             g1.Add(l1);
-           g1.Add(l2);
+           //g1.Add(l2);
             g1.SetCamera(cam);
             l2.LocalPosition = new OpenTK.Mathematics.Vector3(-25, 10, 25);
             l1.Diffuse = new OpenTK.Mathematics.Vector3(2, 1, 1);
@@ -73,6 +83,19 @@ namespace Test3D
             map = new Q.Texture.Texture2D("data/test2.jpg");
             mRender = new Q.Renderer.Renderer();
             mRender.SetGraph(g1);
+
+
+            part1.Image = new Q.Texture.Texture2D("data/fire1.png");
+
+
+            fx1.SpawnPosMin = new OpenTK.Mathematics.Vector3(-0.1f, -0.1f, -0.1f);
+            fx1.SpawnPosMax = new OpenTK.Mathematics.Vector3(0.1f,0.1f,0.1f);
+            fx1.SpawnInertiaMin = new OpenTK.Mathematics.Vector3(-0.1f, -0.1f, -0.1f);
+            fx1.SpawnInertiaMax = new OpenTK.Mathematics.Vector3(0.1f,0.1f,0.1f);
+            efx.CurrentScene = g1;
+
+
+
 
             s2.Meshes[0].Material.ColorMap = new Q.Texture.Texture2D("data/Vampire_Diffuse.png");
             s2.Meshes[0].Material.NormalMap = new Q.Texture.Texture2D("data/norm_Vampire_Diffuse.png");
@@ -122,13 +145,14 @@ namespace Test3D
 
             Q.Input.AppInput.MouseDelta = new OpenTK.Mathematics.Vector2(0, 0);
 
-            if (Q.Input.AppInput.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.Q))
-            {
-                s2.Update();
+            //if (Q.Input.AppInput.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.Q))
+            //{
+             //   s2.Update();
                // emGlow.Glow = !emGlow.Glow;
-            }
+           // }
 
             //s2.Update();
+            s2.AlwaysFaceCamera = true;
 
             //s1.RenderModules();
             g1.RenderShadows();
@@ -136,7 +160,17 @@ namespace Test3D
         
                 g1.RenderGraph();
                 pp.Process();
-         
+
+            g1.Update();
+      
+
+            if (Q.Input.AppInput.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.Z))
+            {
+                fx1.Spawn(part1, 20);
+            }
+
+            efx.Update();
+
 
 
             //mRender.RenderScene();
