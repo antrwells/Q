@@ -7,6 +7,21 @@ using OpenTK.Mathematics;
 
 namespace Q.Scene.Nodes
 {
+
+    public class BoundingBox
+    {
+        public Vector3 Min
+        {
+            get;
+            set;
+        }
+
+        public Vector3 Max
+        {
+            get;
+            set;
+        }
+    }
     public enum NodeType
     {
         Entity,Actor,Particle
@@ -160,6 +175,13 @@ namespace Q.Scene.Nodes
             set;
         }
 
+
+        public Mesh.MeshLines Lines
+        {
+            get;
+            set;
+        }
+
         public NodeModule GetModule<T>() where T : NodeModule
         {
 
@@ -171,6 +193,56 @@ namespace Q.Scene.Nodes
                 }
             }
             return null;
+        }
+
+        public void AddBBLines()
+        {
+
+            var bb = GetBounds();
+
+            Lines = new Mesh.MeshLines();
+
+            Vector3 min = bb.Min;
+            Vector3 max = bb.Max;
+
+            Vector3 t1, t2, t3, t4;
+            Vector3 b1, b2, b3, b4;
+
+            t1 = min;
+            t2 = new Vector3(max.X, min.Y, min.Z);
+            t3 = new Vector3(max.X, min.Y, max.Z);
+            t4 = new Vector3(min.X, min.Y, max.Z);
+
+            b1 = new Vector3(min.X, max.Y, min.Z);
+            b2 = new Vector3(max.X, max.Y, min.Z);
+            b3 = new Vector3(max.X, max.Y, max.Z);
+            b4 = new Vector3(min.X, max.Y, max.Z);
+
+            Lines.AddLine(t1, t2, new Vector4(0, 1, 1,1));
+            Lines.AddLine(t2, t3, new Vector4(0, 1, 1,1));
+            Lines.AddLine(t3, t4, new Vector4(0, 1, 1,1));
+            Lines.AddLine(t4, t1, new Vector4(0, 1, 1, 1));
+
+            Lines.AddLine(b1, b2, new Vector4(0, 1, 1, 1));
+            Lines.AddLine(b2, b3, new Vector4(0, 1, 1, 1));
+            Lines.AddLine(b3, b4, new Vector4(0, 1, 1, 1));
+            Lines.AddLine(b4, b1, new Vector4(0, 1, 1, 1));
+
+            Lines.AddLine(t1, b1, new Vector4(0, 1, 1, 1));
+            Lines.AddLine(t2, b2, new Vector4(0, 1, 1, 1));
+            Lines.AddLine(t3, b3, new Vector4(0, 1, 1, 1));
+            Lines.AddLine(t4, b4, new Vector4(0, 1, 1, 1));
+
+            Lines.Finalize();
+
+            foreach(var cnode in Child)
+            {
+                cnode.AddBBLines();
+            }
+
+            //Lines.AddLine(bb.Min,bb.Min )
+
+
         }
 
         public SceneNode()
@@ -191,6 +263,43 @@ namespace Q.Scene.Nodes
             Color = new Vector4(1, 1, 1, 1);
             Spin = 0;
         }
+
+        public BoundingBox GetBounds()
+        {
+
+            Vector3 min, max;
+
+            min = new Vector3(1200, 1200, 1200);
+            max = new Vector3(-1200, -1200, -1200);
+
+            foreach(var mesh in Meshes)
+            {
+
+                foreach(var vertex in mesh.Vertices)
+                {
+
+                    var pos = vertex.Pos;
+
+                    if (pos.X < min.X) min.X = pos.X;
+                    if (pos.Y < min.Y) min.Y = pos.Y;
+                    if (pos.Z < min.Z) min.Z = pos.Z;
+
+                    if (pos.X > max.X) max.X = pos.X;
+                    if (pos.Y > max.Y) max.Y = pos.Y;
+                    if (pos.Z > max.Z) max.Z = pos.Z;
+
+                }
+
+            }
+
+            var res = new BoundingBox();
+            res.Min = min;
+            res.Max = max;
+
+            return res;
+
+        }
+
 
         public void Update()
         {
@@ -467,7 +576,7 @@ namespace Q.Scene.Nodes
                     state.Bind();
 
                     SceneGlobal.ActiveNode = this;
-                    foreach(var mesh in Meshes)
+                    foreach (var mesh in Meshes)
                     {
                         mesh.DrawParticle(ParticleFX, Color);
                     }
@@ -542,8 +651,13 @@ namespace Q.Scene.Nodes
 
                     break;
             }
-            
-    }
+
+            if (Lines != null)
+            {
+                Lines.Draw();
+            }
+
+        }
 
         public void LookAt(Vector3 target,Vector3 up)
         {

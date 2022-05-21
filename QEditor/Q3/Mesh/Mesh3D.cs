@@ -327,6 +327,9 @@ namespace Q.Mesh
         public void DrawBindOnly()
         {
             GL.BindVertexArray(arrays[0]);
+            GL.BindBuffer(BufferTargetARB.ArrayBuffer, posBuf);
+
+
             GL.MemoryBarrier(MemoryBarrierMask.ShaderImageAccessBarrierBit);
             //GL.draw;
             GL.BindBuffer(BufferTargetARB.ElementArrayBuffer, tb[0]);

@@ -11,6 +11,8 @@ using Q.PostProcessing;
 using Q.PostProcessing.PP;
 using Q.Elemental;
 using Q.Elemental.FX;
+using Q.Harmony;
+using Q.Harmony.Nodes;
 namespace Test3D
 {
     public class Test3DApp : Application
@@ -30,6 +32,11 @@ namespace Test3D
         ParticleFX fx1;
         Particle part1;
         Particle part2;
+
+        PhysicsScene pScene;
+        NodeBox p1, p2;
+        
+        
         public Test3DApp(GameWindowSettings window_settings, NativeWindowSettings native_settings) : base(window_settings, native_settings)
         {
             
@@ -45,6 +52,11 @@ namespace Test3D
             s2.Animations.Add(anim1);
             //s2.PlayAnim("Walk");
             // s2.CurrentAnim = anim1;
+            s2.AddBBLines();
+            pScene = new PhysicsScene();
+
+            p1 = new NodeBox(s1.Child[0]);
+            p2 = new NodeBox(s2);
 
             efx = new Elemental();
             fx1 = new ParticleFX();
@@ -56,6 +68,7 @@ namespace Test3D
             s2.LocalScale = new OpenTK.Mathematics.Vector3(0.02f, 0.02f, 0.02f);
             s2.LocalPosition = new OpenTK.Mathematics.Vector3(0, 1, 0);
             int a = 1;
+            s2.LocalPosition = new OpenTK.Mathematics.Vector3(0, 2, 0);
             cam = new SceneCamera();
             cam.LocalPosition = new OpenTK.Mathematics.Vector3(0, 10, 25);
             l1 = new SceneLight();
@@ -64,12 +77,12 @@ namespace Test3D
             l1.LocalPosition = cam.LocalPosition;
             l1.LocalPosition = new OpenTK.Mathematics.Vector3(25, 10, 25);
             SceneLight l2 = new SceneLight();
-
+            s1.AddBBLines();
             g1 = new SceneGraph();
             g1.Add(s1);
-            //g1.Add(s2);
+            g1.Add(s2);
             g1.Add(l1);
-           //g1.Add(l2);
+           g1.Add(l2);
             g1.SetCamera(cam);
             l2.LocalPosition = new OpenTK.Mathematics.Vector3(-25, 10, 25);
             l1.Diffuse = new OpenTK.Mathematics.Vector3(2, 1, 1);
@@ -152,7 +165,7 @@ namespace Test3D
            // }
 
             //s2.Update();
-            s2.AlwaysFaceCamera = true;
+         //   s2.AlwaysFaceCamera = true;
 
             //s1.RenderModules();
             g1.RenderShadows();
