@@ -52,12 +52,15 @@ namespace Test3D
             s2.Animations.Add(anim1);
             //s2.PlayAnim("Walk");
             // s2.CurrentAnim = anim1;
-            s2.AddBBLines();
+     
             pScene = new PhysicsScene();
 
             p1 = new NodeBox(s1.Child[0]);
             p2 = new NodeBox(s2);
 
+            pScene.Add(p1, p2);
+
+            p2.Position = new OpenTK.Mathematics.Vector3(0, 15, 0);
             efx = new Elemental();
             fx1 = new ParticleFX();
             part1 = new Particle();
@@ -77,7 +80,7 @@ namespace Test3D
             l1.LocalPosition = cam.LocalPosition;
             l1.LocalPosition = new OpenTK.Mathematics.Vector3(25, 10, 25);
             SceneLight l2 = new SceneLight();
-            s1.AddBBLines();
+            s1.AddBBLines(new OpenTK.Mathematics.Vector4(1,1,0,1));
             g1 = new SceneGraph();
             g1.Add(s1);
             g1.Add(s2);
@@ -106,9 +109,10 @@ namespace Test3D
             fx1.SpawnInertiaMin = new OpenTK.Mathematics.Vector3(-0.1f, -0.1f, -0.1f);
             fx1.SpawnInertiaMax = new OpenTK.Mathematics.Vector3(0.1f,0.1f,0.1f);
             efx.CurrentScene = g1;
+            p1.Static = true;
+            //       p2.Static = true;
 
-
-
+            s2.AddBBLines(new OpenTK.Mathematics.Vector4(1, 1, 0, 1));
 
             s2.Meshes[0].Material.ColorMap = new Q.Texture.Texture2D("data/Vampire_Diffuse.png");
             s2.Meshes[0].Material.NormalMap = new Q.Texture.Texture2D("data/norm_Vampire_Diffuse.png");
@@ -160,12 +164,16 @@ namespace Test3D
 
             //if (Q.Input.AppInput.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.Q))
             //{
-             //   s2.Update();
-               // emGlow.Glow = !emGlow.Glow;
-           // }
+            //   s2.Update();
+            // emGlow.Glow = !emGlow.Glow;
+            // }
 
             //s2.Update();
-         //   s2.AlwaysFaceCamera = true;
+            //   s2.AlwaysFaceCamera = true;
+
+          //  p2.ApplyTorque(200,0, 0);
+
+            pScene.Update(0.1f);
 
             //s1.RenderModules();
             g1.RenderShadows();

@@ -131,7 +131,9 @@ namespace Q.Mesh
 
             Matrix4 pm = Scene.SceneGlobal.ActiveCamera.ProjectionMatrix; //Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), App.AppInfo.Width / App.AppInfo.Height, 0.01f, 1000);  //.CreatePerspectiveOffCenter(0, App.AppInfo.FrameWidth, App.AppInfo.FrameHeight, 0, 0.1f, 2500.0f);
             Matrix4 vm = Scene.SceneGlobal.ActiveCamera.WorldMatrix;
-            Matrix4 mm = Scene.SceneGlobal.ActiveNode.WorldMatrix;
+            Matrix4 mm = Scene.SceneGlobal.ActiveNode.WorldMatrixNormal;
+
+            //mm =mm.ClearScale();
 
             fx.Bind();
 

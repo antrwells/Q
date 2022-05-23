@@ -21,6 +21,17 @@ namespace Q.Scene.Nodes
             get;
             set;
         }
+        public override string ToString()
+        {
+            //return base.ToString();
+
+            string r = "Min:";
+            r = r  +Min.ToString();
+            r = r + "Max:";
+            r = r + Max.ToString();
+            return r;
+
+        }
     }
     public enum NodeType
     {
@@ -124,8 +135,13 @@ namespace Q.Scene.Nodes
             {
                 Matrix4 r = Matrix4.Identity;
 
+                if (Root != null)
+                {
+                    r = Root.WorldMatrixNormal;
+                }
 
-                r = LocalRotation * Matrix4.CreateTranslation(LocalPosition); ;
+                r =  (LocalRotation * Matrix4.CreateTranslation(LocalPosition)) * r;
+
 
                 return r;
             }
@@ -195,15 +211,19 @@ namespace Q.Scene.Nodes
             return null;
         }
 
-        public void AddBBLines()
-        {
+        public void AddBBLines(Vector4 col)
+        { 
 
             var bb = GetBounds();
 
             Lines = new Mesh.MeshLines();
 
-            Vector3 min = bb.Min;
-            Vector3 max = bb.Max;
+            Vector3 min = bb.Min - LocalPosition;
+            Vector3 max = bb.Max - LocalPosition;
+            //min = LocalPosition - min;
+            //max = LocalPosition  max;
+
+
 
             Vector3 t1, t2, t3, t4;
             Vector3 b1, b2, b3, b4;
@@ -218,26 +238,26 @@ namespace Q.Scene.Nodes
             b3 = new Vector3(max.X, max.Y, max.Z);
             b4 = new Vector3(min.X, max.Y, max.Z);
 
-            Lines.AddLine(t1, t2, new Vector4(0, 1, 1,1));
-            Lines.AddLine(t2, t3, new Vector4(0, 1, 1,1));
-            Lines.AddLine(t3, t4, new Vector4(0, 1, 1,1));
-            Lines.AddLine(t4, t1, new Vector4(0, 1, 1, 1));
+            Lines.AddLine(t1, t2,col);
+            Lines.AddLine(t2, t3, col);
+            Lines.AddLine(t3, t4, col);
+            Lines.AddLine(t4, t1, col);
 
-            Lines.AddLine(b1, b2, new Vector4(0, 1, 1, 1));
-            Lines.AddLine(b2, b3, new Vector4(0, 1, 1, 1));
-            Lines.AddLine(b3, b4, new Vector4(0, 1, 1, 1));
-            Lines.AddLine(b4, b1, new Vector4(0, 1, 1, 1));
+            Lines.AddLine(b1, b2, col);
+            Lines.AddLine(b2, b3, col);
+            Lines.AddLine(b3, b4, col);
+            Lines.AddLine(b4, b1, col);
 
-            Lines.AddLine(t1, b1, new Vector4(0, 1, 1, 1));
-            Lines.AddLine(t2, b2, new Vector4(0, 1, 1, 1));
-            Lines.AddLine(t3, b3, new Vector4(0, 1, 1, 1));
-            Lines.AddLine(t4, b4, new Vector4(0, 1, 1, 1));
+            Lines.AddLine(t1, b1, col);
+            Lines.AddLine(t2, b2, col);
+            Lines.AddLine(t3, b3, col);
+            Lines.AddLine(t4, b4, col);
 
             Lines.Finalize();
 
             foreach(var cnode in Child)
             {
-                cnode.AddBBLines();
+                cnode.AddBBLines(col);
             }
 
             //Lines.AddLine(bb.Min,bb.Min )
@@ -278,7 +298,7 @@ namespace Q.Scene.Nodes
                 foreach(var vertex in mesh.Vertices)
                 {
 
-                    var pos = vertex.Pos;
+                    var pos = vertex.Pos * LocalScale;
 
                     if (pos.X < min.X) min.X = pos.X;
                     if (pos.Y < min.Y) min.Y = pos.Y;
@@ -293,8 +313,14 @@ namespace Q.Scene.Nodes
             }
 
             var res = new BoundingBox();
-            res.Min = min;
-            res.Max = max;
+
+
+
+            res.Min = LocalPosition + min;
+            res.Max = LocalPosition + max;
+
+            //res.Min = res.Min * LocalScale;
+           // res.Max = res.Max * LocalScale;
 
             return res;
 

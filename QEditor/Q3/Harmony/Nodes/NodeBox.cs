@@ -31,7 +31,24 @@ namespace Q.Harmony.Nodes
             size.Y = bb.Max.Y - bb.Min.Y;
             size.Z = bb.Max.Z - bb.Min.Z;
 
+            Node = node;
+
             Size = size;
+
+            float m = Mass;
+            float w = size.X;
+            float h = size.Y;
+            float d = size.Z;
+            MomentOfInertia = m * (w * w + h * h + d * d) / 12.0f;
+
+        }
+
+        public override Collision CollideWith(PhysicsNode node2)
+        {
+
+
+            return null;
+            //return base.CollideWith(node2);
 
         }
 
