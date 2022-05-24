@@ -1,0 +1,34 @@
+#version 330 core
+
+in vec2 UV;
+
+out vec3 color;
+
+uniform sampler2D tR;
+uniform float blur;
+
+void main(){
+vec3 fc = vec3(0,0,0);
+int fi=0;
+
+    for(int y=-8;y<8;y++){
+        for(int x=-8;x<8;x++){
+
+            vec2 nuv = UV;
+            nuv.x = nuv.x + (x*blur*1.2);
+            nuv.y = nuv.y + (y*blur);
+            fc = fc + texture(tR,nuv).rgb;
+            fi++;
+
+        }
+    }
+
+    fc = fc / fi;
+
+    //fc.r=0;
+
+ //   fc = texture(tR,UV).rgb;
+
+
+    color = fc;
+}

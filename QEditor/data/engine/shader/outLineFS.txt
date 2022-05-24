@@ -1,0 +1,47 @@
+#version 330 core
+
+in vec2 UV;
+
+out vec3 color;
+
+uniform sampler2D tR;
+uniform sampler2D tB;
+
+float dValue(float z1,float z2){
+
+    float vd = z2-z1;
+    if(vd<0) vd = -vd;
+    return vd;
+
+}
+
+float zValue(vec2 uv,float dif){
+
+    float zD = 0;
+    zD = dValue(texture(tR,uv).r,texture(tR,uv+vec2(dif,0)).r);
+    zD+= dValue(texture(tR,uv).r,texture(tR,uv+vec2(-dif,0)).r);
+    zD+= dValue(texture(tR,uv).r,texture(tR,uv+vec2(0,dif)).r);
+    zD+= dValue(texture(tR,uv).r,texture(tR,uv+vec2(0,-dif)).r);
+
+    return zD;
+
+}
+
+void main(){
+ 
+    vec3 rc = texture(tR,UV).rgb;
+    vec3 bc = texture(tB,UV).rgb;
+
+    float zd = zValue(UV,0.001);
+
+    zd = zd * 5;
+
+    if(zd>1) zd = 1;
+
+    vec3 fc = vec3(zd,zd,zd);
+
+
+
+    color = fc;
+
+}
