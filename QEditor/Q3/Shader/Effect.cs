@@ -36,7 +36,25 @@ namespace Q.Shader
             get;
             set;
         }
+        public Effect(string geo,string vert,string frag)
+        {
+            ProgramHandle = GL.CreateProgram();
+            GL.ObjectLabel(ObjectIdentifier.Program, (uint)ProgramHandle.Handle, -1, "Effect:" + vert);
+            AttachShader(ShaderType.GeometryShader, geo);
+            AttachShader(ShaderType.VertexShader, vert);
+            AttachShader(ShaderType.FragmentShader, frag);
+            GL.LinkProgram(ProgramHandle);
+            int pars = 255;
+            unsafe
+            {
+                int* parp = &pars;
 
+                GL.GetProgramiv(ProgramHandle, ProgramPropertyARB.LinkStatus, parp);
+            }
+            GL.GetProgramInfoLog(ProgramHandle, out string info);
+            Console.WriteLine("ProgramStatus:" + info);
+            Console.WriteLine("Link:" + pars);
+        }
         public Effect(string vertex_path,string frag_path)
         {
             ProgramHandle = GL.CreateProgram();

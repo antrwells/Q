@@ -63,19 +63,19 @@ namespace Q.Harmony
         {
 
             //Simulate
-            foreach(var node in Nodes)
+            foreach (var node in Nodes)
             {
-              node.Simulate(time_delta);
+                node.Simulate(time_delta);
             }
 
             List<CollisionPair> Pairs = new List<CollisionPair>();
 
-            //Collision 
+            //Generate possible contacts
             foreach (var node in Nodes)
             {
                 foreach (var other in Nodes)
                 {
-                    if(other == node)
+                    if (other == node)
                     {
                         continue;
                     }
@@ -103,33 +103,55 @@ namespace Q.Harmony
                     npair.B = other;
                     Pairs.Add(npair);
 
-                    if (CollisionTest.Intersect(node.Node.GetBounds(), other.Node.GetBounds()))
-                    {
-                        other.Velocity = Vector3.Zero;
-                        other.Force = Vector3.Zero;
-                        node.Velocity = Vector3.Zero;
 
-                        node.Force = Vector3.Zero;
-                        node.Node.AddBBLines(new Vector4(0, 1, 1,1));
-                        other.Node.AddBBLines(new Vector4(0, 1, 1, 1));
-                        node.Position = node.LastPosition;
-                        other.Position = other.LastPosition;
-                        node.Node.LocalPosition = node.LastPosition;
-                        other.Node.LocalPosition = other.LastPosition;
-                        //Console.WriteLine("Collided!");
-                    }
-                    else
-                    {
-                        node.Node.AddBBLines(new Vector4(1, 1, 0, 1));
-                        other.Node.AddBBLines(new Vector4(1, 1, 0, 1));
-                    }
 
                 }
             }
-            //Response
+
+
+            //Perform possible contacts collision list.
+            foreach (var pair in Pairs)
+            {
+                var node = pair.A;
+                var other = pair.B;
+
+
+                node.Shapes[0].Position = node.Position;
+                other.Shapes[0].Position = other.Position;
+
+                var res = CollisionTest.Intersect(node.Shapes[0], other.Shapes[0]);
+                if (res.Collided)
+                {
+                    other.Velocity = Vector3.Zero;
+                    other.Force = Vector3.Zero;
+                    node.Velocity = Vector3.Zero;
+
+                    node.Force = Vector3.Zero;
+                    node.Node.AddBBLines(new Vector4(0, 1, 1, 1));
+                    other.Node.AddBBLines(new Vector4(0, 1, 1, 1));
+                    node.Position = node.LastPosition;
+                    other.Position = other.LastPosition;
+                    node.Node.LocalPosition = node.LastPosition;
+                    other.Node.LocalPosition = other.LastPosition;
+                }
+                else
+                {
+                    node.Node.AddBBLines(new Vector4(1, 1, 0, 1));
+                    other.Node.AddBBLines(new Vector4(1, 1, 0, 1));
+                }
+
+            }
 
 
         }
+
+        
+
+        
+
+
+        
+
 
     }
 }

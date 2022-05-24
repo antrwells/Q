@@ -62,6 +62,13 @@ namespace Q.Harmony
             get;
             set;
         }
+
+        public List<Shapes.CollisionShape> Shapes
+        {
+            get;
+            set;
+        }
+
         public Vector3 Position
         {
             get;
@@ -152,7 +159,44 @@ namespace Q.Harmony
             Rotation = Matrix4.Identity;
             Mass = 1.0f;
             Static = false;
+            Shapes = new List<Shapes.CollisionShape>();
 
+
+        }
+
+        public PhysicsNode(Q.Scene.Nodes.SceneNode node)
+        {
+            Position = Vector3.Zero;
+            Force = Vector3.Zero;
+            Velocity = Vector3.Zero;
+            AngularVelocity = Vector3.Zero;
+            Rotation = Matrix4.Identity;
+            Mass = 1.0f;
+            Static = false;
+            Shapes = new List<Shapes.CollisionShape>();
+            Node = node;
+        }
+
+        public void PhysicsToBox()
+        {
+
+            var bb = Node.GetBounds();
+
+            var size = new Vector3();
+
+            size.X = bb.Max.X - bb.Min.X;
+            size.Y = bb.Max.Y - bb.Min.Y;
+            size.Z = bb.Max.Z - bb.Min.Z;
+
+            //  Node = node;
+
+            // Size = size;
+
+            float m = Mass;
+            float w = size.X;
+            float h = size.Y;
+            float d = size.Z;
+            MomentOfInertia = m * (w * w + h * h + d * d) / 12.0f;
 
         }
 

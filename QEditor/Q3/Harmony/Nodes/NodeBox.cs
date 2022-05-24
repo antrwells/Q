@@ -15,32 +15,20 @@ namespace Q.Harmony.Nodes
             set;
         }
 
+
+
         public NodeBox()
         {
             Size = new Vector3(1, 1, 1);
         } 
 
+
+        
+
         public NodeBox(Scene.Nodes.SceneNode node)
         {
 
-            var bb = node.GetBounds();
-
-            var size = new Vector3();
-
-            size.X = bb.Max.X - bb.Min.X;
-            size.Y = bb.Max.Y - bb.Min.Y;
-            size.Z = bb.Max.Z - bb.Min.Z;
-
-            Node = node;
-
-            Size = size;
-
-            float m = Mass;
-            float w = size.X;
-            float h = size.Y;
-            float d = size.Z;
-            MomentOfInertia = m * (w * w + h * h + d * d) / 12.0f;
-
+          
         }
 
         public override Collision CollideWith(PhysicsNode node2)

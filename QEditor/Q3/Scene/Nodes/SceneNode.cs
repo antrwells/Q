@@ -77,8 +77,8 @@ namespace Q.Scene.Nodes
             set;
         }
 
-        public static Shader.Effect MeshFX = new Q.Shader._3D.EBasic3D();
-        public static Shader.Effect ParticleFX = new Q.Shader._3D.EBasicParticle();
+        public static Shader.Effect MeshFX;
+        public static Shader.Effect ParticleFX;
 
 
         public List<Mesh.Mesh3D> Meshes = new List<Mesh.Mesh3D>();
@@ -198,6 +198,12 @@ namespace Q.Scene.Nodes
             set;
         }
 
+
+        public List<Mesh.MeshPoints> PointMeshes
+        {
+            get;
+            set;
+        }
         public NodeModule GetModule<T>() where T : NodeModule
         {
 
@@ -218,8 +224,8 @@ namespace Q.Scene.Nodes
 
             Lines = new Mesh.MeshLines();
 
-            Vector3 min = bb.Min - LocalPosition;
-            Vector3 max = bb.Max - LocalPosition;
+            Vector3 min = bb.Min;// - LocalPosition;
+            Vector3 max = bb.Max;// - LocalPosition;
             //min = LocalPosition - min;
             //max = LocalPosition  max;
 
@@ -282,6 +288,7 @@ namespace Q.Scene.Nodes
             AlwaysFaceCamera = false;
             Color = new Vector4(1, 1, 1, 1);
             Spin = 0;
+            PointMeshes = new List<Mesh.MeshPoints>();
         }
 
         public BoundingBox GetBounds()
@@ -316,8 +323,8 @@ namespace Q.Scene.Nodes
 
 
 
-            res.Min = LocalPosition + min;
-            res.Max = LocalPosition + max;
+            res.Min = min;
+            res.Max = max;
 
             //res.Min = res.Min * LocalScale;
            // res.Max = res.Max * LocalScale;
@@ -602,10 +609,23 @@ namespace Q.Scene.Nodes
                     state.Bind();
 
                     SceneGlobal.ActiveNode = this;
-                    foreach (var mesh in Meshes)
+
+                    ParticleFX.Bind();
+
+                    ParticleFX.SetUniform("proj", SceneGlobal.ActiveCamera.ProjectionMatrix);
+                    ParticleFX.SetUniform("model", SceneGlobal.ActiveNode.WorldMatrix);
+                    ParticleFX.SetUniform("view", SceneGlobal.ActiveCamera.WorldMatrix);
+
+                    ParticleFX.SetUniform("tCol", 0);
+
+                    foreach (var mesh in PointMeshes)
                     {
-                        mesh.DrawParticle(ParticleFX, Color);
+                        mesh.Image.Bind(Texture.TextureUnit.Unit0);
+                        mesh.Draw();
+                        mesh.Image.Release(Texture.TextureUnit.Unit0);
                     }
+
+                    ParticleFX.Release();
 
                     break;
                 case NodeType.Entity:

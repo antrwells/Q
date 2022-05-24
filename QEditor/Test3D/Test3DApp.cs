@@ -34,7 +34,8 @@ namespace Test3D
         Particle part2;
 
         PhysicsScene pScene;
-        NodeBox p1, p2;
+        //NodeBox p1, p2;
+        PhysicsNode p1, p2; 
         
         
         public Test3DApp(GameWindowSettings window_settings, NativeWindowSettings native_settings) : base(window_settings, native_settings)
@@ -47,16 +48,29 @@ namespace Test3D
             base.InitApp();
             imp = new Q.Import.AssImpImport();
             s1 = imp.ImportNode("data/test1.fbx");
-           s2 = imp.ImportActor("data/a1.fbx");
-            Q.Anim.ActorAnim anim1 = new Q.Anim.ActorAnim("Walk", 0, 82, 0.5f, Q.Anim.AnimType.Forward);
-            s2.Animations.Add(anim1);
+           s2 = imp.ImportNode("data/sphere1.fbx");
+            //s2.LocalScale = new OpenTK.Mathematics.Vector3(0.02f, 0.02f, 0.02f);
+            //Q.Anim.ActorAnim anim1 = new Q.Anim.ActorAnim("Walk", 0, 82, 0.5f, Q.Anim.AnimType.Forward);
+            //s2.Animations.Add(anim1);
             //s2.PlayAnim("Walk");
             // s2.CurrentAnim = anim1;
      
+
             pScene = new PhysicsScene();
 
-            p1 = new NodeBox(s1.Child[0]);
-            p2 = new NodeBox(s2);
+            p1 = new PhysicsNode(s1.Child[0]);
+            p2 = new PhysicsNode(s2.Child[0]);
+            p1.Shapes.Add(new Q.Harmony.Shapes.ShapeBoundingBox());
+            p2.Shapes.Add(new Q.Harmony.Shapes.ShapeSphere());
+            p1.PhysicsToBox();
+            p2.PhysicsToBox();
+
+            var sh1 = p1.Shapes[0] as Q.Harmony.Shapes.ShapeBoundingBox;
+            var sh2 = p2.Shapes[0] as Q.Harmony.Shapes.ShapeSphere;
+
+            sh1.SetToBounds(s1.Child[0]);
+            sh2.SetToBounds(s2.Child[0]);
+
 
             pScene.Add(p1, p2);
 
@@ -68,10 +82,10 @@ namespace Test3D
             efx.Add(fx1);
             fx1.Position = new OpenTK.Mathematics.Vector3(0, 2, 0);
 
-            s2.LocalScale = new OpenTK.Mathematics.Vector3(0.02f, 0.02f, 0.02f);
-            s2.LocalPosition = new OpenTK.Mathematics.Vector3(0, 1, 0);
+          
+        //    s2.LocalPosition = new OpenTK.Mathematics.Vector3(0, 1, 0);
             int a = 1;
-            s2.LocalPosition = new OpenTK.Mathematics.Vector3(0, 2, 0);
+      //     s2.LocalPosition = new OpenTK.Mathematics.Vector3(0, 2, 0);
             cam = new SceneCamera();
             cam.LocalPosition = new OpenTK.Mathematics.Vector3(0, 10, 25);
             l1 = new SceneLight();
@@ -106,18 +120,18 @@ namespace Test3D
 
             fx1.SpawnPosMin = new OpenTK.Mathematics.Vector3(-0.1f, -0.1f, -0.1f);
             fx1.SpawnPosMax = new OpenTK.Mathematics.Vector3(0.1f,0.1f,0.1f);
-            fx1.SpawnInertiaMin = new OpenTK.Mathematics.Vector3(-0.1f, -0.1f, -0.1f);
-            fx1.SpawnInertiaMax = new OpenTK.Mathematics.Vector3(0.1f,0.1f,0.1f);
+            fx1.SpawnInertiaMin = new OpenTK.Mathematics.Vector3(-0.02f, 0.01f, -0.02f);
+            fx1.SpawnInertiaMax = new OpenTK.Mathematics.Vector3(0.02f,0.03f,0.02f);
             efx.CurrentScene = g1;
             p1.Static = true;
             //       p2.Static = true;
 
             s2.AddBBLines(new OpenTK.Mathematics.Vector4(1, 1, 0, 1));
 
-            s2.Meshes[0].Material.ColorMap = new Q.Texture.Texture2D("data/Vampire_Diffuse.png");
-            s2.Meshes[0].Material.NormalMap = new Q.Texture.Texture2D("data/norm_Vampire_Diffuse.png");
-            s2.Meshes[0].Material.SpecularMap = new Q.Texture.Texture2D("data/spec_Vampire_Diffuse.png");
-            s2.Meshes[0].Material.EmissiveMap = new Q.Texture.Texture2D("data/vampire_emission.png");
+            //s2.Meshes[0].Material.ColorMap = new Q.Texture.Texture2D("data/Vampire_Diffuse.png");
+           // s2.Meshes[0].Material.NormalMap = new Q.Texture.Texture2D("data/norm_Vampire_Diffuse.png");
+         //   s2.Meshes[0].Material.SpecularMap = new Q.Texture.Texture2D("data/spec_Vampire_Diffuse.png");
+       //     s2.Meshes[0].Material.EmissiveMap = new Q.Texture.Texture2D("data/vampire_emission.png");
         }
 
         public override void UpdateApp()
@@ -180,7 +194,7 @@ namespace Test3D
 
         
                 g1.RenderGraph();
-                pp.Process();
+                //pp.Process();
 
             g1.Update();
       

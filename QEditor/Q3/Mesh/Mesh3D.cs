@@ -148,6 +148,18 @@ namespace Q.Mesh
         BufferHandle posBuf, uvBuf, normBuf, tanBuf, biBuf;
         BufferHandle boneBuf, weightBuf;
 
+        public void Delete()
+        {
+
+            GL.DeleteBuffer(posBuf);
+            GL.DeleteBuffer(uvBuf);
+            GL.DeleteBuffer(normBuf);
+            GL.DeleteBuffer(tanBuf);
+            GL.DeleteBuffer(biBuf);
+            GL.DeleteBuffer(tb[0]);
+            GL.DeleteVertexArray(arrays[0]);
+
+        }
         public void Finalize()
         {
 
@@ -327,7 +339,7 @@ namespace Q.Mesh
         public void DrawBindOnly()
         {
             GL.BindVertexArray(arrays[0]);
-            GL.BindBuffer(BufferTargetARB.ArrayBuffer, posBuf);
+          //  GL.BindBuffer(BufferTargetARB.ArrayBuffer, posBuf);
 
 
             GL.MemoryBarrier(MemoryBarrierMask.ShaderImageAccessBarrierBit);
