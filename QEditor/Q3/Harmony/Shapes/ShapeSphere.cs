@@ -29,9 +29,9 @@ namespace Q.Harmony.Shapes
 
                     var vs = vert.Pos * node.LocalScale;
 
-                    float xd = vs.X;
-                    float yd = vs.Y;
-                    float zd = vs.Y;
+                    float xd = Math.Abs(vs.X);
+                    float yd = Math.Abs(vs.Y);
+                    float zd = Math.Abs(vs.Z);
 
                     float dis = MathF.Sqrt(xd * xd + yd * yd + zd * zd);
 
@@ -46,7 +46,7 @@ namespace Q.Harmony.Shapes
 
             }
 
-            Radius = fdis * 2;
+            Radius = fdis;
 
         }
 

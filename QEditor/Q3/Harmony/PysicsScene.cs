@@ -122,13 +122,23 @@ namespace Q.Harmony
                 var res = CollisionTest.Intersect(node.Shapes[0], other.Shapes[0]);
                 if (res.Collided)
                 {
-                    other.Velocity = Vector3.Zero;
+                    //other.Velocity = Vector3.Zero;
                     other.Force = Vector3.Zero;
-                    node.Velocity = Vector3.Zero;
+                  //  node.Velocity = Vector3.Zero;
 
                     node.Force = Vector3.Zero;
+                    
+
                     node.Node.AddBBLines(new Vector4(0, 1, 1, 1));
                     other.Node.AddBBLines(new Vector4(0, 1, 1, 1));
+
+                    var lf = other.LastPosition - other.Position;
+                    //lf.X = -lf.X * 150;
+                    //lf.Z = -lf.Z * 150;
+
+                    other.Force = lf * 150;
+                    //node.Force = -lf * 150;
+
                     node.Position = node.LastPosition;
                     other.Position = other.LastPosition;
                     node.Node.LocalPosition = node.LastPosition;

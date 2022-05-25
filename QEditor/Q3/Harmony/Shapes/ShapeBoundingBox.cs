@@ -28,8 +28,8 @@ namespace Q.Harmony.Shapes
 
             Q.Scene.Nodes.BoundingBox bb = new BoundingBox();
 
-            bb.Min = bb.Min;
-            bb.Max = bb.Max;
+            bb.Min = Min;
+            bb.Max = Max;
 
             return bb;
             

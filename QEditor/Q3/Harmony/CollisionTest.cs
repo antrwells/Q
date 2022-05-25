@@ -55,7 +55,38 @@ namespace Q.Harmony
 
             }
 
+            if(a is Shapes.ShapeSphere)
+            {
+
+                if(b is Shapes.ShapeSphere)
+                {
+
+                    return Intersect(a as Shapes.ShapeSphere, b as Shapes.ShapeSphere);
+
+                }
+
+            }
+
             return null;
+
+        }
+
+        public static CollisionResult Intersect(Shapes.ShapeSphere a, Shapes.ShapeSphere b)
+        {
+
+            CollisionResult res = new CollisionResult();
+            res.Collided = false;
+
+            Vector3 d = a.Position - b.Position;
+
+            float dist2 = Vector3.Dot(d, d);
+
+            float radiusSum = a.Radius + b.Radius;
+
+            res.Collided = dist2 <= radiusSum * radiusSum;
+
+
+            return res;
 
         }
 
@@ -66,7 +97,11 @@ namespace Q.Harmony
 
             Vector3 pp = new Vector3();
 
-            Maths.MathHelp.ClosestPtPointAABB(b.Position, a.GetBounds(), ref pp);
+            var bb = a.GetBounds();
+            bb.Min += a.Position;
+            bb.Max += a.Position;
+
+            Maths.MathHelp.ClosestPtPointAABB(b.Position,bb, ref pp);
 
             Vector3 d = pp - b.Position;
 
