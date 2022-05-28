@@ -13,10 +13,15 @@
     <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />
     <PackageReference Include="Assimp_native_4.1_v142" Version="4.1.0" />
     <PackageReference Include="OpenTK" Version="5.0.0-pre.7" />
-    <PackageReference Include="PhysX.Net" Version="3.0.0-alpha1" />
     <PackageReference Include="SharpFont.Dependencies" Version="2.6.0" />
     <PackageReference Include="SharpFont.NetStandard" Version="1.0.5" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0-preview.4.22229.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PhysX.Net">
+      <HintPath>..\Test3D\bin\x64\Debug\net6.0\PhysX.Net.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

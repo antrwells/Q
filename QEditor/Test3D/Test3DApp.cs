@@ -11,8 +11,7 @@ using Q.PostProcessing;
 using Q.PostProcessing.PP;
 using Q.Elemental;
 using Q.Elemental.FX;
-using Q.Harmony;
-using Q.Harmony.Nodes;
+
 namespace Test3D
 {
     public class Test3DApp : Application
@@ -33,9 +32,7 @@ namespace Test3D
         Particle part1;
         Particle part2;
 
-        PhysicsScene pScene;
-        //NodeBox p1, p2;
-        PhysicsNode p1, p2; 
+
         
         
         public Test3DApp(GameWindowSettings window_settings, NativeWindowSettings native_settings) : base(window_settings, native_settings)
@@ -50,42 +47,24 @@ namespace Test3D
             s1 = imp.ImportNode("data/test1.fbx");
            s2 = imp.ImportNode("data/sphere1.fbx");
             var s3 = imp.ImportNode("data/sphere1.fbx");
+
+            s1.Child[0].SetPhysicsBox(true);
+            s2.Child[0].SetPhysicsBox(false);
             //s2.LocalScale = new OpenTK.Mathematics.Vector3(0.02f, 0.02f, 0.02f);
             //Q.Anim.ActorAnim anim1 = new Q.Anim.ActorAnim("Walk", 0, 82, 0.5f, Q.Anim.AnimType.Forward);
             //s2.Animations.Add(anim1);
             //s2.PlayAnim("Walk");
             // s2.CurrentAnim = anim1;
-     
-
-            pScene = new PhysicsScene();
-
-            p1 = new PhysicsNode(s1.Child[0]);
-            p2 = new PhysicsNode(s2.Child[0]);
-            var p3 = new PhysicsNode(s3.Child[0]);
-            p1.Shapes.Add(new Q.Harmony.Shapes.ShapeBoundingBox());
-            p2.Shapes.Add(new Q.Harmony.Shapes.ShapeSphere());
-            p3.Shapes.Add(new Q.Harmony.Shapes.ShapeSphere());
-            p1.PhysicsToBox();
-            p2.PhysicsToBox();
-            p3.PhysicsToBox();
+            //s1.Child[0].XBody.MakeStatic();
 
 
-            var sh1 = p1.Shapes[0] as Q.Harmony.Shapes.ShapeBoundingBox;
-            var sh2 = p2.Shapes[0] as Q.Harmony.Shapes.ShapeSphere;
-            var sh3 = p3.Shapes[0] as Q.Harmony.Shapes.ShapeSphere;
+          
 
-            sh1.SetToBounds(s1.Child[0]);
-            sh2.SetToBounds(s2.Child[0]);
-            sh3.SetToBounds(s3.Child[0]);
 
-            p2.Force = new OpenTK.Mathematics.Vector3(0, 0, 0);
 
-            p1.Position = new OpenTK.Mathematics.Vector3(0, 7, 0);
 
-            pScene.Add(p1, p2, p3);
-
-            p2.Position = new OpenTK.Mathematics.Vector3(0, 15, 0);
-            p3.Position = new OpenTK.Mathematics.Vector3(0, 20, 0);
+           
+           // p3.Force = new OpenTK.Mathematics.Vector3(-3, 0, 0);
             efx = new Elemental();
             fx1 = new ParticleFX();
             part1 = new Particle();
@@ -110,8 +89,10 @@ namespace Test3D
             g1.Add(s1);
             g1.Add(s2);
             g1.Add(l1);
-            g1.Add(s3);
+           // g1.Add(s3);
            g1.Add(l2);
+            s2.Child[0].LocalPosition = new OpenTK.Mathematics.Vector3(0, 8, 0);
+            s1.Child[0].XBody.MakeStatic();
             g1.SetCamera(cam);
             l2.LocalPosition = new OpenTK.Mathematics.Vector3(-25, 10, 25);
             l1.Diffuse = new OpenTK.Mathematics.Vector3(2, 1, 1);
@@ -135,7 +116,7 @@ namespace Test3D
             fx1.SpawnInertiaMin = new OpenTK.Mathematics.Vector3(-0.02f, 0.01f, -0.02f);
             fx1.SpawnInertiaMax = new OpenTK.Mathematics.Vector3(0.02f,0.03f,0.02f);
             efx.CurrentScene = g1;
-            p1.Static = true;
+
             //       p2.Static = true;
 
             s2.AddBBLines(new OpenTK.Mathematics.Vector4(1, 1, 0, 1));
@@ -199,7 +180,6 @@ namespace Test3D
 
           //  p2.ApplyTorque(200,0, 0);
 
-            pScene.Update(0.1f);
 
             //s1.RenderModules();
             g1.RenderShadows();

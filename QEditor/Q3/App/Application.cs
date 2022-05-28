@@ -101,7 +101,9 @@ namespace Q.App
             Font.FontTTF.Init();
             Texture.Texture.StartTextureSubSystem();
             Global.GlobalEffects.Init();
+            Q.Physx.QPhysics.InitPhysics();
             InitApp();
+           
 
 
            // CursorVisible = false;
@@ -179,6 +181,7 @@ namespace Q.App
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
+            Physx.QPhysics.Simulate(0.02f);
             UpdateApp();
             Texture.Texture._DestroyThread();
         }

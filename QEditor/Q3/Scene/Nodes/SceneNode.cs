@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Mathematics;
+using Q.Physx;
 
 namespace Q.Scene.Nodes
 {
@@ -103,6 +104,12 @@ namespace Q.Scene.Nodes
 
         public List<Q.Anim.ActorAnim> Animations = new List<Anim.ActorAnim>();
 
+        public PXBody XBody
+        {
+            get;
+            set;
+        }
+
         public void SetBoneInfoMap(Dictionary<string, Q.Anim.BoneInfo> boneInfoMap, int count)
         {
             m_BoneInfoMap = boneInfoMap;
@@ -150,15 +157,39 @@ namespace Q.Scene.Nodes
 
         public Matrix4 LocalRotation
         {
-            get;
-            set;
+            get
+            {
+                return _LocalRotation;
+            }
+            set
+            {
+                _LocalRotation = value;
+                if (XBody != null)
+                {
+                    XBody.SetPose(_LocalPosition,_LocalRotation);
+                //    XBodu.SetRotation(_LocalRotation);
+                }
+            }
         }
+        private Matrix4 _LocalRotation = Matrix4.Identity;
 
         public Vector3 LocalPosition
         {
-            get;
-            set;
+            get
+            {
+                return _LocalPosition;
+            }
+            set
+            {
+                _LocalPosition = value;
+                if (XBody != null)
+                {
+                    //Console.WriteLine("!!");
+                    XBody.SetPose(_LocalPosition, _LocalRotation);
+                }
+            }
         }
+        private Vector3 _LocalPosition = Vector3.Zero;
 
         public Vector3 LocalScale
         {
@@ -215,6 +246,29 @@ namespace Q.Scene.Nodes
                 }
             }
             return null;
+        }
+
+        public void SetPhysicsBox(bool IsStatic)
+        {
+            var bounds = GetBounds();
+            if (IsStatic)
+            {
+                XBody = new PXStaticBox(bounds.Max.X - bounds.Min.X, bounds.Max.Y - bounds.Min.Y, bounds.Max.Z - bounds.Min.Z);
+            }
+            else
+            {
+                XBody = new PXBox(bounds.Max.X - bounds.Min.X, bounds.Max.Y - bounds.Min.Y, bounds.Max.Z - bounds.Min.Z);
+            }
+        
+        }
+
+        public void UpdatePhysics()
+        {
+            if (XBody != null)
+            {
+                _LocalPosition = XBody.GetPos();
+                _LocalRotation = XBody.GetRot();
+            }
         }
 
         public void AddBBLines(Vector4 col)
@@ -289,6 +343,8 @@ namespace Q.Scene.Nodes
             Color = new Vector4(1, 1, 1, 1);
             Spin = 0;
             PointMeshes = new List<Mesh.MeshPoints>();
+            //XBody = new PXBox(1, 1, 1);
+
         }
 
         public BoundingBox GetBounds()
@@ -298,6 +354,7 @@ namespace Q.Scene.Nodes
 
             min = new Vector3(1200, 1200, 1200);
             max = new Vector3(-1200, -1200, -1200);
+            bool none = true;
 
             foreach(var mesh in Meshes)
             {
@@ -305,6 +362,7 @@ namespace Q.Scene.Nodes
                 foreach(var vertex in mesh.Vertices)
                 {
 
+                    none = false;
                     var pos = vertex.Pos * LocalScale;
 
                     if (pos.X < min.X) min.X = pos.X;
@@ -322,6 +380,11 @@ namespace Q.Scene.Nodes
             var res = new BoundingBox();
 
 
+            if (none)
+            {
+                min = new Vector3(0, 0, 0);
+                max = new Vector3(0, 0, 0);
+            }
 
             res.Min = min;
             res.Max = max;

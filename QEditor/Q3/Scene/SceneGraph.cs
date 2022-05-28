@@ -157,8 +157,9 @@ namespace Q.Scene
 
         public void UpdateNode(SceneNode node)
         {
-
+            node.UpdatePhysics();
             node.Update();
+           
             foreach(var cnode in node.Child)
             {
                 UpdateNode(cnode);
