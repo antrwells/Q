@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Q.Draw.Simple;
+using Q.Quantum;
+using Q.Scene;
+
 namespace Q.App
 {
     public class AppState
@@ -15,10 +18,39 @@ namespace Q.App
             set;
         }
 
+        public UserInterface UI
+        {
+            get;
+            set;
+        }
+
+        public SceneGraph Graph
+        {
+            get;
+            set;
+        }
+
+        public Scene.Nodes.SceneCamera Cam
+        {
+            get;
+            set;
+        }
+
+        public List<Scene.Nodes.SceneLight> Lights
+        {
+            get;
+            set;
+        }
+
         public AppState()
         {
 
             Draw = new Draw2D();
+            UI = new UserInterface(true);
+            Graph = new SceneGraph();
+            Cam = Graph.Camera;
+            Lights = new List<Scene.Nodes.SceneLight>();
+          
 
         }
 

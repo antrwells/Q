@@ -125,6 +125,7 @@ namespace Q.App
             Global.GlobalEffects.Init();
             Q.Physx.QPhysics.InitPhysics();
             InitApp();
+            CursorVisible = false;
            
 
 
@@ -247,7 +248,7 @@ namespace Q.App
             frame++;
             
 
-            GL.ClearColor(0, 0, 0, 0.5f);
+            GL.ClearColor(1, 0, 0, 0.5f);
                         //GL.ClearDepthf(1.0f);
 
 

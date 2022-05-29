@@ -113,7 +113,7 @@ namespace Q.Quantum
 
         private Vector2 prev_mouse;
 
-        public UserInterface()
+        public UserInterface(bool gameMode = false)
         {
             DragAndDropInfo = null;
             Theme = new Themes.ThemeDark();
@@ -124,8 +124,17 @@ namespace Q.Quantum
 
             // DrawBlur = new BasicDraw2D();
             Root = new Forms.IGroup();
-            Root.Set(0, 70, App.AppInfo.Width, App.AppInfo.Height - 70);
-            ActiveInterface = this;
+            if (gameMode)
+            {
+                Root.Set(0, 0, App.AppInfo.Width, App.AppInfo.Height);
+                var rg = Root as IGroup;
+                rg.DisplayFrame = false;
+            }
+            else
+            {
+                Root.Set(0, 70, App.AppInfo.Width, App.AppInfo.Height - 70);
+            }
+                ActiveInterface = this;
             prev_mouse = new Vector2(0, 0);
             FormPressed = new IForm[32];
             PrevClick = new long[32];

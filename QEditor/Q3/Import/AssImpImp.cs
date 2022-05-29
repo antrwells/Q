@@ -320,7 +320,7 @@ namespace Q.Import
             {
                 if (Optimize)
                 {
-                    s = e.ImportFile(file, PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.CalculateTangentSpace);
+                    s = e.ImportFile(file, PostProcessSteps.Triangulate | PostProcessSteps.OptimizeGraph | PostProcessSteps.OptimizeMeshes | PostProcessSteps.CalculateTangentSpace | PostProcessSteps.GenerateNormals);
                 }
                 else
                 {

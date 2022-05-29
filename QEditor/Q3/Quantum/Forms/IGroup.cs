@@ -8,10 +8,24 @@ namespace Q.Quantum.Forms
 {
     public class IGroup : IForm
     {
+        public bool DisplayFrame
+        {
+            get;
+            set;
+        }
+        public IGroup()
+        {
+            DisplayFrame = true;
+        }
+
         public override void RenderForm()
         {
             base.RenderForm();
-            DrawOutline(new OpenTK.Mathematics.Vector4(1, 1, 1, 1)) ;
+            if (DisplayFrame)
+            {
+                DrawFrame();
+                DrawOutline(new OpenTK.Mathematics.Vector4(1, 1, 1, 1));
+            }
         }
     }
 }

@@ -21,8 +21,8 @@ namespace Q.Quantum.Forms
             {
                 Color = new OpenTK.Mathematics.Vector4(1f, 1f, 1f, 1);
             }
-            DrawButton("");
-            DrawText(Text, RenderPosition.X+6, RenderPosition.Y+5,new OpenTK.Mathematics.Vector4(1,1,1,1));
+            DrawFrame();
+            DrawText(Text, RenderPosition.X+Size.X/2-TextWidth(Text)/2, RenderPosition.Y+3,new OpenTK.Mathematics.Vector4(1,1,1,1));
         }
 
 

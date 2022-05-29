@@ -45,8 +45,8 @@ namespace Q.Quantum.Forms
             get;
             set;
         }
-
-        public IWindow()
+        private bool scrollersOn = false;
+        public IWindow(bool scrollers=true)
         {
             Title = new IWindowTitle();
             Content = new IGroup();
@@ -57,10 +57,14 @@ namespace Q.Quantum.Forms
             VScroller = new ViewScroller();
             Resizer = new IButton();
             Add(Title);
-            Add(VScroller, HScroller);
-            Add(Resizer);
+            scrollersOn = scrollers;
+            if (scrollers)
+            {
+                Add(VScroller, HScroller);
+            }
+           
             Add(Content);
-
+            Add(Resizer);
             Resizer.Dragged += (x, y) =>
             {
                 Set(Position.X,Position.Y,Size.X + x, Size.Y + y);
@@ -129,8 +133,16 @@ namespace Q.Quantum.Forms
 
         public override void OnResized()
         {
-            Title.Set(0, 0, Size.X, TitleHeight);
-            Content.Set(0, TitleHeight, Size.X-10, Size.Y - TitleHeight-1-12);
+            Title.Set(-1, 0, Size.X+2, TitleHeight);
+            if (!scrollersOn)
+            {
+                Content.Set(0, TitleHeight, Size.X, Size.Y-TitleHeight);
+            }
+            else
+            {
+                Content.Set(0, TitleHeight, Size.X - 10, Size.Y - TitleHeight - 1 - 12);
+            }
+            
             VScroller.Set(Size.X -11, TitleHeight, 10, Size.Y-TitleHeight-12);
             HScroller.Set(0, Size.Y - 10, Size.X-11, 10);
             Resizer.Set(Size.X - 11, Size.Y-12,13,13);
