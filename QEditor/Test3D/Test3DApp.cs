@@ -45,11 +45,17 @@ namespace Test3D
             base.InitApp();
             imp = new Q.Import.AssImpImport();
             s1 = imp.ImportNode("data/test1.fbx");
-           s2 = imp.ImportNode("data/sphere1.fbx");
-            var s3 = imp.ImportNode("data/sphere1.fbx");
+           s2 = imp.ImportNode("data/convex1.fbx");
+            var s3 = imp.ImportNode("data/convex1.fbx");
 
-            s1.Child[0].SetPhysicsBox(true);
-            s2.Child[0].SetPhysicsBox(false);
+            s1.Child[0].SetPhysicsBodyType(Q.Physx.BodyType.TriMesh);
+            s2.Child[0].SetPhysicsBodyType(Q.Physx.BodyType.ConvexHull);
+            s3.Child[0].SetPhysicsBodyType(Q.Physx.BodyType.ConvexHull);
+
+            //s1.Child[0].SetPhysicsTriMesh();
+            //s2.Child[0].SetPhysicsSphere();
+            //s3.Child[0].SetPhysicsSphere();
+
             //s2.LocalScale = new OpenTK.Mathematics.Vector3(0.02f, 0.02f, 0.02f);
             //Q.Anim.ActorAnim anim1 = new Q.Anim.ActorAnim("Walk", 0, 82, 0.5f, Q.Anim.AnimType.Forward);
             //s2.Animations.Add(anim1);
@@ -89,9 +95,12 @@ namespace Test3D
             g1.Add(s1);
             g1.Add(s2);
             g1.Add(l1);
-           // g1.Add(s3);
+            g1.Add(s3);
+
            g1.Add(l2);
-            s2.Child[0].LocalPosition = new OpenTK.Mathematics.Vector3(0, 8, 0);
+            s2.Child[0].LocalPosition = new OpenTK.Mathematics.Vector3(0, 15, 1);
+            s2.Child[0].Rotate(45, 45, 45);
+            s3.Child[0].LocalPosition = new OpenTK.Mathematics.Vector3(0, 20, 0);
             s1.Child[0].XBody.MakeStatic();
             g1.SetCamera(cam);
             l2.LocalPosition = new OpenTK.Mathematics.Vector3(-25, 10, 25);
@@ -119,7 +128,7 @@ namespace Test3D
 
             //       p2.Static = true;
 
-            s2.AddBBLines(new OpenTK.Mathematics.Vector4(1, 1, 0, 1));
+           //s2.AddBBLines(new OpenTK.Mathematics.Vector4(1, 1, 0, 1));
 
             //s2.Meshes[0].Material.ColorMap = new Q.Texture.Texture2D("data/Vampire_Diffuse.png");
            // s2.Meshes[0].Material.NormalMap = new Q.Texture.Texture2D("data/norm_Vampire_Diffuse.png");

@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 using PhysX;
 namespace Q.Physx
 {
+
+    public enum BodyType
+    {
+        Box,Sphere,TriMesh,ConvexHull
+    }
     public class PXBody
     {
 
@@ -52,9 +57,13 @@ namespace Q.Physx
         public void SetPose(OpenTK.Mathematics.Vector3 pos,OpenTK.Mathematics.Matrix4 rot)
         {
 
+            var q = rot.ExtractRotation();
             var pose = System.Numerics.Matrix4x4.CreateTranslation(new System.Numerics.Vector3(pos.X, pos.Y, pos.Z));
+            Body.GlobalPosePosition = new System.Numerics.Vector3(pos.X, pos.Y, pos.Z);
+            Body.GlobalPoseQuat = new System.Numerics.Quaternion(q.X, q.Y, q.Z, q.W);
 
-            Body.GlobalPose = pose;
+            //Body.GlobalPose = pose;
+
        
         }
 

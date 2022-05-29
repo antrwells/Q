@@ -167,6 +167,7 @@ namespace Q.Scene.Nodes
                 if (XBody != null)
                 {
                     XBody.SetPose(_LocalPosition,_LocalRotation);
+
                 //    XBodu.SetRotation(_LocalRotation);
                 }
             }
@@ -248,6 +249,45 @@ namespace Q.Scene.Nodes
             return null;
         }
 
+        public void SetPhysicsBodyType(BodyType type, bool isStatic = false)
+        {
+            switch (type)
+            {
+                case BodyType.Box:
+                    SetPhysicsBox(isStatic);
+                    break;
+                case BodyType.Sphere:
+                    SetPhysicsSphere();
+                    break;
+                case BodyType.TriMesh:
+                    SetPhysicsTriMesh();
+                    break;
+                case BodyType.ConvexHull:
+                    SetPhysicsConvexHull();
+                    break;
+
+            }
+        }
+
+        public void SetPhysicsConvexHull()
+        {
+            XBody = new PXConvexHull(Meshes[0]);
+        }
+        public void SetPhysicsTriMesh()
+        {
+
+            XBody = new PXTriMesh(Meshes, 0);
+
+        }
+
+        public void SetPhysicsSphere()
+        {
+
+            var radius = GetRadius();
+            XBody = new PXSphere(radius);
+
+
+        }
         public void SetPhysicsBox(bool IsStatic)
         {
             var bounds = GetBounds();
@@ -346,7 +386,25 @@ namespace Q.Scene.Nodes
             //XBody = new PXBox(1, 1, 1);
 
         }
+        public float GetRadius()
+        {
+            float br = -1;
+            foreach (var mesh in Meshes)
+            {
 
+                foreach (var vertex in mesh.Vertices)
+                {
+
+                    //      none = false;
+                    Vector3 pos = vertex.Pos;
+                    float radius = pos.LengthSquared;
+                    if (radius > br) br = radius;
+
+                }
+
+            }
+            return br;
+        }
         public BoundingBox GetBounds()
         {
 
@@ -419,7 +477,7 @@ namespace Q.Scene.Nodes
 
         public virtual void Rotate(float pitch, float yaw, float roll = 0)
         {
-
+            LocalRotation = Matrix4.CreateRotationX(MathHelper.DegreesToRadians(pitch)) * Matrix4.CreateRotationY(MathHelper.DegreesToRadians(yaw));// * Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(roll));
         }
 
         public void Move(Vector3 v)

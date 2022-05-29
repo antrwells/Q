@@ -30,6 +30,14 @@ namespace Q.Physx
 
 			_Physics = new Physics(_Foundation,true, _Pvd);
 
+			CookingParams cook = new CookingParams();
+
+			
+
+			//cook.MidphaseDesc = mpd;
+
+		
+
 			var sceneDesc = new SceneDesc();
 			sceneDesc.Gravity = new System.Numerics.Vector3(0.0f, -9.81f, 0.0f);
 			sceneDesc.Flags |= SceneFlag.EnableCcd;
@@ -39,8 +47,9 @@ namespace Q.Physx
 
 			_Scene = _Physics.CreateScene(sceneDesc);
 			//_Pvd.Connect()
-
-						//_Pvd.IsConnected;
+			//_Cooking = _Physics.CreateCooking(cook);
+			_Cooking = _Physics.CreateCooking();
+			//_Pvd.IsConnected;
 
 
 
