@@ -63,6 +63,27 @@ namespace Q.App
     public class Application : GameWindow
     {
 
+        public static Stack<AppState> States
+        {
+            get;
+            set;
+        }
+
+
+        public static void PushState(AppState state)
+        {
+            States.Push(state);
+            state.InitState();
+        }
+
+        public static void PopState()
+        {
+            if (States.Count == 0) return;
+            var state = States.Pop();
+            state.StopState();
+
+        }
+
         /// <summary>
         /// Any application that inherits the application class, must implement this constructor to begin the app.
         /// </summary>
@@ -82,6 +103,7 @@ namespace Q.App
             AppInfo.FrameWidth = native_settings.Size.X;
             AppInfo.FrameHeight = native_settings.Size.Y;
             Console.WriteLine("App begun. Initial resolution X:" + AppInfo.Width + " Y:" + AppInfo.Height);
+            States = new Stack<AppState>();
         }
 
         protected override void OnLoad()
@@ -178,11 +200,31 @@ namespace Q.App
         {
 
         }
-
+        int ptick = 0;
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             Physx.QPhysics.Simulate(0.02f);
             UpdateApp();
+
+            if (ptick == 0)
+            {
+                ptick = Environment.TickCount;
+            }
+            int tick = Environment.TickCount;
+            int pc = tick - ptick;
+            if (pc < 1) pc = 1;
+
+            float delta = (float)((float)pc) / 1000.0f;
+
+            ptick = tick;
+
+
+            if (States.Count > 0)
+            {
+                var state = States.Peek();
+                state.UpdateState(delta);
+            }
+
             Texture.Texture._DestroyThread();
         }
 
@@ -205,13 +247,18 @@ namespace Q.App
             frame++;
             
 
-            GL.ClearColor(1, 0, 0, 0.5f);
+            GL.ClearColor(0, 0, 0, 0.5f);
                         //GL.ClearDepthf(1.0f);
 
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             RenderApp();
+            if (States.Count > 0)
+            {
+                var state = States.Peek();
+                state.RenderState();
+            }
 
             SwapBuffers();
             

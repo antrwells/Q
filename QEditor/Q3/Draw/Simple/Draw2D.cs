@@ -259,6 +259,8 @@ namespace Q.Draw.Simple
             DrawState.VY = 0;
             DrawState.VW = App.AppInfo.FrameWidth;
             DrawState.VH = App.AppInfo.FrameHeight;
+            DrawState.Blend = true;
+            DrawState.BlendMode = BlendFunc.Alpha;
             DrawState.Bind();
 
             //   GL.Disable(EnableCap.DepthTest);

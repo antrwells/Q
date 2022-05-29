@@ -19,6 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="irrKlang.NET4">
+      <HintPath>..\..\irrKlang.NET4.dll</HintPath>
+    </Reference>
     <Reference Include="PhysX.Net">
       <HintPath>..\Test3D\bin\x64\Debug\net6.0\PhysX.Net.dll</HintPath>
     </Reference>

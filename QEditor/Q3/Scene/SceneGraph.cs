@@ -155,6 +155,12 @@ namespace Q.Scene
             UpdateNode(Root);
         }
 
+
+        public void Explode(OpenTK.Mathematics.Vector3 pos,float force)
+        {
+
+        }
+
         public void UpdateNode(SceneNode node)
         {
             node.UpdatePhysics();

@@ -98,7 +98,7 @@ namespace Test3D
             g1.Add(s3);
 
            g1.Add(l2);
-            s2.Child[0].LocalPosition = new OpenTK.Mathematics.Vector3(0, 15, 1);
+            s2.Child[0].LocalPosition = new OpenTK.Mathematics.Vector3(0, 15, 3);
             s2.Child[0].Rotate(45, 45, 45);
             s3.Child[0].LocalPosition = new OpenTK.Mathematics.Vector3(0, 20, 0);
             s1.Child[0].XBody.MakeStatic();
