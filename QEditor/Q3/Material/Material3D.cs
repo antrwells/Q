@@ -47,6 +47,13 @@ namespace Q.Material
             get;
             set;
         }
+
+        public Q.Shader.Effect FX
+        {
+            get;
+            set;
+        }
+
         public Material3D()
         {
             if (DefaultColor == null)
@@ -59,6 +66,7 @@ namespace Q.Material
             ColorMap = DefaultColor; 
             NormalMap = DefaultNormal;
             SpecularMap = DefaultSpecular;
+            FX = null;
          //   EmissiveMap = DefaultEmissive;
             
         }

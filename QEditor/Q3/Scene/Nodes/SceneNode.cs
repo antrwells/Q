@@ -753,7 +753,14 @@ namespace Q.Scene.Nodes
                     SceneGlobal.ActiveNode = this;
                     foreach (var mesh in Meshes)
                     {
-                        mesh.Draw(MeshFX);
+                        if (mesh.Material.FX != null)
+                        {
+                            mesh.Draw(mesh.Material.FX);
+                        }
+                        else
+                        {
+                            mesh.Draw(MeshFX);
+                        }
                     }
                     foreach (var child in Child)
                     {

@@ -9,6 +9,11 @@ namespace Q.Quantum.Forms
     public class IWindow : IForm
     {
         
+        private static Texture.Texture2D Shadow
+        {
+            get;
+            set;
+        }
         public IWindowTitle Title
         {
             get;
@@ -51,6 +56,7 @@ namespace Q.Quantum.Forms
             Title = new IWindowTitle();
             Content = new IGroup();
             //Content.ChildScroll = true;
+            Shadow = new Texture.Texture2D("data/ui/shadow1.png");
 
             Title.SetText("Window");// ")
             HScroller = new ViewScroller();
@@ -73,6 +79,13 @@ namespace Q.Quantum.Forms
            // ScissorOffset = new OpenTK.Mathematics.Vector4(0, 0, 0, -30);
 
             TitleHeight = 25;
+        }
+
+
+        public override void RenderForm()
+        {
+            //base.RenderForm();
+            Draw(Shadow, RenderPosition.X + 16, RenderPosition.Y + 32, Size.X+32, Size.Y+32, new OpenTK.Mathematics.Vector4(1, 1, 1, 0.7f));
         }
 
         public bool TitleOn
@@ -133,7 +146,7 @@ namespace Q.Quantum.Forms
 
         public override void OnResized()
         {
-            Title.Set(-1, 0, Size.X+2, TitleHeight);
+            Title.Set(0, 0, Size.X+1, TitleHeight);
             if (!scrollersOn)
             {
                 Content.Set(0, TitleHeight, Size.X, Size.Y-TitleHeight);

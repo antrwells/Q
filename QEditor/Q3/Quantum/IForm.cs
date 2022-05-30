@@ -813,13 +813,15 @@ namespace Q.Quantum
             int ty = App.AppInfo.Height - (y + h);
 
             int sy = App.AppInfo.Height - ty;
-                      
-
-             //           bg.CopyTex(x, ty);
 
 
-           // UserInterface.Draw.RectBlur(x, y+h, w, -h, bg, new Vector4(1,1,1, 1.0f),0.6f) ;
+                       bg.CopyTex(x, ty);
+
+
+           // Draw(bg,x,y+h,w,-h, new Vector4(1, 1, 1, 1));
+            UserInterface.Draw.RectBlur(x, y+h, w, -h, bg, new Vector4(1,1,1, 1.0f),0.002f) ;
             
+
             //Console.WriteLine("B:" + x + " Y:" + y + " W:" + w + " H:" + h);
 
         }

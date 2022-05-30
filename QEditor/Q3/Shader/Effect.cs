@@ -91,7 +91,7 @@ namespace Q.Shader
         public void Bind()
         {
             GL.UseProgram(ProgramHandle);
-            //BindPars();
+            BindPars();
         }
 
         public void Release()

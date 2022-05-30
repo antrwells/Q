@@ -13,9 +13,17 @@ namespace Q.Quantum.Forms
             get;
             set;
         }
+
+        public bool BlurBackground
+        {
+            get;
+            set;
+        }
+
         public IGroup()
         {
             DisplayFrame = true;
+            BlurBackground = false;
         }
 
         public override void RenderForm()
@@ -23,8 +31,10 @@ namespace Q.Quantum.Forms
             base.RenderForm();
             if (DisplayFrame)
             {
-                DrawFrame();
+                DrawFrame(new OpenTK.Mathematics.Vector4(1, 1, 1, 0.55f));
+                DrawBlur(RenderPosition.X,RenderPosition.Y,Size.X,Size.Y,0.2f);
                 DrawOutline(new OpenTK.Mathematics.Vector4(1, 1, 1, 1));
+
             }
         }
     }
