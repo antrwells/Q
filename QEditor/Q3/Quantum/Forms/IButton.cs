@@ -36,7 +36,9 @@ namespace Q.Quantum.Forms
             }
             else
             {
-                DrawButton(Text);
+                DrawFrame();
+                DrawText(Text, RenderPosition.X + Size.X / 2 - TextWidth(Text) / 2, RenderPosition.Y + Size.Y / 2 - TextHeight(Text) / 2, new OpenTK.Mathematics.Vector4(1, 1, 1, 1));
+                //DrawButton(Text);
             }
 
         }
